@@ -5,12 +5,13 @@ import { RootStackParamList } from '@navigations/types/RootParamList'
 import Chat from '@navigations/AppNavigator/Groups/Chat'
 import Activities from '@navigations/AppNavigator/Groups/Activities'
 import SignIn from '@navigations/AppNavigator/Groups/auth'
+import Report from '@navigations/AppNavigator/Groups/Report'
 
 export const RootStack = createNativeStackNavigator<RootStackParamList>()
 
 const AppNavigator: React.FC = () => {
   const screenForAppState = useCallback(() => {
-    return [SignIn(), Chat(), Activities()]
+    return [SignIn(), Report(), Chat(), Activities()]
   }, [])
 
   return (
