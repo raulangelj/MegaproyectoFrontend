@@ -8,7 +8,6 @@
       "@themes/*": ["src/themes/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@components/*": ["src/components/*"],
-      "@static/*": ["src/static/*"],
       "*": ["src/*"],
     }
   },

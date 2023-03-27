@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from './RootParamList'
+import { ReportTabsParamList, RootStackParamList } from './RootParamList'
 /**
  * This intefaces can be used with the useRoute hook or React.FC for navigators direct child components.
  * We can create one interface for each navigator
@@ -13,3 +13,6 @@ import { RootStackParamList } from './RootParamList'
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, T>
+
+export type ReportTabsScreenProps<T extends keyof ReportTabsParamList> =
+  NativeStackScreenProps<ReportTabsParamList, T>
