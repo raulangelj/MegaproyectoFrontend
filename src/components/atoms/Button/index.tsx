@@ -7,10 +7,22 @@ export interface ButtonProps {
   type: keyof Colors
   text: string
   styles?: StyleProp<ViewStyle>
+  borderRadius?: number
+  width?: number | string
 }
-const Button: React.FC<ButtonProps> = ({ type = 'primary', text, styles }) => {
+const Button: React.FC<ButtonProps> = ({
+  type = 'primary',
+  text,
+  styles,
+  width,
+  borderRadius,
+}) => {
   return (
-    <ButtonWrapper type={type} styles={styles}>
+    <ButtonWrapper
+      type={type}
+      styles={styles}
+      width={width}
+      borderRadius={borderRadius}>
       <Text>{text}</Text>
     </ButtonWrapper>
   )
