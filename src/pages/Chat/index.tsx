@@ -1,4 +1,4 @@
-import Button from '@components/atoms'
+import Button from '@components/atoms/Button'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import React from 'react'
 import { Container } from './styles'
