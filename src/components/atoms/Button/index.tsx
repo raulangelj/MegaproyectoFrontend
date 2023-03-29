@@ -9,6 +9,7 @@ export interface ButtonProps {
   styles?: StyleProp<ViewStyle>
   borderRadius?: number
   width?: number | string
+  onPress: () => void
 }
 const Button: React.FC<ButtonProps> = ({
   type = 'primary',
@@ -16,13 +17,15 @@ const Button: React.FC<ButtonProps> = ({
   styles,
   width,
   borderRadius,
+  onPress,
 }) => {
   return (
     <ButtonWrapper
       type={type}
       styles={styles}
       width={width}
-      borderRadius={borderRadius}>
+      borderRadius={borderRadius}
+      onPress={onPress}>
       <Text>{text}</Text>
     </ButtonWrapper>
   )
