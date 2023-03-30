@@ -1,9 +1,9 @@
 export interface Question {
-  id: string
+  id: number
   title: string
   description: string
   type: string
-  options: undefined
-  answer: undefined
+  options: Array<string>
+  answer: string
   isAnswered: boolean
 }

@@ -22,6 +22,12 @@ export interface Colors {
   background3: string
   background4: string
   background5: string
+  flatColor1: string
+  flatColor2: string
+  flatColor3: string
+  flatColor4: string
+  flatColor5: string
+  buttonColor0: string
   transparent: 'transparent'
 }
 

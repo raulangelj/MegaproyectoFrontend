@@ -26,6 +26,12 @@ const lightColors: Colors = {
   background3: '#B3B3B3',
   background4: '#999999',
   background5: '#808080',
+  flatColor1: '#87CEEB',
+  flatColor2: '#FADADD',
+  flatColor3: '#D8BFD8',
+  flatColor4: '#F9DC5C',
+  flatColor5: '#FF7F50',
+  buttonColor0: '#F9D99A',
   transparent: 'transparent',
 }
 
