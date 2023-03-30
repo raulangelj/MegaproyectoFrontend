@@ -14,6 +14,7 @@ export type RootStackParamList = {
   SignIn: undefined
   SignUp: undefined
   TabNavigator: undefined
+  HistoryView: undefined
 }
 
 export type ReportTabsParamList = {
