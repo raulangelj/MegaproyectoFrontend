@@ -38,11 +38,13 @@ export const TitleContainer = styled.View(() => ({
 }))
 
 export const TextInput = styled.TextInput(() => ({
-  height: '20%',
-  width: '90%',
+  height: '100%',
+  width: '100%',
   borderRadius: 10,
   borderColor: 'black',
   borderWidth: 1,
+  backgroundColor: 'white',
+  color: 'black',
 }))
 
 export const Text = styled.Text(() => ({
@@ -55,11 +57,9 @@ export const Text = styled.Text(() => ({
 }))
 
 export const InputContainer = styled.View(() => ({
-  flex: 1,
-  flexDirection: 'row',
+  height: '100%',
   width: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
+  backgroundColor: 'green',
 }))
 
 export const TextContainer = styled.View(() => ({
@@ -68,4 +68,15 @@ export const TextContainer = styled.View(() => ({
   width: '100%',
   justifyContent: 'center',
   alignItems: 'center',
+}))
+
+export const KeyBoardAvoidingView = styled.KeyboardAvoidingView(() => ({
+  flex: 1,
+}))
+
+export const ScrollView = styled.ScrollView(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'column',
+  backgroundColor: 'red',
 }))

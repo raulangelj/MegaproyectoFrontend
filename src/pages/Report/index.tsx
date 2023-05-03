@@ -11,6 +11,8 @@ import {
   InputContainer,
   TextContainer,
   ButtonsContainerInside,
+  KeyBoardAvoidingView,
+  ScrollView,
 } from './styles'
 import Image from '../../assets/images/reportImage.svg'
 import { Question } from '@interfaces/questions'
@@ -70,9 +72,11 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
           <Text>{question?.description}</Text>
         </TextContainer>
         {question?.type === 'input' && (
-          <InputContainer>
-            <TextInput onChangeText={setChangeText} />
-          </InputContainer>
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <InputContainer>
+              <TextInput onChangeText={setChangeText} />
+            </InputContainer>
+          </ScrollView>
         )}
         {question?.type === 'options' && (
           <ButtonsContainerInside>
