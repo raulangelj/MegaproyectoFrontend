@@ -67,8 +67,7 @@ export const TextContainer = styled.View(() => ({
   height: '30%',
   flexDirection: 'row',
   width: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
+  backgroundColor: 'green',
 }))
 
 export const KeyBoardAvoidingView = styled.KeyboardAvoidingView(() => ({
@@ -95,4 +94,15 @@ export const Touchable = styled.TouchableOpacity(() => ({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+}))
+
+export const KeyBoardAvoidingView = styled.KeyboardAvoidingView(() => ({
+  flex: 1,
+}))
+
+export const ScrollView = styled.ScrollView(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'column',
+  backgroundColor: 'red',
 }))
