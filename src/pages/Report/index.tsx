@@ -11,11 +11,12 @@ import {
   InputContainer,
   TextContainer,
   ButtonsContainerInside,
-  KeyBoardAvoidingView,
   ScrollView,
+  SliderContainer,
 } from './styles'
 import Image from '../../assets/images/reportImage.svg'
 import { Question } from '@interfaces/questions'
+import { RadialSlider } from 'react-native-radial-slider'
 
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const Question1: Question = {
@@ -48,14 +49,21 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
     options: ['kike', 'jose', 'juan'],
   }
 
-  const [questions, setQuestions] = useState<Question[]>([
-    Question1,
-    Question2,
-    Question3,
-  ])
+  const Question4: Question = {
+    id: 4,
+    description: '¿Que tanto disfrutaste tu dia?',
+    title: 'Nombre',
+    answer: '',
+    isAnswered: true,
+    type: 'slider',
+    options: ['kike'],
+  }
+
+  let questions = [Question1, Question2, Question3, Question4]
   const [counterQuestion, setCounterQuestion] = useState(0)
   const [question, setQuestion] = useState<Question>(questions[counterQuestion])
   const [text, setChangeText] = useState('')
+  const [speed, setSpeed] = useState(0)
 
   useEffect(() => {
     setQuestion(questions[counterQuestion])
@@ -83,6 +91,19 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
             <Button type={'buttonColor0'} borderRadius={10} text={'Feliz'} />
             <Button type={'buttonColor0'} borderRadius={10} text={'Triste'} />
           </ButtonsContainerInside>
+        )}
+        {question?.type === 'slider' && (
+          <SliderContainer>
+            <RadialSlider
+              title="Score"
+              value={speed}
+              min={0}
+              max={100}
+              onChange={setSpeed}
+              unit=" "
+              subTitle="Rango"
+            />
+          </SliderContainer>
         )}
 
         <ButtonsContainer>
