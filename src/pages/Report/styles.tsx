@@ -104,5 +104,12 @@ export const ScrollView = styled.ScrollView(() => ({
   flex: 1,
   width: '100%',
   flexDirection: 'column',
-  backgroundColor: 'red',
+}))
+
+export const SliderContainer = styled.View(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
 }))
