@@ -59,7 +59,6 @@ export const Text = styled.Text(() => ({
 export const InputContainer = styled.View(() => ({
   height: '100%',
   width: '100%',
-  backgroundColor: 'green',
 }))
 
 export const TextContainer = styled.View(() => ({
@@ -78,5 +77,12 @@ export const ScrollView = styled.ScrollView(() => ({
   flex: 1,
   width: '100%',
   flexDirection: 'column',
-  backgroundColor: 'red',
+}))
+
+export const SliderContainer = styled.View(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
 }))
