@@ -29,3 +29,22 @@ export const Text = styled.Text(() => ({
   textAlign: 'center',
   alignItems: 'center',
 }))
+
+export const ButtonsContainer = styled.View(() => ({
+  flex: 0,
+  flexDirection: 'row',
+  height: '10%',
+  width: '100%',
+  justifyContent: 'space-between',
+  backgroundColor: 'white',
+}))
+
+export const DownloadButton = styled.TouchableOpacity(({ theme }) => ({
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: theme.colors.buttonColor0,
+  margin: 10,
+  borderRadius: 10,
+}))
