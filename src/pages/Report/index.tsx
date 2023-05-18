@@ -64,16 +64,30 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [question, setQuestion] = useState<Question>(questions[counterQuestion])
   const [text, setChangeText] = useState('')
   const [speed, setSpeed] = useState(0)
+  const [date, setDate] = useState('')
+
+  const get_date = () => {
+    console.log('date')
+    let day = new Date().getDate()
+    let month = new Date().getMonth()
+    let year = new Date().getFullYear()
+
+    return day + '/' + month + '/' + year
+  }
 
   useEffect(() => {
     setQuestion(questions[counterQuestion])
   }, [counterQuestion])
 
+  useEffect(() => {
+    setDate(get_date())
+  }, [])
+
   return (
     <Container>
       <TitleContainer>
         <Image width={100} height={100} />
-        <Text>Reporte Diario</Text>
+        <Text>Reporte Diario {date}</Text>
       </TitleContainer>
       <CardContainer>
         <TextContainer>

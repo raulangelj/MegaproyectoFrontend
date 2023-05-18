@@ -86,7 +86,7 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
               </tr>
               <tr>
                 <th>Total reportes</th>
-                <td>$13232</td>
+                <td>${reports.length}</td>
               </tr>
             </table>
             <h1>Historial de reportes</h1>
