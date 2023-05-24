@@ -6,37 +6,50 @@ import {
   Text,
   ButtonsContainer,
   DownloadButton,
+  Touchable,
+  ModalView,
+  ModalContainer,
 } from './styles'
 import { useNavigation } from '@react-navigation/native'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
-import { Alert } from 'react-native'
+import { Alert, Modal } from 'react-native'
 import DownloadIcon from '../../assets/images/download.svg'
+import FilterIcon from '../../assets/images/filter.svg'
 
 const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [count, setCount] = useState(1)
+  const [visible, setVisible] = useState(false)
 
-  const reports = [
+  const reportsArr = [
     {
       id: 1,
-      date: '25 marzo 2023',
+      dateDay: 25,
+      dateMonth: 3,
+      dateYear: 2023,
       answered: true,
       responses: 3,
     },
     {
       id: 2,
-      date: '26 marzo 2023',
+      dateDay: 26,
+      dateMonth: 4,
+      dateYear: 2023,
       answered: true,
       responses: 3,
     },
     {
       id: 3,
-      date: '27 mazo 2023',
+      dateDay: 20,
+      dateMonth: 5,
+      dateYear: 2021,
       answered: true,
-      responses: 2,
+      responses: 3,
     },
   ]
+
+  const [reports, setReports] = useState(reportsArr)
 
   const generatePDF = async () => {
     setIsLoading(true)
@@ -101,7 +114,7 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
                   line => `
                 <tr>
                   <td>${line.id}</td>
-                  <td>${line.date}</td>
+                  <td>${line.dateDay}</td>
                   <td>${line.responses}</td>
                 </tr>
               `,
@@ -134,6 +147,40 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
 
   return (
     <Container>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setVisible(!visible)
+        }}
+        visible={visible}>
+        <ModalContainer>
+          <ModalView>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateDay - b.dateDay))
+
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por dia</Text>
+            </Touchable>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateMonth - b.dateMonth))
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por mes</Text>
+            </Touchable>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateYear - b.dateYear))
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por año</Text>
+            </Touchable>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
       <ButtonsContainer>
         <DownloadButton
           onPress={() => {
@@ -142,19 +189,26 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
           <DownloadIcon width={50} />
           <Text>Descargar informe</Text>
         </DownloadButton>
+        <Touchable
+          onPress={() => {
+            setVisible(!visible)
+          }}>
+          <FilterIcon width={50} />
+        </Touchable>
       </ButtonsContainer>
 
-      <HistoryBlock onPress={() => navigation.navigate('HistoryView')}>
-        <Text>Reporte 25 marzo 2023</Text>
-      </HistoryBlock>
-
-      <HistoryBlock>
-        <Text>Reporte 26 marzo 2023</Text>
-      </HistoryBlock>
-
-      <HistoryBlock>
-        <Text>Reporte 27 marzo 2023</Text>
-      </HistoryBlock>
+      {reports.map(report => (
+        <HistoryBlock
+          key={report.id}
+          onPress={() => {
+            navigation.navigate('HistoryView')
+          }}>
+          <Text>Reporte #{report.id}</Text>
+          <Text>
+            {report.dateDay}/{report.dateMonth}/{report.dateYear}
+          </Text>
+        </HistoryBlock>
+      ))}
     </Container>
   )
 }
