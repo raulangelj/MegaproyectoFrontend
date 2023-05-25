@@ -17,14 +17,15 @@ export const ButtonsContainer = styled.View(() => ({
   flex: 0,
   flexDirection: 'row',
   width: '100%',
-  justifyContent: 'space-between',
+  padding: 10,
+  justifyContent: 'center',
 }))
 
 export const ButtonsContainerInside = styled.View(() => ({
   flex: 1,
   flexDirection: 'column',
-  width: '30%',
-  justifyContent: 'space-between',
+  width: '100%',
+  justifyContent: 'space-evenly',
   alignItems: 'center',
 }))
 
@@ -62,7 +63,8 @@ export const InputContainer = styled.View(() => ({
 }))
 
 export const TextContainer = styled.View(() => ({
-  flex: 1,
+  flex: 0,
+  height: '30%',
   flexDirection: 'row',
   width: '100%',
   justifyContent: 'center',
