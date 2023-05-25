@@ -26,7 +26,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
     answer: '',
     isAnswered: true,
     type: 'options',
-    options: ['kike', 'jose', 'juan'],
+    options: ['Feliz', 'Triste', 'Enojado'],
   }
 
   const Question2: Question = {
@@ -102,8 +102,18 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
         )}
         {question?.type === 'options' && (
           <ButtonsContainerInside>
-            <Button type={'buttonColor0'} borderRadius={10} text={'Feliz'} />
-            <Button type={'buttonColor0'} borderRadius={10} text={'Triste'} />
+            {question?.options?.map(option => (
+              <Button
+                type={'buttonColor0'}
+                text={option}
+                width={'auto'}
+                borderRadius={10}
+                onPress={() => {
+                  question.answer = option
+                  setCounterQuestion((counterQuestion + 1) % questions.length)
+                }}
+              />
+            ))}
           </ButtonsContainerInside>
         )}
         {question?.type === 'slider' && (
@@ -127,16 +137,10 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
             width={'auto'}
             borderRadius={10}
             onPress={() => {
+              question.isAnswered = false
+              console.log(question.answer)
+              console.log(question.isAnswered)
               setCounterQuestion((counterQuestion + 1) % questions.length)
-            }}
-          />
-          <Button
-            type="buttonColor0"
-            text="Siguiente"
-            width={'auto'}
-            borderRadius={10}
-            onPress={() => {
-              setCounterQuestion((counterQuestion + 1) % questions.length) //CHANGE
             }}
           />
         </ButtonsContainer>
