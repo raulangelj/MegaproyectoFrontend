@@ -24,6 +24,50 @@ export interface Colors {
   transparent: 'transparent'
 }
 
+export interface Fonts {
+  family: keyof FontFamilies
+  fontSize: number
+  lineHeight: number
+  fontWeight: TextFontWeight
+  letterSpacing: number
+  color: keyof Colors
+}
+
+export interface FontFamilies {
+  light: string
+  regular: string
+  medium: string
+  semibold: string
+  bold: string
+}
+
+export type TextFontWeight =
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semibold'
+  | 'bold'
+
+export type FontSize = keyof FontSizes
+export interface FontSizes {
+  hero: Fonts
+  d1: Fonts
+  d2: Fonts
+  d3: Fonts
+  h1: Fonts
+  h2: Fonts
+  c: Fonts
+  pLarge: Fonts
+  pLargeBold: Fonts
+  pMedium: Fonts
+  pMediumBold: Fonts
+  pSmall: Fonts
+  pSmallBold: Fonts
+  buttonLarge: Fonts
+  buttonMedium: Fonts
+  buttonSmall: Fonts
+}
+
 export interface Sizes {
   xxxs: number
   xxs: number
@@ -40,4 +84,6 @@ export interface AppTheme {
   name: string
   sizes: Sizes
   colors: Colors
+  fontSizes: FontSizes
+  fontFamilies: FontFamilies
 }
