@@ -7,6 +7,5 @@ export const ButtonWrapper = styled.TouchableOpacity<
   backgroundColor: theme.colors[type],
   width: width || '100%',
   borderRadius: borderRadius || 0,
-  height: theme.sizes.xl * 2,
   padding: theme.sizes.md,
 }))
