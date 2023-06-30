@@ -11,7 +11,7 @@ export const fontsFamilies: FontFamilies = {
 const heroFont: Fonts = {
   family: 'bold',
   fontSize: 78,
-  lineHeight: 105 / 100,
+  lineHeight: 0,
   fontWeight: 'bold',
   letterSpacing: -1,
   color: 'foreground0',
@@ -20,7 +20,7 @@ const heroFont: Fonts = {
 const display1Font: Fonts = {
   family: 'regular',
   fontSize: 56,
-  lineHeight: 108 / 100,
+  lineHeight: 0,
   fontWeight: 'bold',
   letterSpacing: -1,
   color: 'foreground0',
@@ -29,7 +29,7 @@ const display1Font: Fonts = {
 const display2Font: Fonts = {
   family: 'regular',
   fontSize: 40,
-  lineHeight: 112 / 100,
+  lineHeight: 0,
   fontWeight: 'bold',
   letterSpacing: -1,
   color: 'foreground0',
@@ -38,7 +38,7 @@ const display2Font: Fonts = {
 const display3Font: Fonts = {
   family: 'regular',
   fontSize: 32,
-  lineHeight: 128 / 100,
+  lineHeight: 0,
   fontWeight: 'bold',
   letterSpacing: -1,
   color: 'foreground0',
@@ -47,7 +47,7 @@ const display3Font: Fonts = {
 const heading1Font: Fonts = {
   family: 'regular',
   fontSize: 24,
-  lineHeight: 128 / 100,
+  lineHeight: 0,
   fontWeight: 'bold',
   letterSpacing: -0.5,
   color: 'foreground0',
@@ -74,7 +74,7 @@ const captionFont: Fonts = {
 const paragraphLargeFont: Fonts = {
   family: 'regular',
   fontSize: 16,
-  lineHeight: 150 / 100,
+  lineHeight: 0,
   fontWeight: 'regular',
   letterSpacing: -0.5,
   color: 'foreground0',
@@ -92,7 +92,7 @@ const paragraphLargeBoldFont: Fonts = {
 const paragraphMediumFont: Fonts = {
   family: 'regular',
   fontSize: 14,
-  lineHeight: 150 / 100,
+  lineHeight: 0,
   fontWeight: 'regular',
   letterSpacing: 0,
   color: 'foreground0',
