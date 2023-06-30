@@ -32,6 +32,10 @@ export const StyledText = styled.Text<TextProps>(
     letterSpacing: letterSpacing ?? theme.fontSizes[type].letterSpacing,
     fontWeight:
       fontWeightMapping[fontWeight ?? theme.fontSizes[type].fontWeight],
-    lineHeight: lineHeight ?? theme.fontSizes[type].lineHeight,
+    lineHeight:
+      lineHeight ??
+      (theme.fontSizes[type].lineHeight === 0
+        ? undefined
+        : theme.fontSizes[type].lineHeight),
   }),
 )

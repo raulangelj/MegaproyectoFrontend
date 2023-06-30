@@ -8,7 +8,9 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   return (
     <Container>
       <Button type="primary" text="Hello" />
-      <Text type="d1">Chat</Text>
+      <Text type="pLarge" color="foreground0">
+        Chat
+      </Text>
     </Container>
   )
 }
