@@ -13,7 +13,7 @@ const lightColors: Colors = {
   warning: '#E6CF63',
   info: '#007AFF',
 
-  foreground0: '#222222',
+  foreground0: '#10182B',
   foreground1: '#1C1C1E',
   foreground2: '#393E46',
   foreground3: '#2D2D2D',
