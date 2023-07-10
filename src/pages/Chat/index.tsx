@@ -3,6 +3,7 @@ import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import React from 'react'
 import { Container } from './styles'
 import Text from '@components/atoms/Text'
+import ChatMessage from '@components/molecules/ChatBubble'
 
 const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   return (
@@ -16,11 +17,22 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
         textType="buttonMedium"
         size="block"
         onPress={() => console.log('Pressed!')}
-        onFocus={() => console.log('Focused!')}
       />
       <Text type="h1" color="foreground0">
         Hello
       </Text>
+      <ChatMessage author="OTRO" text="Este es un mensaje del usuario ACTUAL" />
+      <ChatMessage
+        author="Actual"
+        text="Este es un mensaje de prubeeee"
+        isActualUser
+      />
+      <ChatMessage author="OTRO" text="Este es un mensaje del usuario ACTUAL" />
+      <ChatMessage
+        author="Actual"
+        text="Este es un mensaje de prubeeee"
+        isActualUser
+      />
     </Container>
   )
 }
