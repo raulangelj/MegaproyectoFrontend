@@ -1,12 +1,12 @@
 import { Colors } from '@interfaces/themes'
 
 const lightColors: Colors = {
-  primary: '#FA9900',
-  secondary: '#F1A36B',
-  tertiary: '#FF141C',
-  quaternary: '#00B32F',
-  quinary: '#E6CF63',
-  senary: '#007AFF',
+  primary: '#F4E9E0',
+  secondary: '#80B4AB',
+  tertiary: '#EEDBCD',
+  quaternary: '#466875',
+  quinary: '#FFBB98',
+  senary: '#10182B',
 
   error: '#CA0519',
   success: '#45ABAD',
