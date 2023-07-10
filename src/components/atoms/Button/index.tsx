@@ -1,30 +1,55 @@
-import { Colors } from '@interfaces/themes'
+import { Colors, FontSizes } from '@interfaces/themes'
 import React from 'react'
-import { StyleProp, Text, ViewStyle } from 'react-native'
-import { ButtonWrapper } from './styles'
+import { StyleProp, TextStyle } from 'react-native'
+import { ButtonContainer, ButtonSize, ButtonWrapper } from './styles'
+import Text from '../Text'
 
 export interface ButtonProps {
-  type: keyof Colors
+  onPress: () => void
   text: string
-  styles?: StyleProp<ViewStyle>
+  size: ButtonSize
+  textType: keyof Pick<
+    FontSizes,
+    'buttonSmall' | 'buttonMedium' | 'buttonLarge'
+  >
+  textStyle?: StyleProp<TextStyle>
+  activeOpacity?: number
+  color?: keyof Colors
+  textColor?: keyof Colors
   borderRadius?: number
-  width?: number | string
+  onFocus?: () => void
 }
 const Button: React.FC<ButtonProps> = ({
-  type = 'primary',
   text,
-  styles,
-  width,
+  color,
+  textColor,
+  activeOpacity,
+  textStyle,
+  textType,
+  size,
   borderRadius,
+  onPress,
+  onFocus = () => {},
 }) => {
   return (
-    <ButtonWrapper
-      type={type}
-      styles={styles}
-      width={width}
-      borderRadius={borderRadius}>
-      <Text>{text}</Text>
-    </ButtonWrapper>
+    <ButtonContainer>
+      <ButtonWrapper
+        color={color}
+        borderRadius={borderRadius}
+        size={size}
+        onPress={onPress}
+        onFocus={onFocus}
+        activeOpacity={activeOpacity ?? 0.8}
+        accessibilityLabel="Press me">
+        <Text
+          type={textType}
+          color={textColor}
+          style={textStyle}
+          numberOfLines={1}>
+          {text}
+        </Text>
+      </ButtonWrapper>
+    </ButtonContainer>
   )
 }
 
