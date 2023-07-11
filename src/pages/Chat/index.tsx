@@ -1,39 +1,56 @@
-import Button from '@components/atoms/Button'
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
-import React from 'react'
-import { Container } from './styles'
-import Text from '@components/atoms/Text'
+import React, { useState } from 'react'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import {
+  ChatScreen,
+  MessageInput,
+  MessageInputContainer,
+  MessageSendPressable,
+  MessageView,
+} from './styles'
+import { MockChatRoom } from '@static/mocks/ChatRoom'
+import { FlatList, Text, View } from 'react-native'
 import ChatMessage from '@components/molecules/ChatBubble'
+import { MockHost } from '@static/mocks/User'
+import { Message } from '@interfaces/chat'
 
 const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
+  const [actualUser, setActualUser] = useState(MockHost)
+  const [chatInfo, setChatInfo] = useState(MockChatRoom)
+  // const [chatMessages, setChatMessages] = React.useState(MockChatRoom)
+
+  const renderItems = ({ item }: { item: Message }) => {
+    return (
+      <ChatMessage
+        text={item.content}
+        author={item.author_name}
+        isActualUser={item.author_id === actualUser.id}
+      />
+    )
+  }
+
   return (
-    <Container>
-      <Text type="pLarge" color="foreground0">
-        Chat
-      </Text>
-      <Button
-        text="Press me!"
-        color="primary"
-        textType="buttonMedium"
-        size="block"
-        onPress={() => console.log('Pressed!')}
-      />
-      <Text type="h1" color="foreground0">
-        Hello
-      </Text>
-      <ChatMessage author="OTRO" text="Este es un mensaje del usuario ACTUAL" />
-      <ChatMessage
-        author="Actual"
-        text="Este es un mensaje de prubeeee"
-        isActualUser
-      />
-      <ChatMessage author="OTRO" text="Este es un mensaje del usuario ACTUAL" />
-      <ChatMessage
-        author="Actual"
-        text="Este es un mensaje de prubeeee"
-        isActualUser
-      />
-    </Container>
+    <ChatScreen>
+      <MessageView>
+        {chatInfo.messages.length > 0 ? (
+          <FlatList
+            data={chatInfo.messages}
+            renderItem={renderItems}
+            keyExtractor={(item: Message) => item.id}
+          />
+        ) : (
+          ''
+        )}
+      </MessageView>
+      <MessageInputContainer>
+        <MessageInput />
+        <MessageSendPressable>
+          <FontAwesome name="send" size={20} color="#f2f0f1" />
+          {/* <Text style={{ color: '#f2f0f1', fontSize: 20 }}>SEND</Text> */}
+        </MessageSendPressable>
+      </MessageInputContainer>
+    </ChatScreen>
   )
 }
 
