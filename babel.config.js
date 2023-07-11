@@ -12,6 +12,7 @@ module.exports = {
           '@themes': './src/themes',
           '@components': './src/components',
           '@interfaces': './src/interfaces',
+          '@static': './src/static',
         },
       },
     ],
