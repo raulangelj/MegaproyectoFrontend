@@ -18,7 +18,7 @@ export interface ButtonProps {
   textColor?: keyof Colors
   borderRadius?: number
   width?: number | string
-  onPress?: () => void
+  onFocus?: () => void
 }
 const Button: React.FC<ButtonProps> = ({
   text,

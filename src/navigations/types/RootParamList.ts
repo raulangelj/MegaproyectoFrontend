@@ -10,13 +10,16 @@
 export type RootStackParamList = {
   Chat: undefined
   ActivitiesMenu: undefined
-  TabNavigator: undefined
+  TabNavigator: { screen: string } | undefined
+  Report: undefined
   HistoryView: undefined
 }
 
 export type ReportTabsParamList = {
   Report: undefined
   HistoryReport: undefined
+  MainReport: undefined
+  Main: undefined
 }
 
 declare global {
