@@ -13,8 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
 import { Alert, Modal } from 'react-native'
-import DownloadIcon from '../../assets/images/download.svg'
-import FilterIcon from '../../assets/images/filter.svg'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
   const navigation = useNavigation()
@@ -186,14 +185,14 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
           onPress={() => {
             generatePDF()
           }}>
-          <DownloadIcon width={50} />
+          <Icon name='file-download' size={30} color="black" />
           <Text>Descargar informe</Text>
         </DownloadButton>
         <Touchable
           onPress={() => {
             setVisible(!visible)
           }}>
-          <FilterIcon width={50} />
+          <Icon name='filter' size={30} color="black" />
         </Touchable>
       </ButtonsContainer>
 

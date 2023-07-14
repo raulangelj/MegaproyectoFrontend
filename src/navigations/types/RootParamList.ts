@@ -13,13 +13,16 @@ export type RootStackParamList = {
   ActivitiesList: undefined
   SignIn: undefined
   SignUp: undefined
-  TabNavigator: undefined
+  TabNavigator: { screen: string } | undefined
+  Report: undefined
   HistoryView: undefined
 }
 
 export type ReportTabsParamList = {
   Report: undefined
   HistoryReport: undefined
+  MainReport: undefined
+  Main: undefined
 }
 
 declare global {

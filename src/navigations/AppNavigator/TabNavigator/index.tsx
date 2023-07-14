@@ -3,28 +3,53 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HistoryReport from '@pages/HistoryReport'
 import Report from '@pages/Report'
+import MainReport from '@pages/MainReportPage'
 import { ReportTabsParamList } from '@navigations/types/RootParamList'
-import ReportIcon2 from '../../../assets/images/iconTres.svg'
-import HistoryIcon from '../../../assets/images/historyIcon.svg'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Tab = createBottomTabNavigator<ReportTabsParamList>()
+
+const Stack = createNativeStackNavigator<ReportTabsParamList>()
+
+const ReportStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="MainReport"
+      component={MainReport}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Report"
+      component={Report}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </Stack.Navigator>
+)
+
 const TabNavigator: React.FC<RootStackScreenProps<'TabNavigator'>> = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Report"
+        name="Main"
         options={{
           title: 'Reporte',
-          tabBarIcon: () => <ReportIcon2 width={20} height={20} />,
+          tabBarIcon: () => (
+            <Icon name="file-document-edit-outline" size={20} color="black" />
+          ),
           headerShown: false,
         }}
-        component={Report}
+        component={ReportStack}
       />
       <Tab.Screen
         name="HistoryReport"
         options={{
           title: 'Historial',
-          tabBarIcon: () => <HistoryIcon width={20} height={20} />,
+          tabBarIcon: () => <Icon name="history" size={20} color="black" />,
           headerShown: false,
         }}
         component={HistoryReport}
