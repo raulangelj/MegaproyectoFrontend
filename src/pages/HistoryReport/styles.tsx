@@ -24,7 +24,7 @@ export const HistoryBlock = styled.TouchableOpacity(({ theme }) => ({
 export const Text = styled.Text(() => ({
   flex: 1,
   color: 'black',
-  fontSize: 20,
+  fontSize: 15,
   fontWeight: 'bold',
   textAlign: 'center',
   alignItems: 'center',
@@ -46,6 +46,7 @@ export const DownloadButton = styled.TouchableOpacity(({ theme }) => ({
   alignItems: 'center',
   backgroundColor: theme.colors.buttonColor0,
   margin: 10,
+  padding: 10,
   borderRadius: 10,
 }))
 
