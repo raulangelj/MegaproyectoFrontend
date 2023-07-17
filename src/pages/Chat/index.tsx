@@ -18,16 +18,30 @@ import { Message } from '@interfaces/chat'
 const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   const [actualUser, setActualUser] = useState(MockHost)
   const [chatInfo, setChatInfo] = useState(MockChatRoom)
+  const [message, setMessage] = useState('')
   // const [chatMessages, setChatMessages] = React.useState(MockChatRoom)
 
   const renderItems = ({ item }: { item: Message }) => {
     return (
       <ChatMessage
-        text={item.content}
-        author={item.author_name}
+        item={item}
         isActualUser={item.author_id === actualUser.id}
       />
     )
+  }
+
+  const onChangeText = (value: string) => {
+    setMessage(value)
+  }
+
+  const onMessageSend = () => {
+    const newMessage: Omit<Message, 'id'> = {
+      author_id: actualUser.id,
+      author_name: actualUser.name,
+      content: message,
+      created_at: new Date(),
+    }
+    console.log(newMessage)
   }
 
   return (
@@ -44,10 +58,9 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
         )}
       </MessageView>
       <MessageInputContainer>
-        <MessageInput />
-        <MessageSendPressable>
+        <MessageInput onChangeText={onChangeText} />
+        <MessageSendPressable onPress={onMessageSend}>
           <FontAwesome name="send" size={20} color="#f2f0f1" />
-          {/* <Text style={{ color: '#f2f0f1', fontSize: 20 }}>SEND</Text> */}
         </MessageSendPressable>
       </MessageInputContainer>
     </ChatScreen>
