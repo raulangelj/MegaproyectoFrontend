@@ -8,19 +8,12 @@ import { InputWrapper, LeftIcon, RightIcon, StyledInput } from './styles'
 interface ExtraInputProps {
   label: ReactNode
   icon: ComponentProps<typeof MaterialCommunityIcons>['name']
-  showLabel?: boolean
   isPassword?: boolean
 }
 
 export type InputProps = TextInputProps & ExtraInputProps
 
-const Input: React.FC<InputProps> = ({
-  label,
-  icon,
-  showLabel,
-  isPassword,
-  ...props
-}) => {
+const Input: React.FC<InputProps> = ({ label, icon, isPassword, ...props }) => {
   const [hasFocus, setHasFocus] = React.useState(false)
   const [showPassword, setShowPassword] = React.useState(false)
 
@@ -44,7 +37,7 @@ const Input: React.FC<InputProps> = ({
           color={lightTheme.colors.quinary}
         />
       </LeftIcon>
-      {showLabel && <Text type="pSmall">{label}</Text>}
+      <Text type="pSmall">{label}</Text>
       <StyledInput
         {...props}
         hasFocus={hasFocus}
