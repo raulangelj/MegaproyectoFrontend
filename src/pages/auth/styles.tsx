@@ -40,7 +40,8 @@ export const SignInButtonContainer = styled.View(({ theme }) => ({
 }))
 
 export const SignInButton = styled(Button)(({ theme }) => ({
-  padding: theme.sizes.xs,
+  padding: theme.sizes.sm,
+  marginVertical: theme.sizes.xs,
 }))
 
 export const ForgotPasswordText = styled(Text)(() => ({
@@ -52,11 +53,13 @@ export const InputField = styled(Input)(() => ({
 }))
 
 export const CreateAccountContainer = styled.View(({ theme }) => ({
+  flex: 1,
   flexDirection: 'row',
+  alignItems: 'flex-end',
   justifyContent: 'center',
-  // alignItems: 'center',
+  alignSelf: 'flex-end',
   width: '100%',
-  marginVertical: theme.sizes.xl,
+  marginBottom: theme.sizes.lg,
 }))
 
 export const CreateAccountBtn = styled.Pressable(() => ({
