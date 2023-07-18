@@ -73,7 +73,7 @@ export const SignIn = () => {
             </ForgotPasswordText>
           </ForgotPasswordButton>
         </LoginSmallButtonsContainer>
-        {/* NO ESTA JALANDO LOS ESTILOS  */}
+        {/* NO ESTA JALANDO LOS ESTILOS ! falta un margen vertical */}
         <SignInButton
           textType="buttonMedium"
           size="block"
