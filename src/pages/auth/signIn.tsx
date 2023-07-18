@@ -14,7 +14,11 @@ import Text from '@components/atoms/Text'
 import { Checkbox } from 'native-base'
 import { OrStray } from '@components/atoms/OrStray'
 import SocialBtns from '@components/atoms/SocialBtns'
-export const SignIn = () => {
+import { RootStackScreenProps } from '@navigations/types/ScreenProps'
+
+export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
+  navigation,
+}) => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
@@ -38,7 +42,7 @@ export const SignIn = () => {
     console.log('Twitter')
   }
   const onCreateAccount = () => {
-    console.log('Create Account')
+    navigation.navigate('SignUp')
   }
 
   return (
