@@ -73,11 +73,12 @@ export const SignIn = () => {
             </ForgotPasswordText>
           </ForgotPasswordButton>
         </LoginSmallButtonsContainer>
+        {/* NO ESTA JALANDO LOS ESTILOS  */}
         <SignInButton
           textType="buttonMedium"
           size="block"
           onPress={onSignIn}
-          text="Sign In 2"
+          text="Sign In"
           borderRadius={50}
         />
       </EmailPaswordContainer>
