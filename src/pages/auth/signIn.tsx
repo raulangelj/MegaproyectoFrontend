@@ -50,7 +50,6 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
       <Text type="h1">Sign In</Text>
       <EmailPaswordContainer>
         <InputField
-          showLabel
           label="Email Address"
           icon="email-variant"
           value={email}
@@ -59,7 +58,6 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
           keyboardType="email-address"
         />
         <InputField
-          showLabel
           label="Password"
           icon="lock-open"
           value={password}
