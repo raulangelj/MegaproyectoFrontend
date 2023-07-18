@@ -18,6 +18,7 @@ export interface ButtonProps {
   textColor?: keyof Colors
   borderRadius?: number
   onFocus?: () => void
+  style?: StyleProp<TextStyle>
 }
 const Button: React.FC<ButtonProps> = ({
   text,
@@ -30,9 +31,10 @@ const Button: React.FC<ButtonProps> = ({
   borderRadius,
   onPress,
   onFocus = () => {},
+  style,
 }) => {
   return (
-    <ButtonContainer>
+    <ButtonContainer style={style}>
       <ButtonWrapper
         color={color}
         borderRadius={borderRadius}
