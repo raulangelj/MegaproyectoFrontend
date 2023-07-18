@@ -11,6 +11,7 @@ export type RootStackParamList = {
   Chat: undefined
   ActivitiesMenu: undefined
   SignIn: undefined
+  SignUp: undefined
 }
 
 declare global {
