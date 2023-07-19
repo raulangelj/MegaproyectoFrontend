@@ -75,7 +75,6 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
             </ForgotPasswordText>
           </ForgotPasswordButton>
         </LoginSmallButtonsContainer>
-        {/* NO ESTA JALANDO LOS ESTILOS ! falta un margen vertical */}
         <SignInButton
           textType="buttonMedium"
           size="block"
