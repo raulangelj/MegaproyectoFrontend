@@ -3,10 +3,10 @@ import Image from '../../assets/images/reportMain.svg'
 import { Container } from './styles'
 import React from 'react'
 import Button from '@components/atoms/Button'
-import { useNavigation } from '@react-navigation/native'
 
-const MainReport: React.FC<ReportTabsScreenProps<'MainReport'>> = () => {
-  const navigation = useNavigation()
+const MainReport: React.FC<ReportTabsScreenProps<'MainReport'>> = ({
+  navigation,
+}) => {
   return (
     <Container>
       <Image width={300} height={300} />

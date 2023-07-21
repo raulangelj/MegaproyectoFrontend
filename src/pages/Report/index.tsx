@@ -7,21 +7,22 @@ import {
   ButtonsContainer,
   TitleContainer,
   TextInput,
-  Text,
-  InputContainer,
   TextContainer,
   ButtonsContainerInside,
   ScrollView,
   SliderContainer,
+  SkipPressable,
+  MicPressable,
 } from './styles'
+import Text from '@components/atoms/Text'
 import Image from '../../assets/images/reportImage.svg'
 import { Question } from '@interfaces/questions'
 import { RadialSlider } from 'react-native-radial-slider'
 import Voice from '@react-native-voice/voice'
-import { TouchableHighlight } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Questions } from '@static/mocks/QuestionsMock'
-import { Checkbox, NativeBaseProvider } from 'native-base'
+import { CheckBox, LinearProgress } from '@rneui/themed'
 
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [counterQuestion, setCounterQuestion] = useState(0)
@@ -37,6 +38,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [results, setResults] = useState([])
   const [partialResults, setPartialResults] = useState([])
   const [checked, setChecked] = useState(false)
+  const [groupValues, setGroupValues] = useState([])
 
   useEffect(() => {
     //Setting callbacks for the process status
@@ -75,6 +77,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
     //Invoked when SpeechRecognizer is finished recognizing
     console.log('onSpeechResults: ', e)
     setResults(e.value)
+    setChangeText(e.value[0])
   }
 
   const onSpeechPartialResults = e => {
@@ -137,6 +140,15 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
     }
   }
 
+  const changeStatusofRecord = () => {
+    if (started === '') {
+      startRecognizing()
+    } else {
+      setStarted('')
+      stopRecognizing()
+    }
+  }
+
   const get_date = () => {
     console.log('date')
     let day = new Date().getDate()
@@ -155,95 +167,88 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   }, [])
 
   return (
-    <NativeBaseProvider>
-      <Container>
-        <TitleContainer>
-          <Image width={100} height={100} />
-          <Text>Reporte Diario {date}</Text>
-        </TitleContainer>
-        <CardContainer>
-          <TextContainer>
-            <Text>{question?.description}</Text>
-          </TextContainer>
-          {question?.type === 'input' && (
-            <ScrollView showsHorizontalScrollIndicator={false}>
-              <TouchableHighlight onPress={startRecognizing}>
-                <FontAwesome name="microphone" size={45} color="black" />
-              </TouchableHighlight>
-              <InputContainer>
-                <TextInput onChangeText={setChangeText} />
-              </InputContainer>
-              <ScrollView style={{ marginBottom: 42 }}>
-                {results.map((result, index) => {
-                  return (
-                    <Text key={`result-${index}`} style={styles.textStyle}>
-                      {result}
-                    </Text>
-                  )
-                })}
-              </ScrollView>
-            </ScrollView>
-          )}
-          {question?.type === 'options' && (
-            <ButtonsContainerInside>
-              {question?.options?.map(option => (
-                <Button
-                  textType="buttonSmall"
-                  color="primary"
-                  text={option}
-                  width={'auto'}
-                  size="block"
-                  borderRadius={10}
-                  onPress={() => {
-                    question.answer = option
-                    setCounterQuestion((counterQuestion + 1) % Questions.length)
-                  }}
-                />
-              ))}
-            </ButtonsContainerInside>
-          )}
-          {question?.type === 'slider' && (
-            <SliderContainer>
-              <RadialSlider
-                title="Score"
-                value={speed}
-                min={0}
-                max={100}
-                onChange={setSpeed}
-                unit=" "
-                subTitle="Rango"
+    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
+      <TitleContainer>
+        <Image width={100} height={100} />
+        <Text type="pMedium" color="quaternary">
+          Reporte Diario {date}
+        </Text>
+        <LinearProgress color="red" style={{ marginTop: 10, width: '80%' }} />
+      </TitleContainer>
+
+      <CardContainer>
+        {question?.type === 'input' && (
+          <Container>
+            <TextContainer>
+              <Text type="pMedium">{question?.description}</Text>
+            </TextContainer>
+            <TextInput onChangeText={setChangeText} value={text} />
+            <MicPressable onPress={changeStatusofRecord}>
+              <FontAwesome name="microphone" size={40} color="white" />
+            </MicPressable>
+          </Container>
+        )}
+        {question?.type === 'options' && (
+          <ButtonsContainerInside>
+            <TextContainer>
+              <Text type="pMedium">{question?.description}</Text>
+            </TextContainer>
+            {question?.options?.map(option => (
+              <Button
+                key={option}
+                textType="buttonSmall"
+                color="primary"
+                text={option}
+                width={'auto'}
+                size="block"
+                borderRadius={10}
+                onPress={() => {
+                  question.answer = option
+                  setCounterQuestion((counterQuestion + 1) % Questions.length)
+                }}
               />
-            </SliderContainer>
-          )}
-
-          {question?.type === 'checkbox' && (
-            <Checkbox
-              isChecked={checked}
-              onChange={() => setChecked(!checked)}
-              value={''}>
-              <Text>I agree</Text>
-            </Checkbox>
-          )}
-
-          <ButtonsContainer>
-            <Button
-              textType="buttonLarge"
-              color="primary"
-              size="block"
-              text="Saltar"
-              width={'auto'}
-              borderRadius={10}
-              onPress={() => {
-                question.isAnswered = false
-                console.log(question.answer)
-                console.log(question.isAnswered)
-                setCounterQuestion((counterQuestion + 1) % Questions.length)
-              }}
+            ))}
+          </ButtonsContainerInside>
+        )}
+        {question?.type === 'slider' && (
+          <SliderContainer>
+            <RadialSlider
+              value={speed}
+              min={0}
+              max={100}
+              onChange={setSpeed}
+              unit=" "
+              subTitle="Calificacion"
+              sliderWidth={10}
+              leftIconStyle={{ display: 'none' }}
+              rightIconStyle={{ display: 'none' }}
             />
-          </ButtonsContainer>
-        </CardContainer>
-      </Container>
-    </NativeBaseProvider>
+          </SliderContainer>
+        )}
+
+        {question?.type === 'checkbox' && (
+          <CheckBox
+            checked={checked}
+            onPress={() => {
+              setChecked(!checked)
+            }}
+            title="Custom"
+            iconType="material-community"
+            checkedIcon="checkbox-marked"
+            uncheckedIcon="checkbox-blank-outline"
+          />
+        )}
+      </CardContainer>
+      <ButtonsContainer>
+        <SkipPressable
+          onPress={() => {
+            question.isAnswered = false
+            setCounterQuestion((counterQuestion + 1) % Questions.length)
+          }}>
+          <AntDesign name="right" size={40} color="white" />
+        </SkipPressable>
+      </ButtonsContainer>
+    </ScrollView>
   )
 }
 
