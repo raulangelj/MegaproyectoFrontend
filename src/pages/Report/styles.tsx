@@ -2,12 +2,14 @@ import styled from '@emotion/native'
 //TODO
 //Ask props , and FC or view? in Text
 
+
 export const Container = styled.View(({ theme }) => ({
   flex: 0,
   backgroundColor: theme.colors.background0,
   alignItems: 'center',
   width: '100%',
   height: '100%',
+  borderRadius: 10,
 }))
 
 export const ButtonsContainer = styled.View(() => ({
@@ -23,7 +25,7 @@ export const ButtonsContainerInside = styled.View(({ theme }) => ({
   alignItems: 'center',
   borderRadius: 10,
   shadowColor: 'black',
-  backgroundColor: theme.colors.quaternary,
+  backgroundColor: theme.colors.background0,
 }))
 
 export const TitleContainer = styled.View(({ theme }) => ({
@@ -33,7 +35,7 @@ export const TitleContainer = styled.View(({ theme }) => ({
   flexDirection: 'column',
   padding: 10,
   justifyContent: 'center',
-  backgroundColor: theme.colors.background0,
+  backgroundColor: theme.colors.primary,
 }))
 
 export const CardContainer = styled.View(() => ({
@@ -48,7 +50,7 @@ export const SkipPressable = styled.Pressable(({ theme }) => ({
   padding: 10,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: theme.colors.senary,
+  backgroundColor: theme.colors.quinary,
   borderRadius: 50,
 }))
 
@@ -58,16 +60,16 @@ export const MicPressable = styled.Pressable(({ theme }) => ({
   marginTop: 10,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: theme.colors.quaternary,
+  backgroundColor: theme.colors.quinary,
   borderRadius: 50,
 }))
 
-export const TextInput = styled.TextInput(() => ({
+export const TextInput = styled.TextInput(({ theme }) => ({
   height: '40%',
-  width: '100%',
+  width: '90%',
   borderRadius: 10,
   backgroundColor: 'white',
-  borderColor: 'black',
+  borderColor: theme.colors.background4,
   borderWidth: 2,
   color: 'black',
 }))
@@ -101,19 +103,21 @@ export const KeyBoardAvoidingView = styled.KeyboardAvoidingView(() => ({
   flex: 1,
 }))
 
-export const ScrollView = styled.ScrollView(( { theme }) => ({
+export const ScrollView = styled.ScrollView(({ theme }) => ({
   flex: 0,
   width: '100%',
   flexDirection: 'column',
-  backgroundColor: theme.colors.background0,
+  backgroundColor: theme.colors.primary,
 }))
 
-export const SliderContainer = styled.View(() => ({
+export const SliderContainer = styled.View(({ theme }) => ({
   flex: 1,
   width: '100%',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  backgroundColor: theme.colors.background0,
+  borderRadius: 10,
 }))
 
 export const Touchable = styled.TouchableOpacity(() => ({
