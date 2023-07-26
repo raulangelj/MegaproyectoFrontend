@@ -3,7 +3,8 @@ export interface Question {
   title: string
   description: string
   type: string
-  options: Array<string>
+  options?: Array<string>
   answer: string
   isAnswered: boolean
+  checkBoxOptions?: Array<any>
 }

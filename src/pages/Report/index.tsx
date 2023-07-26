@@ -14,6 +14,7 @@ import {
   SkipPressable,
   MicPressable,
 } from './styles'
+import { lightColors } from '@themes/colors'
 import Text from '@components/atoms/Text'
 import Image from '../../assets/images/reportImage.svg'
 import { Question } from '@interfaces/questions'
@@ -39,6 +40,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [partialResults, setPartialResults] = useState([])
   const [checked, setChecked] = useState(false)
   const [groupValues, setGroupValues] = useState([])
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     //Setting callbacks for the process status
@@ -160,27 +162,59 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
 
   useEffect(() => {
     setQuestion(Questions[counterQuestion])
+    //change the bar progress between 0 and 1
+    setProgress((counterQuestion + 1) / Questions.length)
   }, [counterQuestion])
 
   useEffect(() => {
     setDate(get_date())
   }, [])
 
+  //handle state of checkboxes dynamically
+  const [state, setState] = useState<{ selections: string[] }>({
+    selections: [],
+  })
+
+  function handleCheckboxChange(key: string) {
+    let sel = state.selections
+    let find = sel.indexOf(key)
+    if (find > -1) {
+      sel.splice(find, 1)
+    } else {
+      sel.push(key)
+    }
+
+    setState({
+      selections: sel,
+    })
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
       <TitleContainer>
         <Image width={100} height={100} />
-        <Text type="pMedium" color="quaternary">
+        <Text type="pLarge" color="quaternary">
           Reporte Diario {date}
         </Text>
-        <LinearProgress color="red" style={{ marginTop: 10, width: '80%' }} />
+        <LinearProgress
+          color={lightColors.quinary}
+          animation={{ duration: 1000 }}
+          style={{ width: '80%', height: 10 }}
+          value={progress}
+          variant="determinate"
+        />
       </TitleContainer>
 
       <CardContainer>
         {question?.type === 'input' && (
           <Container>
             <TextContainer>
-              <Text type="pMedium">{question?.description}</Text>
+              <Text
+                type="h1"
+                color="background3"
+                style={{ textAlign: 'center' }}>
+                {question?.description}
+              </Text>
             </TextContainer>
             <TextInput onChangeText={setChangeText} value={text} />
             <MicPressable onPress={changeStatusofRecord}>
@@ -191,13 +225,15 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
         {question?.type === 'options' && (
           <ButtonsContainerInside>
             <TextContainer>
-              <Text type="pMedium">{question?.description}</Text>
+              <Text type="h1" color="background3">
+                {question?.description}
+              </Text>
             </TextContainer>
             {question?.options?.map(option => (
               <Button
                 key={option}
                 textType="buttonSmall"
-                color="primary"
+                color="tertiary"
                 text={option}
                 width={'auto'}
                 size="block"
@@ -212,6 +248,14 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
         )}
         {question?.type === 'slider' && (
           <SliderContainer>
+            <TextContainer>
+              <Text
+                type="h1"
+                color="background3"
+                style={{ textAlign: 'center' }}>
+                {question?.description}
+              </Text>
+            </TextContainer>
             <RadialSlider
               value={speed}
               min={0}
@@ -222,30 +266,64 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
               sliderWidth={10}
               leftIconStyle={{ display: 'none' }}
               rightIconStyle={{ display: 'none' }}
+              thumbColor={lightColors.quinary}
+              subTitleStyle={{ color: lightColors.quinary }}
+              valueStyle={{ color: lightColors.quinary }}
+              linearGradient={[
+                {
+                  offset: '0%',
+                  color: lightColors.quinary,
+                },
+              ]}
             />
           </SliderContainer>
         )}
 
         {question?.type === 'checkbox' && (
-          <CheckBox
-            checked={checked}
-            onPress={() => {
-              setChecked(!checked)
-            }}
-            title="Custom"
-            iconType="material-community"
-            checkedIcon="checkbox-marked"
-            uncheckedIcon="checkbox-blank-outline"
-          />
+          <ButtonsContainerInside>
+            <TextContainer>
+              <Text
+                type="h1"
+                color="background3"
+                style={{ textAlign: 'center' }}>
+                {question?.description}
+              </Text>
+            </TextContainer>
+            {question?.checkBoxOptions?.map((option, index) => (
+              <CheckBox
+                title={option.title}
+                key={index}
+                checked={state.selections.includes(option)}
+                onPress={() => {
+                  handleCheckboxChange(option)
+                  console.log(option)
+                }}
+              />
+            ))}
+          </ButtonsContainerInside>
         )}
       </CardContainer>
       <ButtonsContainer>
         <SkipPressable
           onPress={() => {
             question.isAnswered = false
+            //check options of checkbox
+            if (question?.type === 'checkbox') {
+              console.log('YESS', state.selections)
+              question.checkBoxOptions?.map(option => {
+                if (state.selections.includes(option)) {
+                  option.checked = true
+                } else {
+                  option.checked = false
+                }
+              })
+            }
+            console.log('question', question)
+            //clean the array
+            setState({ selections: [] })
             setCounterQuestion((counterQuestion + 1) % Questions.length)
           }}>
-          <AntDesign name="right" size={40} color="white" />
+          <AntDesign name="right" size={30} color="white" />
         </SkipPressable>
       </ButtonsContainer>
     </ScrollView>
