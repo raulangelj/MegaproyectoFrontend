@@ -43,11 +43,38 @@ export const Questions: Question[] = [
   },
   {
     id: 5,
-    description: 'Dime como te sientes',
+    description: '¿Como ves el mundo?',
     title: 'Nombre',
     answer: '',
     isAnswered: true,
     type: 'checkbox',
-    options: ['f'],
+    checkBoxOptions: [
+      {
+        title: 'Triste',
+        checked: false,
+      },
+      {
+        title: 'Feliz',
+        checked: false,
+      },
+    ],
+  },
+  {
+    id: 6,
+    description: '¿Como ves el mundo ayer?',
+    title: 'Nombre',
+    answer: '',
+    isAnswered: true,
+    type: 'checkbox',
+    checkBoxOptions: [
+      {
+        title: 'Triste',
+        checked: false,
+      },
+      {
+        title: 'Feliz',
+        checked: false,
+      },
+    ],
   },
 ]
