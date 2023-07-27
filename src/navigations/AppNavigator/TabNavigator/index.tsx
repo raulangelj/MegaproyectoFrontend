@@ -3,6 +3,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HistoryReport from '@pages/HistoryReport'
 import Report from '@pages/Report'
+import HistoryView from '@pages/HistoryView'
 import MainReport from '@pages/MainReportPage'
 import { ReportTabsParamList } from '@navigations/types/RootParamList'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -31,6 +32,25 @@ const ReportStack = () => (
   </Stack.Navigator>
 )
 
+const HistoryReportStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="HistoryReport"
+      component={HistoryReport}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="HistoryView"
+      component={HistoryView}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </Stack.Navigator>
+)
+
 const TabNavigator: React.FC<RootStackScreenProps<'TabNavigator'>> = () => {
   return (
     <Tab.Navigator>
@@ -46,13 +66,13 @@ const TabNavigator: React.FC<RootStackScreenProps<'TabNavigator'>> = () => {
         component={ReportStack}
       />
       <Tab.Screen
-        name="HistoryReport"
+        name="HistoryReportMain"
         options={{
           title: 'Historial',
           tabBarIcon: () => <Icon name="history" size={20} color="black" />,
           headerShown: false,
         }}
-        component={HistoryReport}
+        component={HistoryReportStack}
       />
     </Tab.Navigator>
   )
