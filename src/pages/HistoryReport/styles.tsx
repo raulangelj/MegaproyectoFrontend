@@ -10,7 +10,7 @@ export const Container = styled.View(({}) => ({
 export const HistoryBlock = styled.TouchableOpacity(({ theme }) => ({
   flex: 0,
   flexDirection: 'row',
-  width: '80%',
+  width: '70%',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: 10,
@@ -44,7 +44,7 @@ export const DownloadButton = styled.TouchableOpacity(({ theme }) => ({
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: theme.colors.buttonColor0,
+  backgroundColor: theme.colors.tertiary,
   margin: 10,
   padding: 10,
   borderRadius: 10,
@@ -76,6 +76,13 @@ export const ModalView = styled.View(({ theme }) => ({
 export const ModalContainer = styled.View(({}) => ({
   flex: 1,
   backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const ReportContainer = styled.View(({ theme }) => ({
+  flex: 1,
+  backgroundColor: theme.colors.background0,
   justifyContent: 'center',
   alignItems: 'center',
 }))

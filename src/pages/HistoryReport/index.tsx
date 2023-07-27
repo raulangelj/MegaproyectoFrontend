@@ -9,13 +9,15 @@ import {
   Touchable,
   ModalView,
   ModalContainer,
+  ReportContainer,
 } from './styles'
 import { useNavigation } from '@react-navigation/native'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
 import { Alert, Modal } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ScrollView } from '@pages/Report/styles'
-
+import Entypo from 'react-native-vector-icons/Entypo'
+import { lightColors } from '@themes/colors'
 const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
@@ -210,72 +212,74 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
   }
 
   return (
-    <ScrollView>
-      <Container>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => {
+    <Container>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setVisible(!visible)
+        }}
+        visible={visible}>
+        <ModalContainer>
+          <ModalView>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateDay - b.dateDay))
+
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por dia</Text>
+            </Touchable>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateMonth - b.dateMonth))
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por mes</Text>
+            </Touchable>
+            <Touchable
+              onPress={() => {
+                setReports(reports.sort((a, b) => a.dateYear - b.dateYear))
+                setVisible(!visible)
+              }}>
+              <Text>Ordenar por año</Text>
+            </Touchable>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
+      <ButtonsContainer>
+        <DownloadButton
+          onPress={() => {
+            generatePDF()
+          }}>
+          <Icon name="file-download" size={30} color={lightColors.quaternary} />
+          <Text>Descargar informe</Text>
+        </DownloadButton>
+        <Touchable
+          onPress={() => {
             setVisible(!visible)
-          }}
-          visible={visible}>
-          <ModalContainer>
-            <ModalView>
-              <Touchable
-                onPress={() => {
-                  setReports(reports.sort((a, b) => a.dateDay - b.dateDay))
-
-                  setVisible(!visible)
-                }}>
-                <Text>Ordenar por dia</Text>
-              </Touchable>
-              <Touchable
-                onPress={() => {
-                  setReports(reports.sort((a, b) => a.dateMonth - b.dateMonth))
-                  setVisible(!visible)
-                }}>
-                <Text>Ordenar por mes</Text>
-              </Touchable>
-              <Touchable
-                onPress={() => {
-                  setReports(reports.sort((a, b) => a.dateYear - b.dateYear))
-                  setVisible(!visible)
-                }}>
-                <Text>Ordenar por año</Text>
-              </Touchable>
-            </ModalView>
-          </ModalContainer>
-        </Modal>
-        <ButtonsContainer>
-          <DownloadButton
-            onPress={() => {
-              generatePDF()
-            }}>
-            <Icon name="file-download" size={30} color="black" />
-            <Text>Descargar informe</Text>
-          </DownloadButton>
-          <Touchable
-            onPress={() => {
-              setVisible(!visible)
-            }}>
-            <Icon name="filter" size={30} color="black" />
-          </Touchable>
-        </ButtonsContainer>
-
+          }}>
+          <Icon name="filter" size={30} color={lightColors.quaternary} />
+        </Touchable>
+      </ButtonsContainer>
+      <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
         {reports.map(report => (
           <HistoryBlock
             key={report.id}
             onPress={() => {
               navigation.navigate('HistoryView')
             }}>
-            <Text>Reporte #{report.id}</Text>
-            <Text>
-              {report.dateDay}/{report.dateMonth}/{report.dateYear}
-            </Text>
+            <Entypo name="text-document" size={30} color="black" />
+            <ReportContainer>
+              <Text>Reporte #{report.id}</Text>
+              <Text>
+                {report.dateDay}/{report.dateMonth}/{report.dateYear}
+              </Text>
+            </ReportContainer>
           </HistoryBlock>
         ))}
-      </Container>
-    </ScrollView>
+      </ScrollView>
+    </Container>
   )
 }
 
