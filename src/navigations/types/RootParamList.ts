@@ -17,9 +17,10 @@ export type RootStackParamList = {
 
 export type ReportTabsParamList = {
   Report: undefined
-  HistoryReport: undefined
+  HistoryReportMain: undefined
   MainReport: undefined
   Main: undefined
+  HistoryView: undefined
 }
 
 declare global {

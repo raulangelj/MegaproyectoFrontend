@@ -13,8 +13,11 @@ export const Container = styled.View(({ theme }) => ({
 }))
 
 export const ButtonsContainer = styled.View(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'row',
   padding: 10,
-  alignSelf: 'flex-end',
+  justifyContent: 'space-between',
 }))
 
 export const ButtonsContainerInside = styled.View(({ theme }) => ({
@@ -39,7 +42,8 @@ export const TitleContainer = styled.View(({ theme }) => ({
 }))
 
 export const CardContainer = styled.View(() => ({
-  flex: 1,
+  flex: 0,
+  height: '70%',
   width: '80%',
   justifyContent: 'center',
   alignItems: 'center',

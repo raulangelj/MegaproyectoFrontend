@@ -24,7 +24,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Questions } from '@static/mocks/QuestionsMock'
 import { CheckBox, LinearProgress } from '@rneui/themed'
-
+import { KeyboardAvoidingView } from 'react-native'
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [counterQuestion, setCounterQuestion] = useState(0)
   const [question, setQuestion] = useState<Question>(Questions[counterQuestion])
@@ -190,143 +190,161 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
-      <TitleContainer>
-        <Image width={100} height={100} />
-        <Text type="pLarge" color="quaternary">
-          Reporte Diario {date}
-        </Text>
-        <LinearProgress
-          color={lightColors.quinary}
-          animation={{ duration: 1000 }}
-          style={{ width: '80%', height: 10 }}
-          value={progress}
-          variant="determinate"
-        />
-      </TitleContainer>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
+        <TitleContainer>
+          <Image width={100} height={100} />
+          <Text type="pLarge" color="quaternary">
+            Reporte Diario {date}
+          </Text>
+          <LinearProgress
+            color={lightColors.quinary}
+            animation={{ duration: 1000 }}
+            style={{ width: '80%', height: 10 }}
+            value={progress}
+            variant="determinate"
+          />
+        </TitleContainer>
 
-      <CardContainer>
-        {question?.type === 'input' && (
-          <Container>
-            <TextContainer>
-              <Text
-                type="h1"
-                color="background3"
-                style={{ textAlign: 'center' }}>
-                {question?.description}
-              </Text>
-            </TextContainer>
-            <TextInput onChangeText={setChangeText} value={text} />
-            <MicPressable onPress={changeStatusofRecord}>
-              <FontAwesome name="microphone" size={40} color="white" />
-            </MicPressable>
-          </Container>
-        )}
-        {question?.type === 'options' && (
-          <ButtonsContainerInside>
-            <TextContainer>
-              <Text type="h1" color="background3">
-                {question?.description}
-              </Text>
-            </TextContainer>
-            {question?.options?.map(option => (
-              <Button
-                key={option}
-                textType="buttonSmall"
-                color="tertiary"
-                text={option}
-                width={'auto'}
-                size="block"
-                borderRadius={10}
-                onPress={() => {
-                  question.answer = option
-                  setCounterQuestion((counterQuestion + 1) % Questions.length)
-                }}
+        <CardContainer>
+          {question?.type === 'input' && (
+            <Container>
+              <TextContainer>
+                <Text
+                  type="h1"
+                  color="background3"
+                  style={{ textAlign: 'center' }}>
+                  {question?.description}
+                </Text>
+              </TextContainer>
+              <TextInput onChangeText={setChangeText} value={text} />
+              <MicPressable onPress={changeStatusofRecord}>
+                <FontAwesome name="microphone" size={40} color="white" />
+              </MicPressable>
+            </Container>
+          )}
+          {question?.type === 'options' && (
+            <ButtonsContainerInside>
+              <TextContainer>
+                <Text type="h1" color="background3">
+                  {question?.description}
+                </Text>
+              </TextContainer>
+              {question?.options?.map(option => (
+                <Button
+                  key={option}
+                  textType="buttonSmall"
+                  color="tertiary"
+                  text={option}
+                  width={'auto'}
+                  size="block"
+                  borderRadius={10}
+                  onPress={() => {
+                    question.answer = option
+                    setCounterQuestion((counterQuestion + 1) % Questions.length)
+                  }}
+                />
+              ))}
+            </ButtonsContainerInside>
+          )}
+          {question?.type === 'slider' && (
+            <SliderContainer>
+              <TextContainer>
+                <Text
+                  type="h1"
+                  color="background3"
+                  style={{ textAlign: 'center' }}>
+                  {question?.description}
+                </Text>
+              </TextContainer>
+              <RadialSlider
+                value={speed}
+                min={0}
+                max={100}
+                onChange={setSpeed}
+                unit=" "
+                subTitle="Calificacion"
+                sliderWidth={10}
+                leftIconStyle={{ display: 'none' }}
+                rightIconStyle={{ display: 'none' }}
+                thumbColor={lightColors.quinary}
+                subTitleStyle={{ color: lightColors.quinary }}
+                valueStyle={{ color: lightColors.quinary }}
+                linearGradient={[
+                  {
+                    offset: '0%',
+                    color: lightColors.quinary,
+                  },
+                ]}
               />
-            ))}
-          </ButtonsContainerInside>
-        )}
-        {question?.type === 'slider' && (
-          <SliderContainer>
-            <TextContainer>
-              <Text
-                type="h1"
-                color="background3"
-                style={{ textAlign: 'center' }}>
-                {question?.description}
-              </Text>
-            </TextContainer>
-            <RadialSlider
-              value={speed}
-              min={0}
-              max={100}
-              onChange={setSpeed}
-              unit=" "
-              subTitle="Calificacion"
-              sliderWidth={10}
-              leftIconStyle={{ display: 'none' }}
-              rightIconStyle={{ display: 'none' }}
-              thumbColor={lightColors.quinary}
-              subTitleStyle={{ color: lightColors.quinary }}
-              valueStyle={{ color: lightColors.quinary }}
-              linearGradient={[
-                {
-                  offset: '0%',
-                  color: lightColors.quinary,
-                },
-              ]}
-            />
-          </SliderContainer>
-        )}
+            </SliderContainer>
+          )}
 
-        {question?.type === 'checkbox' && (
-          <ButtonsContainerInside>
-            <TextContainer>
-              <Text
-                type="h1"
-                color="background3"
-                style={{ textAlign: 'center' }}>
-                {question?.description}
-              </Text>
-            </TextContainer>
-            {question?.checkBoxOptions?.map((option, index) => (
-              <CheckBox
-                title={option.title}
-                key={index}
-                checked={state.selections.includes(option)}
-                onPress={() => {
-                  handleCheckboxChange(option)
-                  console.log(option)
-                }}
-              />
-            ))}
-          </ButtonsContainerInside>
-        )}
-      </CardContainer>
-      <ButtonsContainer>
-        <SkipPressable
-          onPress={() => {
-            question.isAnswered = false
-            //check options of checkbox
-            if (question?.type === 'checkbox') {
-              console.log('YESS', state.selections)
-              question.checkBoxOptions?.map(option => {
-                if (state.selections.includes(option)) {
-                  option.checked = true
-                } else {
-                  option.checked = false
-                }
-              })
-            }
-            console.log('question', question)
-            //clean the array
-            setState({ selections: [] })
-            setCounterQuestion((counterQuestion + 1) % Questions.length)
-          }}>
-          <AntDesign name="right" size={30} color="white" />
-        </SkipPressable>
-      </ButtonsContainer>
-    </ScrollView>
+          {question?.type === 'checkbox' && (
+            <ButtonsContainerInside>
+              <TextContainer>
+                <Text
+                  type="h1"
+                  color="background3"
+                  style={{ textAlign: 'center' }}>
+                  {question?.description}
+                </Text>
+              </TextContainer>
+              {question?.checkBoxOptions?.map((option, index) => (
+                <CheckBox
+                  textStyle={{
+                    fontSize: 15,
+                  }}
+                  iconType="material-community"
+                  checkedIcon="checkbox-marked"
+                  checkedColor={lightColors.quinary}
+                  uncheckedIcon="checkbox-blank-outline"
+                  title={option.title}
+                  key={index}
+                  checked={state.selections.includes(option)}
+                  onPress={() => {
+                    handleCheckboxChange(option)
+                    console.log(option)
+                  }}
+                />
+              ))}
+            </ButtonsContainerInside>
+          )}
+        </CardContainer>
+        <ButtonsContainer>
+          <SkipPressable
+            onPress={() => {
+              question.isAnswered = true
+              question.answer = text
+              setChangeText('')
+              setCounterQuestion((counterQuestion + 1) % Questions.length)
+            }}>
+            <FontAwesome name="coffee" size={30} color="white" />
+          </SkipPressable>
+          <SkipPressable
+            onPress={() => {
+              question.isAnswered = false
+              //check options of checkbox
+              if (question?.type === 'checkbox') {
+                console.log('YESS', state.selections)
+                question.checkBoxOptions?.map(option => {
+                  if (state.selections.includes(option)) {
+                    option.checked = true
+                  } else {
+                    option.checked = false
+                  }
+                })
+              }
+              console.log('question', question)
+              //clean the array
+              setState({ selections: [] })
+              setCounterQuestion((counterQuestion + 1) % Questions.length)
+            }}>
+            <AntDesign name="right" size={30} color="white" />
+          </SkipPressable>
+        </ButtonsContainer>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
