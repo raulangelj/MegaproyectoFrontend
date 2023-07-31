@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import Button from '@components/atoms/Button'
 import { ReportTabsScreenProps } from '@navigations/types/ScreenProps'
 import React, { useEffect, useState } from 'react'
@@ -13,10 +14,13 @@ import {
   SliderContainer,
   SkipPressable,
   MicPressable,
+  ModalView,
+  ModalContainer,
 } from './styles'
 import { lightColors } from '@themes/colors'
 import Text from '@components/atoms/Text'
 import Image from '../../assets/images/reportImage.svg'
+import Relax from '../../assets/images/relax.svg'
 import { Question } from '@interfaces/questions'
 import { RadialSlider } from 'react-native-radial-slider'
 import Voice from '@react-native-voice/voice'
@@ -24,7 +28,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Questions } from '@static/mocks/QuestionsMock'
 import { CheckBox, LinearProgress } from '@rneui/themed'
-import { KeyboardAvoidingView } from 'react-native'
+import { KeyboardAvoidingView, Modal } from 'react-native'
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [counterQuestion, setCounterQuestion] = useState(0)
   const [question, setQuestion] = useState<Question>(Questions[counterQuestion])
@@ -41,6 +47,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [checked, setChecked] = useState(false)
   const [groupValues, setGroupValues] = useState([])
   const [progress, setProgress] = useState(0)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     //Setting callbacks for the process status
@@ -191,6 +198,35 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setVisible(!visible)
+        }}
+        visible={visible}>
+        <ModalContainer>
+          <ModalView>
+            <Text type="h1" color="background3" style={{ textAlign: 'center' }}>
+              Toma un descanso
+            </Text>
+            <CountdownCircleTimer
+              isPlaying
+              duration={10}
+              colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+              onComplete={() => {
+                setVisible(!visible)
+              }}>
+              {({ remainingTime }) => (
+                <>
+                  <Relax width={100} height={100} />
+                  <Text type="pLarge">{remainingTime}</Text>
+                </>
+              )}
+            </CountdownCircleTimer>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
       <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
         <TitleContainer>
           <Image width={100} height={100} />
@@ -314,10 +350,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
         <ButtonsContainer>
           <SkipPressable
             onPress={() => {
-              question.isAnswered = true
-              question.answer = text
-              setChangeText('')
-              setCounterQuestion((counterQuestion + 1) % Questions.length)
+              setVisible(true)
             }}>
             <FontAwesome name="coffee" size={30} color="white" />
           </SkipPressable>

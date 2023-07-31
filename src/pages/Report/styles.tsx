@@ -131,3 +131,27 @@ export const Touchable = styled.TouchableOpacity(() => ({
   justifyContent: 'center',
   alignItems: 'center',
 }))
+
+export const ModalView = styled.View(({ theme }) => ({
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '50%',
+  backgroundColor: theme.colors.background1,
+  borderRadius: 20,
+  padding: 35,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+}))
+
+export const ModalContainer = styled.View(({}) => ({
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
