@@ -12,7 +12,7 @@ export type RootStackParamList = {
   ActivitiesMenu: undefined
   TabNavigator: { screen: string } | undefined
   Report: undefined
-  HistoryView: undefined
+  HistoryView: { id: number } | undefined
 }
 
 export type ReportTabsParamList = {
@@ -25,7 +25,6 @@ export type ReportTabsParamList = {
 
 declare global {
   namespace ReactNavigation {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface RootParamList extends RootStackParamList {}
   }
 }
