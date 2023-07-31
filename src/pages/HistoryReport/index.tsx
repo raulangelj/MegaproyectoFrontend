@@ -18,7 +18,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ScrollView } from '@pages/Report/styles'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { lightColors } from '@themes/colors'
-const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
+const HistoryReport: React.FC<
+  ReportTabsScreenProps<'HistoryReportMain'>
+> = () => {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [count, setCount] = useState(1)
@@ -267,7 +269,7 @@ const HistoryReport: React.FC<ReportTabsScreenProps<'HistoryReport'>> = () => {
           <HistoryBlock
             key={report.id}
             onPress={() => {
-              navigation.navigate('HistoryView')
+              navigation.navigate('HistoryView', { id: report.id })
             }}>
             <Entypo name="text-document" size={30} color="black" />
             <ReportContainer>
