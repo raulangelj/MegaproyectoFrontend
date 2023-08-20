@@ -9,7 +9,7 @@ export const RootStack = createNativeStackNavigator<RootStackParamList>()
 
 const AppNavigator: React.FC = () => {
   const screenForAppState = useCallback(() => {
-    return [Chat(), Activities()]
+    return [Activities(), Chat()]
   }, [])
 
   return (

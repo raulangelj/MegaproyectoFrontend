@@ -11,16 +11,26 @@ var getBlacklistRE = function getBlacklistRE() {
   )
 }
 
-module.exports = {
-  resolver: {
-    blacklistRE: getBlacklistRE(),
-  },
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-}
+const { getDefaultConfig } = require('metro-config')
+
+module.exports = (async () => {
+  const {
+    resolver: { sourceExts, assetExts },
+  } = await getDefaultConfig()
+  return {
+    transformer: {
+      getTransformOptions: async () => ({
+        transform: {
+          experimentalImportSupport: false,
+          inlineRequires: true,
+        },
+      }),
+      babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    },
+    resolver: {
+      blacklistRE: getBlacklistRE(),
+      assetExts: assetExts.filter(ext => ext !== 'svg'),
+      sourceExts: [...sourceExts, 'svg'],
+    },
+  }
+})()

@@ -7,7 +7,7 @@ const lightColors: Colors = {
   quaternary: '#466875',
   quinary: '#FFBB98',
   senary: '#10182B',
-
+  white: 'white',
   error: '#CA0519',
   success: '#45ABAD',
   warning: '#E6CF63',

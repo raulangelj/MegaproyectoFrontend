@@ -9,6 +9,7 @@ export interface Colors {
   success: string
   warning: string
   info: string
+  white: string
   foreground0: string
   foreground1: string
   foreground2: string
