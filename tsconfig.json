@@ -10,6 +10,7 @@
       "@modules/*": ["src/modules/*"],
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
+      "@static/*": ["src/static/*"],
       "*": ["src/*"],
     }
   },

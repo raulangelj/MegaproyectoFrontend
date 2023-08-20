@@ -14,6 +14,7 @@ module.exports = {
           '@interfaces': './src/interfaces',
           '@modules': './src/modules',
           '@assets': './src/assets',
+          '@static': './src/static',
         },
       },
     ],
