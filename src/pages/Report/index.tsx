@@ -30,10 +30,11 @@ import { Questions } from '@static/mocks/QuestionsMock'
 import { CheckBox, LinearProgress } from '@rneui/themed'
 import { KeyboardAvoidingView, Modal } from 'react-native'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import axios from 'axios'
 
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [counterQuestion, setCounterQuestion] = useState(0)
-  const [question, setQuestion] = useState<Question>(Questions[counterQuestion])
+
   const [text, setChangeText] = useState('')
   const [speed, setSpeed] = useState(0)
   const [date, setDate] = useState('')
@@ -48,7 +49,29 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [groupValues, setGroupValues] = useState([])
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(false)
-
+  let Questions2: any[] = []
+  console.log('IM HERE')
+  //call to api to get questions
+  useEffect(() => {
+    //call to api to get questions using fetch
+    fetch('http://192.168.1.3:400/api/report/getAssignedQuestions', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzE3MjM1NWZmYzY0OTg3ZWExMmYiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI0MDI2MTcsImV4cCI6MTY5MjQwOTgxN30.xgnqTAGQCC2yWPSD2LrbKr3gmf9f1JubXJtKB8ilxG8',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        //assign the questions to the array
+        Questions2 = data.questions
+      })
+      .catch(errror => console.log(errror))
+  }, [])
+  console.log('IM HERE2')
+  const [question, setQuestion] = useState(Questions2[counterQuestion])
+  console.log('QUESTIOOON', question)
   useEffect(() => {
     //Setting callbacks for the process status
     Voice.onSpeechStart = onSpeechStart
