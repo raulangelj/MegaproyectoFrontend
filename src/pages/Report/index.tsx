@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import Button from '@components/atoms/Button'
 import { ReportTabsScreenProps } from '@navigations/types/ScreenProps'
 import React, { useEffect, useState } from 'react'
@@ -26,19 +25,16 @@ import { RadialSlider } from 'react-native-radial-slider'
 import Voice from '@react-native-voice/voice'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { Questions } from '@static/mocks/QuestionsMock'
 import { CheckBox, LinearProgress } from '@rneui/themed'
 import { KeyboardAvoidingView, Modal } from 'react-native'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import axios from 'axios'
 
-const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
+const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   const [counterQuestion, setCounterQuestion] = useState(0)
-
   const [text, setChangeText] = useState('')
   const [speed, setSpeed] = useState(0)
   const [date, setDate] = useState('')
-
   const [pitch, setPitch] = useState('')
   const [error, setError] = useState('')
   const [end, setEnd] = useState('')
@@ -49,29 +45,44 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
   const [groupValues, setGroupValues] = useState([])
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(false)
-  let Questions2: any[] = []
-  console.log('IM HERE')
+  const [Questions2, setQuestions2] = useState([])
+  const [answers, setAnswers] = useState<any[]>([])
+
+  //call to api to get questions using axios and async await
+  const getQuestions = async () => {
+    await axios
+      .get('http://IP:400/api/report/getAssignedQuestions', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'x-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI5OTYzNjcsImV4cCI6MTY5MzAwMzU2N30.vwRDw266LmXMZieyTVvcs2Z441aqF8IOLKdce53RiYs',
+        },
+      })
+      .then(response => {
+        console.log('RESPONSE', response.data)
+        setQuestions2(response.data.questions)
+      })
+      .catch(error2 => {
+        console.log('ERROR', error2)
+      })
+  }
   //call to api to get questions
   useEffect(() => {
-    //call to api to get questions using fetch
-    fetch('http://192.168.1.3:400/api/report/getAssignedQuestions', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-token':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzE3MjM1NWZmYzY0OTg3ZWExMmYiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI0MDI2MTcsImV4cCI6MTY5MjQwOTgxN30.xgnqTAGQCC2yWPSD2LrbKr3gmf9f1JubXJtKB8ilxG8',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        //assign the questions to the array
-        Questions2 = data.questions
-      })
-      .catch(errror => console.log(errror))
+    getQuestions()
   }, [])
-  console.log('IM HERE2')
-  const [question, setQuestion] = useState(Questions2[counterQuestion])
-  console.log('QUESTIOOON', question)
+  //console.log('IM HERE2')
+  //console.log('QUESTIONS ', Questions2)
+  //console.log('FIRST QUESTION ', Questions2[counterQuestion])
+  //console.log('COUNTER', counterQuestion)
+  const [question, setQuestion] = useState<Question>(
+    Questions2[counterQuestion],
+  )
+
+  useEffect(() => {
+    setQuestion(Questions2[counterQuestion])
+  }, [Questions2])
+
   useEffect(() => {
     //Setting callbacks for the process status
     Voice.onSpeechStart = onSpeechStart
@@ -190,15 +201,117 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
     return day + '/' + month + '/' + year
   }
 
+  const saveAnswer = () => {
+    console.log('SAVING ANSWER')
+    axios
+      .post(
+        'http://IP:400/api/report/saveAnswer',
+        {
+          answers: answers,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'x-token':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI5OTYzNjcsImV4cCI6MTY5MzAwMzU2N30.vwRDw266LmXMZieyTVvcs2Z441aqF8IOLKdce53RiYs',
+          },
+        },
+      )
+      .then(response => {
+        console.log('RESPONSE', response.data)
+      })
+      .catch(error2 => {
+        console.log('ERROR', error2)
+      })
+  }
+
   useEffect(() => {
-    setQuestion(Questions[counterQuestion])
+    //console.log('ENTERING EFFECT', counterQuestion)
+    setQuestion(Questions2[counterQuestion])
     //change the bar progress between 0 and 1
-    setProgress((counterQuestion + 1) / Questions.length)
+    setProgress(counterQuestion / Questions2.length)
   }, [counterQuestion])
 
   useEffect(() => {
     setDate(get_date())
   }, [])
+
+  //useEffect of answers
+  // useEffect(() => {
+  //   console.log('ANSWERS EFFECT', answers)
+  // }, [answers])
+
+  const handlePress = () => {
+    console.log('HANDLE PRESS')
+    if (question?.type === 'options') {
+      // Create a new array with the updated answer
+      const updatedAnswers = [
+        ...answers,
+        {
+          question: question?.question,
+          answer: [''],
+        },
+      ]
+
+      setAnswers(updatedAnswers)
+    }
+    //check options of checkbox
+    if (question?.type === 'checkbox') {
+      question?.checkBoxOptions?.map(option => {
+        if (state.selections.includes(option)) {
+          option.checked = true
+        } else {
+          option.checked = false
+        }
+      })
+      //add to answers
+      setAnswers([
+        ...answers,
+        {
+          question: question?.question,
+          answer: state.selections,
+        },
+      ])
+    }
+    //clean input value
+    if (question?.type === 'input') {
+      //add to answers
+      setAnswers([
+        ...answers,
+        {
+          question: question?.question,
+          answer: [text],
+        },
+      ])
+
+      setChangeText('')
+    }
+    if (question?.type === 'slider') {
+      //add to answers
+      setAnswers([
+        ...answers,
+        {
+          question: question?.question,
+          answer: [speed],
+        },
+      ])
+    }
+  }
+  useEffect(() => {
+    // console.log('USE EFFECT ANSWER', counterQuestion)
+    if (counterQuestion === Questions2.length - 1) {
+      // Save the answers
+      console.log('ANSWER TO BE SAVED', answers)
+      saveAnswer()
+
+      // Navigate to the next screen
+      navigation.navigate('MainReport')
+    }
+    if (Questions2.length > 0) {
+      setCounterQuestion((counterQuestion + 1) % Questions2.length)
+    }
+  }, [answers, navigation])
 
   //handle state of checkboxes dynamically
   const [state, setState] = useState<{ selections: string[] }>({
@@ -236,7 +349,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
             <CountdownCircleTimer
               isPlaying
               duration={10}
-              colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+              colors={'#004777'}
               onComplete={() => {
                 setVisible(!visible)
               }}>
@@ -273,7 +386,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
                   type="h1"
                   color="background3"
                   style={{ textAlign: 'center' }}>
-                  {question?.description}
+                  {question?.question}
                 </Text>
               </TextContainer>
               <TextInput onChangeText={setChangeText} value={text} />
@@ -286,7 +399,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
             <ButtonsContainerInside>
               <TextContainer>
                 <Text type="h1" color="background3">
-                  {question?.description}
+                  {question?.question}
                 </Text>
               </TextContainer>
               {question?.options?.map(option => (
@@ -299,8 +412,15 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
                   size="block"
                   borderRadius={10}
                   onPress={() => {
-                    question.answer = option
-                    setCounterQuestion((counterQuestion + 1) % Questions.length)
+                    setState({ selections: [] })
+                    //save answer
+                    setAnswers([
+                      ...answers,
+                      {
+                        question: question?.question,
+                        answer: [option],
+                      },
+                    ])
                   }}
                 />
               ))}
@@ -313,7 +433,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
                   type="h1"
                   color="background3"
                   style={{ textAlign: 'center' }}>
-                  {question?.description}
+                  {question?.question}
                 </Text>
               </TextContainer>
               <RadialSlider
@@ -346,7 +466,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
                   type="h1"
                   color="background3"
                   style={{ textAlign: 'center' }}>
-                  {question?.description}
+                  {question?.question}
                 </Text>
               </TextContainer>
               {question?.checkBoxOptions?.map((option, index) => (
@@ -379,22 +499,22 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = () => {
           </SkipPressable>
           <SkipPressable
             onPress={() => {
-              question.isAnswered = false
-              //check options of checkbox
-              if (question?.type === 'checkbox') {
-                console.log('YESS', state.selections)
-                question.checkBoxOptions?.map(option => {
-                  if (state.selections.includes(option)) {
-                    option.checked = true
-                  } else {
-                    option.checked = false
-                  }
-                })
-              }
-              console.log('question', question)
+              handlePress()
+              question.isAnswered = true
               //clean the array
               setState({ selections: [] })
-              setCounterQuestion((counterQuestion + 1) % Questions.length)
+              // console.log(Questions2.length, counterQuestion)
+              //if is the last question navigate to MainReport
+
+              // if (counterQuestion === Questions2.length - 1) {
+              //   console.log('LAST QUESTION')
+              //   //save the answers
+              //   console.log('WATCHING ANSWERS SKIP', answers)
+              //   //saveAnswer()
+              //   navigation.navigate('MainReport')
+              // }
+              //print answers
+              // console.log('ANSWERS', answers)
             }}>
             <AntDesign name="right" size={30} color="white" />
           </SkipPressable>
