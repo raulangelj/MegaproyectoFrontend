@@ -1,10 +1,9 @@
 export interface Question {
-  id: number
-  title: string
-  description: string
+  id: string
+  question: string
   type: string
   options?: Array<string>
-  answer: string
+  answer: Array<string>
   isAnswered: boolean
   checkBoxOptions?: Array<any>
 }
