@@ -1,5 +1,5 @@
 import { ReportTabsScreenProps } from '@navigations/types/ScreenProps'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   HistoryBlock,
@@ -37,13 +37,25 @@ const HistoryReport: React.FC<
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwMDM2MTQsImV4cCI6MTY5MzAxMDgxNH0.PQOucPxJJPNxcbcAtdjjn1sBeDSUsI9MC2spGSCyg3E',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwNjg0NDQsImV4cCI6MTY5MzA3NTY0NH0.Egq7L0Nn88c851saAoh7FaRjgfeLwKq-IKL_-2hnIYw',
         },
       })
       .then(response => {
         console.log('RESPONSE', response.data)
         console.log(typeof response.data.answers)
-        setReports(response.data.answers)
+        const updatedReports = response.data.answers.map(
+          (report: { creationDate: string | number | Date }) => {
+            const date = new Date(report.creationDate)
+            return {
+              ...report,
+              dateDay: date.getDate(),
+              dateMonth: date.getMonth() + 1,
+              dateYear: date.getFullYear(),
+            }
+          },
+        )
+
+        setReports(updatedReports)
       })
       .catch(error2 => {
         console.log('ERROR', error2)
@@ -59,6 +71,7 @@ const HistoryReport: React.FC<
 
   const generatePDF = async () => {
     setIsLoading(true)
+    const date = new Date()
     try {
       const html = `
         <html>
@@ -101,7 +114,7 @@ const HistoryReport: React.FC<
               </tr>
               <tr>
                 <th>Fecha de creacion</th>
-                <td>29-Jul-2022</td>
+                <td>${date.getDay()} / ${date.getMonth()} / ${date.getFullYear()}</td>
               </tr>
               <tr>
                 <th>Total reportes</th>
@@ -112,16 +125,16 @@ const HistoryReport: React.FC<
             <table>
               <tr>
                 <th>Reporte No.</th>
-                <th>Titulo</th>
+                <th>Fecha de creacion</th>
                 <th>Total de respuestas</th>
               </tr>
               ${reports
                 .map(
-                  line => `
+                  (line, index) => `
                 <tr>
-                  <td>${line.id}</td>
-                  <td>${line.dateDay}</td>
-                  <td>${line.responses}</td>
+                  <td>${index}</td>
+                  <td>${line.dateDay} / ${line.dateMonth} / ${line.dateYear}</td>
+                  <td>${line.answers.length}</td>
                 </tr>
               `,
                 )
@@ -204,8 +217,6 @@ const HistoryReport: React.FC<
       </ButtonsContainer>
       <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
         {reports.map((report, index) => {
-          const date = new Date(report.creationDate)
-
           return (
             <HistoryBlock
               key={index}
@@ -218,9 +229,7 @@ const HistoryReport: React.FC<
               <Entypo name="text-document" size={30} color="black" />
               <ReportContainer>
                 <Text>Reporte #{index + 1}</Text>
-                <Text>{`${date.getDate()} /${
-                  date.getMonth() + 1
-                } /${date.getFullYear()}`}</Text>
+                <Text>{`${report?.dateDay} / ${report?.dateMonth} / ${report?.dateYear}`}</Text>
               </ReportContainer>
             </HistoryBlock>
           )
