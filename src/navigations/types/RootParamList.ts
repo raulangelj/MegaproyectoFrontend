@@ -12,7 +12,7 @@ export type RootStackParamList = {
   ActivitiesMenu: undefined
   TabNavigator: { screen: string } | undefined
   Report: undefined
-  HistoryView: { id: number } | undefined
+  HistoryView: { id: number; report: any } | undefined
 }
 
 export type ReportTabsParamList = {
