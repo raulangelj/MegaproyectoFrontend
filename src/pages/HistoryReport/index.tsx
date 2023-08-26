@@ -11,13 +11,14 @@ import {
   ModalContainer,
   ReportContainer,
 } from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
 import { Alert, Modal } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ScrollView } from '@pages/Report/styles'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { lightColors } from '@themes/colors'
+import axios from 'axios'
 const HistoryReport: React.FC<
   ReportTabsScreenProps<'HistoryReportMain'>
 > = () => {
@@ -26,98 +27,35 @@ const HistoryReport: React.FC<
   const [count, setCount] = useState(1)
   const [visible, setVisible] = useState(false)
 
-  const reportsArr = [
-    {
-      id: 1,
-      dateDay: 25,
-      dateMonth: 3,
-      dateYear: 2023,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 2,
-      dateDay: 26,
-      dateMonth: 4,
-      dateYear: 2023,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 3,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 4,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 5,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 6,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 7,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 8,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 9,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 10,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-    {
-      id: 11,
-      dateDay: 20,
-      dateMonth: 5,
-      dateYear: 2021,
-      answered: true,
-      responses: 3,
-    },
-  ]
+  const [reports, setReports] = useState<any[]>([])
 
-  const [reports, setReports] = useState(reportsArr)
+  //GET request of answers
+  const getAnswers = async () => {
+    await axios
+      .get('http://IP:400/api/report/getAnswers', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'x-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwMDM2MTQsImV4cCI6MTY5MzAxMDgxNH0.PQOucPxJJPNxcbcAtdjjn1sBeDSUsI9MC2spGSCyg3E',
+        },
+      })
+      .then(response => {
+        console.log('RESPONSE', response.data)
+        console.log(typeof response.data.answers)
+        setReports(response.data.answers)
+      })
+      .catch(error2 => {
+        console.log('ERROR', error2)
+      })
+  }
+
+  //use effect run when focus
+  useFocusEffect(
+    React.useCallback(() => {
+      getAnswers()
+    }, []),
+  )
 
   const generatePDF = async () => {
     setIsLoading(true)
@@ -265,21 +203,28 @@ const HistoryReport: React.FC<
         </Touchable>
       </ButtonsContainer>
       <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-        {reports.map(report => (
-          <HistoryBlock
-            key={report.id}
-            onPress={() => {
-              navigation.navigate('HistoryView', { id: report.id })
-            }}>
-            <Entypo name="text-document" size={30} color="black" />
-            <ReportContainer>
-              <Text>Reporte #{report.id}</Text>
-              <Text>
-                {report.dateDay}/{report.dateMonth}/{report.dateYear}
-              </Text>
-            </ReportContainer>
-          </HistoryBlock>
-        ))}
+        {reports.map((report, index) => {
+          const date = new Date(report.creationDate)
+
+          return (
+            <HistoryBlock
+              key={index}
+              onPress={() => {
+                navigation.navigate('HistoryView', {
+                  id: index + 1,
+                  report: report,
+                })
+              }}>
+              <Entypo name="text-document" size={30} color="black" />
+              <ReportContainer>
+                <Text>Reporte #{index + 1}</Text>
+                <Text>{`${date.getDate()} /${
+                  date.getMonth() + 1
+                } /${date.getFullYear()}`}</Text>
+              </ReportContainer>
+            </HistoryBlock>
+          )
+        })}
       </ScrollView>
     </Container>
   )
