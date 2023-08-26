@@ -15,10 +15,12 @@ import Text from '@components/atoms/Text'
 import { OrStray } from '@components/atoms/OrStray'
 import SocialBtns from '@components/atoms/SocialBtns'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
+import { useUserStore } from 'hooks'
 
 export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
   navigation,
 }) => {
+  const { onLogin } = useUserStore()
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
@@ -28,6 +30,7 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
 
   const onSignIn = () => {
     console.log('Sign In')
+    onLogin('Test', email, 'TEST UID', 'PACIENTE', 'TOKEN')
   }
 
   const onFacebookPress = () => {
