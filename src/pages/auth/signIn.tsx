@@ -1,52 +1,53 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   EmailPaswordContainer,
-  ForgotPasswordButton,
   LoginSmallButtonsContainer,
   SignInScreen,
   SignInButton,
-  ForgotPasswordText,
   InputField,
-  CreateAccountContainer,
-  CreateAccountBtn,
   ScrollView,
 } from './styles'
 import Text from '@components/atoms/Text'
-import { OrStray } from '@components/atoms/OrStray'
-import SocialBtns from '@components/atoms/SocialBtns'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import { useUserStore } from 'hooks'
 
-export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
-  navigation,
-}) => {
-  const { onLogin } = useUserStore()
+export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = () => {
+  const { startLogin, errorMessage } = useUserStore()
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
-  const onForgotPassword = () => {
-    console.log('Forgot Password')
-  }
+  // const onForgotPassword = () => {
+  //   console.log('Forgot Password')
+  // }
+
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+      // TODO SHOW ALERT OF ERROR
+    }
+  }, [errorMessage])
 
   const onSignIn = () => {
     console.log('Sign In')
-    onLogin('Test', email, 'TEST UID', 'PACIENTE', 'TOKEN')
+    startLogin({
+      userEmail: email,
+      password,
+    })
   }
 
-  const onFacebookPress = () => {
-    console.log('Facebook')
-  }
+  // const onFacebookPress = () => {
+  //   console.log('Facebook')
+  // }
 
-  const onGooglePress = () => {
-    console.log('Google')
-  }
+  // const onGooglePress = () => {
+  //   console.log('Google')
+  // }
 
-  const onTwitterPress = () => {
-    console.log('Twitter')
-  }
-  const onCreateAccount = () => {
-    navigation.navigate('SignUp')
-  }
+  // const onTwitterPress = () => {
+  //   console.log('Twitter')
+  // }
+  // const onCreateAccount = () => {
+  //   navigation.navigate('SignUp')
+  // }
 
   return (
     <ScrollView>
@@ -73,11 +74,11 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
             {/* <Checkbox value="rememberMe">
               <Text type="pSmall">Remember me</Text>
             </Checkbox> */}
-            <ForgotPasswordButton onPress={onForgotPassword}>
+            {/* <ForgotPasswordButton onPress={onForgotPassword}>
               <ForgotPasswordText type="pSmall">
-                Forgot Password?
+              Forgot Password?
               </ForgotPasswordText>
-            </ForgotPasswordButton>
+            </ForgotPasswordButton> */}
           </LoginSmallButtonsContainer>
           <SignInButton
             textType="buttonMedium"
@@ -87,12 +88,12 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
             borderRadius={50}
           />
         </EmailPaswordContainer>
-        <OrStray />
+        {/* <OrStray />
         <SocialBtns
           onFacebookPress={onFacebookPress}
           onGooglePress={onGooglePress}
           onTwitterPress={onTwitterPress}
-        />
+          />
         <CreateAccountContainer>
           <Text type="pSmall">Don't have an account?</Text>
           <CreateAccountBtn onPress={onCreateAccount}>
@@ -100,7 +101,7 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
               Create Account
             </Text>
           </CreateAccountBtn>
-        </CreateAccountContainer>
+        </CreateAccountContainer> */}
       </SignInScreen>
     </ScrollView>
   )
