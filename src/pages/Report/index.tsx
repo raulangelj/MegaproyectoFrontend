@@ -51,12 +51,12 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   //call to api to get questions using axios and async await
   const getQuestions = async () => {
     await axios
-      .get('http://IP:400/api/report/getAssignedQuestions', {
+      .get('http://192.168.1.3:400/api/report/getAssignedQuestions', {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI5OTYzNjcsImV4cCI6MTY5MzAwMzU2N30.vwRDw266LmXMZieyTVvcs2Z441aqF8IOLKdce53RiYs',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwMDM2MTQsImV4cCI6MTY5MzAxMDgxNH0.PQOucPxJJPNxcbcAtdjjn1sBeDSUsI9MC2spGSCyg3E',
         },
       })
       .then(response => {
@@ -205,7 +205,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
     console.log('SAVING ANSWER')
     axios
       .post(
-        'http://IP:400/api/report/saveAnswer',
+        'http://192.168.1.3:400/api/report/saveAnswer',
         {
           answers: answers,
         },
@@ -214,7 +214,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'x-token':
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTI5OTYzNjcsImV4cCI6MTY5MzAwMzU2N30.vwRDw266LmXMZieyTVvcs2Z441aqF8IOLKdce53RiYs',
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwMDM2MTQsImV4cCI6MTY5MzAxMDgxNH0.PQOucPxJJPNxcbcAtdjjn1sBeDSUsI9MC2spGSCyg3E',
           },
         },
       )
@@ -266,11 +266,17 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
         }
       })
       //add to answers
+      console.log(state.selections)
+      //array to save the titles of selections
+      let titles: any[] = []
+      state.selections.map(selection => {
+        titles.push(selection.title)
+      })
       setAnswers([
         ...answers,
         {
           question: question?.question,
-          answer: state.selections,
+          answer: titles,
         },
       ])
     }
