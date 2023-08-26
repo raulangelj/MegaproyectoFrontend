@@ -72,11 +72,17 @@ const HistoryView: React.FC<RootStackScreenProps<'HistoryView'>> = ({
             route.params?.report.answers.map((item: any) => {
               return (
                 <CardContainer>
-                  <Text type="h2"> {item.question} </Text>
+                  <Text type="h2" key={item.question}>
+                    {item.question}
+                  </Text>
                   {
                     //map answers
                     item.answer.map((answer: any) => {
-                      return <Text type="h2"> {answer} </Text>
+                      return (
+                        <Text type="h2" key={answer}>
+                          {answer}
+                        </Text>
+                      )
                     })
                   }
                 </CardContainer>
