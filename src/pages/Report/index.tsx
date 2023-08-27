@@ -51,7 +51,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   //call to api to get questions using axios and async await
   const getQuestions = async () => {
     await axios
-      .get('http://IP:400/api/report/getAssignedQuestions', {
+      .get('http://192.168.1.3:400/api/report/getAssignedQuestions', {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -205,7 +205,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
     console.log('SAVING ANSWER')
     axios
       .post(
-        'http://IP:400/api/report/saveAnswer',
+        'http://192.168.1.3:400/api/report/saveAnswer',
         {
           answers: answers,
         },

@@ -2,7 +2,6 @@ import styled from '@emotion/native'
 //TODO
 //Ask props , and FC or view? in Text
 
-
 export const Container = styled.View(({ theme }) => ({
   flex: 0,
   backgroundColor: theme.colors.background0,

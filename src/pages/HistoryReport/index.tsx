@@ -32,7 +32,7 @@ const HistoryReport: React.FC<
   //GET request of answers
   const getAnswers = async () => {
     await axios
-      .get('http://IP:400/api/report/getAnswers', {
+      .get('http://192.168.1.3:400/api/report/getAnswers', {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',

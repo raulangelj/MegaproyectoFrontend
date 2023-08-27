@@ -14,6 +14,7 @@ export type RootStackParamList = {
   SignIn: undefined
   SignUp: undefined
   TabNavigator: { screen: string } | undefined
+  PsychologyNavigator: { screen: string } | undefined
   Report: undefined
   HistoryView: { id: number; report: any } | undefined
 }
@@ -24,6 +25,13 @@ export type ReportTabsParamList = {
   MainReport: undefined
   Main: undefined
   HistoryView: undefined
+}
+
+export type PsychologyTabsParamList = {
+  PatientList: undefined
+  PatientList1: undefined
+  QuestionsList1: undefined
+  QuestionsList: undefined
 }
 
 declare global {
