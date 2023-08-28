@@ -1,29 +1,43 @@
+/* eslint-disable react-native/no-inline-styles */
 import { PsychologyTabsScreenProps } from '@navigations/types/ScreenProps'
 import {
   FlatList,
   TitleContainer,
   CardTouchable,
+  IconTouchable,
+  ModalContainer,
+  ModalView,
+  Touchable,
+  ButtonContainer,
+  TextInput,
 } from '@pages/QuestionsList/styles'
 import Text from '@components/atoms/Text'
 import React from 'react'
-import Feather from 'react-native-vector-icons/Feather'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { Modal } from 'react-native'
+import Button from '@components/atoms/Button'
+import SelectDropdown from 'react-native-select-dropdown'
+import { lightColors } from '@themes/colors'
+import { CardContainer } from '@pages/Report/styles'
 
 const QuestionsList: React.FC<
   PsychologyTabsScreenProps<'QuestionsList'>
 > = () => {
   const [questions, setQuestions] = React.useState([])
+  const [visible, setVisible] = React.useState(false)
+  const [value, setValue] = React.useState('')
+  const [selectItem, setSelectItem] = React.useState('')
   //make the request to get patients
   const getQuestions = async () => {
     await axios
-      .get('http://192.168.1.3:400/api/report/getAllQuestions', {
+      .get('http://10.100.2.14:400/api/report/getAllQuestions', {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzA5MzkwMSwiZXhwIjoxNjkzMTAxMTAxfQ.d8s2JcIciU4mexO1800mcNy7kIctCSo_H3cmuXu0GXM',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzI2MjQ4NiwiZXhwIjoxNjkzMjY5Njg2fQ.okvsKseLwQMiWQAp544QaJ2TMYCc9q2VmoGgd4a_ZwY',
         },
       })
       .then(response => {
@@ -43,15 +57,78 @@ const QuestionsList: React.FC<
 
   return (
     <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setVisible(!visible)
+        }}
+        visible={visible}>
+        <ModalContainer>
+          <ModalView>
+            <Text type={'h1'}>Crear pregunta</Text>
+            <CardContainer>
+              <Text type={'pLarge'}>Pregunta</Text>
+              <TextInput onChangeText={setValue} value={value} />
+              <Text type={'pLarge'}>Tipo</Text>
+              <SelectDropdown
+                data={['input', 'checkbox', 'options', 'slider']}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index)
+                  setSelectItem(selectedItem)
+                }}
+                buttonStyle={{
+                  borderRadius: 5,
+                  backgroundColor: lightColors.secondary,
+                }}
+              />
+            </CardContainer>
+            {selectItem === 'options' && (
+              <>
+                <Text type={'pLarge'}>Escribe las opciones</Text>
+                <TextInput onChangeText={setValue} value={value} />
+              </>
+            )}
+            {selectItem === 'checkbox' && (
+              <>
+                <Text type={'pLarge'}>Escribe las opciones</Text>
+                <TextInput onChangeText={setValue} value={value} />
+              </>
+            )}
+
+            <ButtonContainer>
+              <Button
+                textType="buttonMedium"
+                size="medium"
+                text="Cancelar"
+                onPress={() => {
+                  setVisible(!visible)
+                }}
+              />
+              <Button
+                textType="buttonMedium"
+                size="medium"
+                text="Guardar"
+                onPress={() => {}}
+              />
+            </ButtonContainer>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
       <TitleContainer>
         <Text type="pLarge" color="quaternary">
           Lista de preguntas
         </Text>
-        <AntDesign name="addfile" size={20} color="black" />
+        <IconTouchable
+          onPress={() => {
+            setVisible(!visible)
+          }}>
+          <AntDesign name="addfile" size={25} color="black" />
+        </IconTouchable>
       </TitleContainer>
       <FlatList
         data={questions}
-        renderItem={({ item }) => (
+        renderItem={({ item }: { item: any }) => (
           <CardTouchable>
             <Text type="pLarge">{item.question}</Text>
             <Text type="pLarge">Tipo: {item.type}</Text>
