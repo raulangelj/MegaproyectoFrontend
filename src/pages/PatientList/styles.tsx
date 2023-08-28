@@ -27,7 +27,7 @@ export const FlatList = styled.FlatList(({ theme }) => ({
   backgroundColor: theme.colors.primary,
 }))
 
-export const CardContainer = styled.View(({ theme }) => ({
+export const CardContainer = styled.View(() => ({
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',

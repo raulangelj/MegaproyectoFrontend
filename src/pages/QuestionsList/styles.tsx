@@ -27,7 +27,7 @@ export const FlatList = styled.FlatList(({ theme }) => ({
   backgroundColor: theme.colors.primary,
 }))
 
-export const CardContainer = styled.View(({ theme }) => ({
+export const CardContainer = styled.View(() => ({
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
@@ -56,4 +56,61 @@ export const CardTouchable = styled.TouchableOpacity(({ theme }) => ({
   borderRadius: 10,
   borderBottomColor: theme.colors.quaternary,
   borderBottomWidth: 3,
+}))
+
+export const IconTouchable = styled.TouchableOpacity(() => ({
+  flex: 0,
+  padding: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const ModalView = styled.View(({ theme }) => ({
+  height: '80%',
+  width: '90%',
+  backgroundColor: theme.colors.background1,
+  borderRadius: 20,
+  padding: 35,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  alignItems: 'center',
+}))
+
+export const ModalContainer = styled.View(({}) => ({
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const Touchable = styled.TouchableOpacity(() => ({
+  flex: 1,
+  width: '100%',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const ButtonContainer = styled.View(() => ({
+  flex: 1,
+  width: '100%',
+  height: '30%',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+}))
+
+export const TextInput = styled.TextInput(({ theme }) => ({
+  width: '90%',
+  borderRadius: 10,
+  backgroundColor: 'white',
+  borderColor: theme.colors.background4,
+  borderWidth: 2,
+  color: 'black',
 }))
