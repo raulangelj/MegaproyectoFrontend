@@ -1,4 +1,5 @@
 /**
+import { Activities } from '@navigations/AppNavigator/Groups/Activities';
  * Here we should have all the navigation tree, and all possible params
  * So we can have typescript autocomplete in all screens and params
  * This file was created when the new ref-app development was started, and
@@ -17,6 +18,9 @@ export type RootStackParamList = {
   PsychologyNavigator: { screen: string } | undefined
   Report: undefined
   HistoryView: { id: number; report: any } | undefined
+  Landing: undefined
+  Profile: undefined
+  Activities: undefined
 }
 
 export type ReportTabsParamList = {
