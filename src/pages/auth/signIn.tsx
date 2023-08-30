@@ -11,7 +11,9 @@ import Text from '@components/atoms/Text'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import { useUserStore } from 'hooks'
 
-export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = () => {
+export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
+  navigation,
+}) => {
   const { startLogin, errorMessage } = useUserStore()
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -32,6 +34,7 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = () => {
       userEmail: email,
       password,
     })
+    navigation.navigate('Landing')
   }
 
   // const onFacebookPress = () => {
