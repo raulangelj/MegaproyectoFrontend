@@ -21,37 +21,19 @@ import Button from '@components/atoms/Button'
 import SelectDropdown from 'react-native-select-dropdown'
 import { lightColors } from '@themes/colors'
 import { CardContainer } from '@pages/Report/styles'
+import { usePsychologyStore } from 'hooks'
 
 const QuestionsList: React.FC<
   PsychologyTabsScreenProps<'QuestionsList'>
 > = () => {
-  const [questions, setQuestions] = React.useState([])
   const [visible, setVisible] = React.useState(false)
   const [value, setValue] = React.useState('')
   const [selectItem, setSelectItem] = React.useState('')
-  //make the request to get patients
-  const getQuestions = async () => {
-    await axios
-      .get('http://10.100.2.14:400/api/report/getAllQuestions', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzYwMDM5MiwiZXhwIjoxNjkzNjA3NTkyfQ.uusu4AWOt2GW3btVyHIjme0X3AKEoBYrpBp5bzlIIhk',
-        },
-      })
-      .then(response => {
-        console.log('RESPONSE', response.data)
-        setQuestions(response.data.questions)
-      })
-      .catch(error2 => {
-        console.log(error2)
-      })
-  }
+  const { psychologyQuestions, setQuestionsPsychology } = usePsychologyStore()
 
   useFocusEffect(
     React.useCallback(() => {
-      getQuestions()
+      setQuestionsPsychology()
     }, []),
   )
 
@@ -127,7 +109,7 @@ const QuestionsList: React.FC<
         </IconTouchable>
       </TitleContainer>
       <FlatList
-        data={questions}
+        data={psychologyQuestions}
         renderItem={({ item }: { item: any }) => (
           <CardTouchable>
             <Text type="pLarge">{item.question}</Text>
