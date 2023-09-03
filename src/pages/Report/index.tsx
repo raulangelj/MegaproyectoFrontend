@@ -28,7 +28,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { CheckBox, LinearProgress } from '@rneui/themed'
 import { KeyboardAvoidingView, Modal } from 'react-native'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import axios from 'axios'
+import { usePatientStore } from 'hooks'
+import { useFocusEffect } from '@react-navigation/native'
 
 const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   const [counterQuestion, setCounterQuestion] = useState(0)
@@ -45,43 +46,29 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   const [groupValues, setGroupValues] = useState([])
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(false)
-  const [Questions2, setQuestions2] = useState([])
   const [answers, setAnswers] = useState<any[]>([])
+  const { setQuestions, questions, saveAnswer } = usePatientStore()
 
-  //call to api to get questions using axios and async await
-  const getQuestions = async () => {
-    await axios
-      .get('http://192.168.1.3:400/api/report/getAssignedQuestions', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwNjg0NDQsImV4cCI6MTY5MzA3NTY0NH0.Egq7L0Nn88c851saAoh7FaRjgfeLwKq-IKL_-2hnIYw',
-        },
-      })
-      .then(response => {
-        console.log('RESPONSE', response.data)
-        setQuestions2(response.data.questions)
-      })
-      .catch(error2 => {
-        console.log('ERROR', error2)
-      })
-  }
+  //reset counter
+  useFocusEffect(
+    React.useCallback(() => {
+      setCounterQuestion(0)
+    }, []),
+  )
+
   //call to api to get questions
   useEffect(() => {
-    getQuestions()
+    setQuestions()
   }, [])
   //console.log('IM HERE2')
   //console.log('QUESTIONS ', Questions2)
   //console.log('FIRST QUESTION ', Questions2[counterQuestion])
   //console.log('COUNTER', counterQuestion)
-  const [question, setQuestion] = useState<Question>(
-    Questions2[counterQuestion],
-  )
+  const [question, setQuestion] = useState<Question>(questions[counterQuestion])
 
   useEffect(() => {
-    setQuestion(Questions2[counterQuestion])
-  }, [Questions2])
+    setQuestion(questions[counterQuestion])
+  }, [questions])
 
   useEffect(() => {
     //Setting callbacks for the process status
@@ -201,36 +188,11 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
     return day + '/' + month + '/' + year
   }
 
-  const saveAnswer = () => {
-    console.log('SAVING ANSWER')
-    axios
-      .post(
-        'http://192.168.1.3:400/api/report/saveAnswer',
-        {
-          answers: answers,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'x-token':
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwNjg0NDQsImV4cCI6MTY5MzA3NTY0NH0.Egq7L0Nn88c851saAoh7FaRjgfeLwKq-IKL_-2hnIYw',
-          },
-        },
-      )
-      .then(response => {
-        console.log('RESPONSE', response.data)
-      })
-      .catch(error2 => {
-        console.log('ERROR', error2)
-      })
-  }
-
   useEffect(() => {
-    //console.log('ENTERING EFFECT', counterQuestion)
-    setQuestion(Questions2[counterQuestion])
+    //console.log('ENTERING EFFECT COUNTER', counterQuestion)
+    setQuestion(questions[counterQuestion])
     //change the bar progress between 0 and 1
-    setProgress(counterQuestion / Questions2.length)
+    setProgress(counterQuestion / questions.length)
   }, [counterQuestion])
 
   useEffect(() => {
@@ -294,6 +256,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
       setChangeText('')
     }
     if (question?.type === 'slider') {
+      //console.log('SPEED', speed)
       //add to answers
       setAnswers([
         ...answers,
@@ -305,17 +268,18 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
     }
   }
   useEffect(() => {
-    // console.log('USE EFFECT ANSWER', counterQuestion)
-    if (counterQuestion === Questions2.length - 1) {
+    //console.log('USE EFFECT ANSWER', counterQuestion)
+    if (counterQuestion === questions.length - 1) {
       // Save the answers
       console.log('ANSWER TO BE SAVED', answers)
-      saveAnswer()
+      //saveAnswer({ answersData: answers })
+      setCounterQuestion(0)
 
       // Navigate to the next screen
       navigation.navigate('MainReport')
     }
-    if (Questions2.length > 0) {
-      setCounterQuestion((counterQuestion + 1) % Questions2.length)
+    if (questions.length > 0) {
+      setCounterQuestion((counterQuestion + 1) % questions.length)
     }
   }, [answers, navigation])
 
@@ -446,7 +410,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
                 value={speed}
                 min={0}
                 max={100}
-                onChange={setSpeed}
+                onChange={value => setSpeed(value)}
                 unit=" "
                 subTitle="Calificacion"
                 sliderWidth={10}

@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ScrollView } from '@pages/Report/styles'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { lightColors } from '@themes/colors'
-import axios from 'axios'
+import { usePatientStore } from 'hooks'
 const HistoryReport: React.FC<
   ReportTabsScreenProps<'HistoryReportMain'>
 > = () => {
@@ -27,41 +27,7 @@ const HistoryReport: React.FC<
   const [isLoading, setIsLoading] = useState(false)
   const [count, setCount] = useState(1)
   const [visible, setVisible] = useState(false)
-
-  const [reports, setReports] = useState<any[]>([])
-
-  //GET request of answers
-  const getAnswers = async () => {
-    await axios
-      .get('http://192.168.1.3:400/api/report/getAnswers', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGU0ZmIyNzNmM2JkYmQ5NDk5OTc5MDQiLCJuYW1lIjoiUGVkcm8gcGFjaWVudGUiLCJpYXQiOjE2OTMwNjg0NDQsImV4cCI6MTY5MzA3NTY0NH0.Egq7L0Nn88c851saAoh7FaRjgfeLwKq-IKL_-2hnIYw',
-        },
-      })
-      .then(response => {
-        console.log('RESPONSE', response.data)
-        console.log(typeof response.data.answers)
-        const updatedReports = response.data.answers.map(
-          (report: { creationDate: string | number | Date }) => {
-            const date = new Date(report.creationDate)
-            return {
-              ...report,
-              dateDay: date.getDate(),
-              dateMonth: date.getMonth() + 1,
-              dateYear: date.getFullYear(),
-            }
-          },
-        )
-
-        setReports(updatedReports)
-      })
-      .catch(error2 => {
-        console.log('ERROR', error2)
-      })
-  }
+  const { getAnswers, answers, sortAnswers } = usePatientStore()
 
   //use effect run when focus
   useFocusEffect(
@@ -119,7 +85,7 @@ const HistoryReport: React.FC<
               </tr>
               <tr>
                 <th>Total reportes</th>
-                <td>${reports.length}</td>
+                <td>${answers.length}</td>
               </tr>
             </table>
             <h1>Historial de reportes</h1>
@@ -129,9 +95,17 @@ const HistoryReport: React.FC<
                 <th>Fecha de creacion</th>
                 <th>Total de respuestas</th>
               </tr>
-              ${reports
+              ${answers
                 .map(
-                  (line, index) => `
+                  (
+                    line: {
+                      dateDay: any
+                      dateMonth: any
+                      dateYear: any
+                      answers: string | any[]
+                    },
+                    index: any,
+                  ) => `
                 <tr>
                   <td>${index}</td>
                   <td>${line.dateDay} / ${line.dateMonth} / ${line.dateYear}</td>
@@ -178,7 +152,7 @@ const HistoryReport: React.FC<
           <ModalView>
             <Touchable
               onPress={() => {
-                setReports(reports.sort((a, b) => a.dateDay - b.dateDay))
+                sortAnswers({ type: 'day' })
 
                 setVisible(!visible)
               }}>
@@ -186,14 +160,14 @@ const HistoryReport: React.FC<
             </Touchable>
             <Touchable
               onPress={() => {
-                setReports(reports.sort((a, b) => a.dateMonth - b.dateMonth))
+                sortAnswers({ type: 'month' })
                 setVisible(!visible)
               }}>
               <Text>Ordenar por mes</Text>
             </Touchable>
             <Touchable
               onPress={() => {
-                setReports(reports.sort((a, b) => a.dateYear - b.dateYear))
+                sortAnswers({ type: 'year' })
                 setVisible(!visible)
               }}>
               <Text>Ordenar por año</Text>
@@ -217,24 +191,29 @@ const HistoryReport: React.FC<
         </Touchable>
       </ButtonsContainer>
       <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-        {reports.map((report, index) => {
-          return (
-            <HistoryBlock
-              key={index}
-              onPress={() => {
-                navigation.navigate('HistoryView', {
-                  id: index + 1,
-                  report: report,
-                })
-              }}>
-              <Entypo name="text-document" size={30} color="black" />
-              <ReportContainer>
-                <Text>Reporte #{index + 1}</Text>
-                <Text>{`${report?.dateDay} / ${report?.dateMonth} / ${report?.dateYear}`}</Text>
-              </ReportContainer>
-            </HistoryBlock>
-          )
-        })}
+        {answers.map(
+          (
+            report: { dateDay: any; dateMonth: any; dateYear: any },
+            index: React.Key | null | undefined,
+          ) => {
+            return (
+              <HistoryBlock
+                key={index}
+                onPress={() => {
+                  navigation.navigate('HistoryView', {
+                    id: index + 1,
+                    report: report,
+                  })
+                }}>
+                <Entypo name="text-document" size={30} color="black" />
+                <ReportContainer>
+                  <Text>Reporte #{index + 1}</Text>
+                  <Text>{`${report?.dateDay} / ${report?.dateMonth} / ${report?.dateYear}`}</Text>
+                </ReportContainer>
+              </HistoryBlock>
+            )
+          },
+        )}
       </ScrollView>
     </Container>
   )
