@@ -272,7 +272,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
     if (counterQuestion === questions.length - 1) {
       // Save the answers
       console.log('ANSWER TO BE SAVED', answers)
-      //saveAnswer({ answersData: answers })
+      saveAnswer({ answersData: answers })
       setCounterQuestion(0)
 
       // Navigate to the next screen
