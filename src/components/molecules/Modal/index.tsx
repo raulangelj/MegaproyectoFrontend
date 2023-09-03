@@ -11,7 +11,6 @@ export type ModalProps = {
 }
 
 const Modal: React.FC<ModalProps> = ({ onClose, isVisible, text }) => {
-  console.log('Modal', text)
   return (
     <RNModal
       animationType="slide"
