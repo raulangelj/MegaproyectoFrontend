@@ -1,8 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { backendAPI } from 'api'
+import { useNavigation } from '@react-navigation/native'
 import { clearErrorMessage, onChecking, onLogin, onLogout } from 'store'
 
 export const useUserStore = () => {
+  const navigation = useNavigation()
   const dispatch = useDispatch()
   const { user, status, errorMessage } = useSelector(state => state.user)
 
@@ -14,9 +16,11 @@ export const useUserStore = () => {
         password: password,
       })
       dispatch(onLogin({ ...data, email: userEmail }))
+      // navigate to home
+      navigation.navigate('Landing')
     } catch (error) {
-      console.log('error ', error)
-      dispatch(onLogout('Credenciales Incorrectas'))
+      console.error('error ', error)
+      dispatch(onLogout('Credenciales Incorrectas!'))
       setTimeout(() => {
         dispatch(clearErrorMessage())
       }, 10)
