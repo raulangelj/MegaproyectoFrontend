@@ -13,7 +13,7 @@ export const RootStack = createNativeStackNavigator<RootStackParamList>()
 
 const AppNavigator: React.FC = () => {
   const screenForAppState = useCallback(() => {
-    return [Psychology(), SignIn(), MainBottonNavigator()]
+    return [SignIn(), MainBottonNavigator()]
   }, [])
 
   return (
