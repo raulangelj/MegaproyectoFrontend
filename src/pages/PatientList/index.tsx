@@ -21,7 +21,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzI2MjQ4NiwiZXhwIjoxNjkzMjY5Njg2fQ.okvsKseLwQMiWQAp544QaJ2TMYCc9q2VmoGgd4a_ZwY',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzYwMDM5MiwiZXhwIjoxNjkzNjA3NTkyfQ.uusu4AWOt2GW3btVyHIjme0X3AKEoBYrpBp5bzlIIhk',
         },
       })
       .then(response => {
