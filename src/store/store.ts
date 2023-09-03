@@ -1,6 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { userSlice } from './user/userSlice'
 import { patientSlice } from './patient/patientSlice'
+import { psychologySlice } from './psychology/psychologySlice'
 
 const middleware = getDefaultMiddleware({
   serializableCheck: false,
@@ -15,6 +16,7 @@ export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     patient: patientSlice.reducer,
+    psychology: psychologySlice.reducer,
   },
   middleware: middleware,
 })

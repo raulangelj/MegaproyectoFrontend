@@ -10,32 +10,14 @@ import Feather from 'react-native-vector-icons/Feather'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { usePsychologyStore } from 'hooks'
 
 const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
-  const [patients, setPatients] = React.useState([])
-  //make the request to get patients
-  const getPatients = async () => {
-    await axios
-      .get('http://10.100.2.14:400/api/report/getAllPatients', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'x-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5MzYwMDM5MiwiZXhwIjoxNjkzNjA3NTkyfQ.uusu4AWOt2GW3btVyHIjme0X3AKEoBYrpBp5bzlIIhk',
-        },
-      })
-      .then(response => {
-        console.log('RESPONSE', response.data)
-        setPatients(response.data.patients)
-      })
-      .catch(error2 => {
-        console.log(error2)
-      })
-  }
+  const { patients, setPatients } = usePsychologyStore()
 
   useFocusEffect(
     React.useCallback(() => {
-      getPatients()
+      setPatients()
     }, []),
   )
 
