@@ -10,13 +10,16 @@ import {
 import Text from '@components/atoms/Text'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import { useUserStore } from 'hooks'
+import Modal from '@components/molecules/Modal'
 
-export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
-  navigation,
-}) => {
+export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = () => {
   const { startLogin, errorMessage } = useUserStore()
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [modalConfig, setModalConfig] = React.useState({
+    isVisible: false,
+    text: '',
+  })
 
   // const onForgotPassword = () => {
   //   console.log('Forgot Password')
@@ -24,17 +27,33 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
 
   useEffect(() => {
     if (errorMessage !== undefined) {
-      // TODO SHOW ALERT OF ERROR
+      setModalConfig({
+        isVisible: true,
+        text: errorMessage,
+      })
     }
   }, [errorMessage])
 
   const onSignIn = () => {
     console.log('Sign In')
+    if (email === '' || password === '') {
+      setModalConfig({
+        isVisible: true,
+        text: 'Please enter your email and password',
+      })
+      return
+    }
     startLogin({
       userEmail: email,
       password,
     })
-    navigation.navigate('Landing')
+  }
+
+  const onClose = () => {
+    setModalConfig({
+      isVisible: false,
+      text: '',
+    })
   }
 
   // const onFacebookPress = () => {
@@ -105,6 +124,11 @@ export const SignIn: React.FC<RootStackScreenProps<'SignIn'>> = ({
             </Text>
           </CreateAccountBtn>
         </CreateAccountContainer> */}
+        <Modal
+          onClose={onClose}
+          isVisible={modalConfig.isVisible}
+          text={modalConfig.text}
+        />
       </SignInScreen>
     </ScrollView>
   )
