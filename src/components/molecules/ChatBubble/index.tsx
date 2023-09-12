@@ -16,11 +16,12 @@ export interface ChatMessageProps {
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ item, isActualUser }) => {
-  const { author_name: author, content: text, created_at } = item
+  const { author_name: author, content: text, createdAt } = item
 
   const formattedTime = useMemo(() => {
-    const hours = created_at.getHours()
-    const minutes = created_at.getMinutes()
+    const date = new Date(createdAt)
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
     // Formatear la hora en HH:MM
     return `${hours.toString().padStart(2, '0')}:${minutes
       .toString()
