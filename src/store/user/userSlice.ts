@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { UserInterface } from '@interfaces/user/user'
 
 export const userSlice = createSlice({
   name: 'user',
@@ -10,7 +11,7 @@ export const userSlice = createSlice({
       category: '',
       token: '',
       tokenInitDate: undefined,
-    },
+    } as unknown as UserInterface,
     status: 'checking',
     errorMessage: undefined,
   },
@@ -24,15 +25,18 @@ export const userSlice = createSlice({
       state.user.uid = action.payload.uid
       state.user.category = action.payload.category
       state.user.token = action.payload.token
-      state.user.tokenInitDate = new Date().getTime()
+      state.user.tokenInitDate = new Date()
       state.status = 'authenticated'
+      if (action.payload?.idPsychology) {
+        state.user.idPsychology = action.payload.idPsychology
+      }
     },
     onLogout: (state, { payload }) => {
       state.user = {
         name: '',
         email: '',
         uid: '',
-        category: '',
+        category: undefined,
         token: '',
         tokenInitDate: undefined,
       }

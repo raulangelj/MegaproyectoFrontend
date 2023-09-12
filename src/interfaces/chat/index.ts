@@ -6,9 +6,9 @@ export interface ChatData {
 }
 
 export interface Message {
-  id: string
+  _id: string
   author_id: string
   author_name: string
   content: string
-  created_at: Date
+  createdAt: Date
 }
