@@ -16,7 +16,7 @@ import React from 'react'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { Modal } from 'react-native'
+import { Modal, ScrollView, View } from 'react-native'
 import Button from '@components/atoms/Button'
 import SelectDropdown from 'react-native-select-dropdown'
 import { lightColors } from '@themes/colors'
@@ -48,52 +48,68 @@ const QuestionsList: React.FC<
         visible={visible}>
         <ModalContainer>
           <ModalView>
-            <Text type={'h1'}>Crear pregunta</Text>
-            <CardContainer>
-              <Text type={'pLarge'}>Pregunta</Text>
-              <TextInput onChangeText={setValue} value={value} />
-              <Text type={'pLarge'}>Tipo</Text>
-              <SelectDropdown
-                data={['input', 'checkbox', 'options', 'slider']}
-                onSelect={(selectedItem, index) => {
-                  console.log(selectedItem, index)
-                  setSelectItem(selectedItem)
-                }}
-                buttonStyle={{
-                  borderRadius: 5,
-                  backgroundColor: lightColors.secondary,
-                }}
-              />
-            </CardContainer>
-            {selectItem === 'options' && (
-              <>
-                <Text type={'pLarge'}>Escribe las opciones</Text>
-                <TextInput onChangeText={setValue} value={value} />
-              </>
-            )}
-            {selectItem === 'checkbox' && (
-              <>
-                <Text type={'pLarge'}>Escribe las opciones</Text>
-                <TextInput onChangeText={setValue} value={value} />
-              </>
-            )}
+            <ScrollView
+              contentContainerStyle={{
+                height: '100vh',
+                marginBottom: 5,
+                backgroundColor: 'green',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
+              <Text type={'h1'}>Crear pregunta</Text>
 
-            <ButtonContainer>
-              <Button
-                textType="buttonMedium"
-                size="medium"
-                text="Cancelar"
-                onPress={() => {
-                  setVisible(!visible)
-                }}
-              />
-              <Button
-                textType="buttonMedium"
-                size="medium"
-                text="Guardar"
-                onPress={() => {}}
-              />
-            </ButtonContainer>
+              <CardContainer>
+                <Text type={'pLarge'}>Pregunta</Text>
+                <TextInput onChangeText={setValue} value={value} />
+                <Text type={'pLarge'}>Tipo</Text>
+                <SelectDropdown
+                  data={['input', 'checkbox', 'options', 'slider']}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index)
+                    setSelectItem(selectedItem)
+                  }}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    backgroundColor: lightColors.secondary,
+                  }}
+                />
+              </CardContainer>
+              {selectItem === 'options' && (
+                <>
+                  <Text type={'pLarge'}>Primera opcion</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                  <Text type={'pLarge'}>Segunda opcion (opcional)</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                  <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                  <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                </>
+              )}
+              {selectItem === 'checkbox' && (
+                <>
+                  <Text type={'pLarge'}>Escribe las opciones</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                </>
+              )}
+
+              <ButtonContainer>
+                <Button
+                  textType="buttonMedium"
+                  size="medium"
+                  text="Cancelar"
+                  onPress={() => {
+                    setVisible(!visible)
+                  }}
+                />
+                <Button
+                  textType="buttonMedium"
+                  size="medium"
+                  text="Guardar"
+                  onPress={() => {}}
+                />
+              </ButtonContainer>
+            </ScrollView>
           </ModalView>
         </ModalContainer>
       </Modal>
