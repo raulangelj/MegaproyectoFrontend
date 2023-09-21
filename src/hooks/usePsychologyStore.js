@@ -36,6 +36,18 @@ export const usePsychologyStore = () => {
     }
   }
 
+  //Save new question
+  const saveQuestion = async question => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.post('/report/new', question)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
   return {
     // properties
     patients,
@@ -43,5 +55,6 @@ export const usePsychologyStore = () => {
     // methods
     setPatients,
     setQuestionsPsychology,
+    saveQuestion,
   }
 }
