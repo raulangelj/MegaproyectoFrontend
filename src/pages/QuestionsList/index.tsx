@@ -7,17 +7,16 @@ import {
   IconTouchable,
   ModalContainer,
   ModalView,
-  Touchable,
   ButtonContainer,
   TextInput,
 } from '@pages/QuestionsList/styles'
 import Text from '@components/atoms/Text'
 import React from 'react'
-import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { Modal, ScrollView, View } from 'react-native'
+import { Modal, ScrollView } from 'react-native'
 import Button from '@components/atoms/Button'
+import ModalComponent from '@components/molecules/Modal'
 import SelectDropdown from 'react-native-select-dropdown'
 import { lightColors } from '@themes/colors'
 import { CardContainer } from '@pages/Report/styles'
@@ -27,15 +26,64 @@ const QuestionsList: React.FC<
   PsychologyTabsScreenProps<'QuestionsList'>
 > = () => {
   const [visible, setVisible] = React.useState(false)
+  const [errorVisible, setErrorVisible] = React.useState(false)
   const [value, setValue] = React.useState('')
+  const [submitted, setSubmitted] = React.useState(false)
+  const [values, setValues] = React.useState({
+    firstOption: '',
+    secondOption: '',
+    thirdOption: '',
+    fourthOption: '',
+  })
   const [selectItem, setSelectItem] = React.useState('')
-  const { psychologyQuestions, setQuestionsPsychology } = usePsychologyStore()
+  const { psychologyQuestions, setQuestionsPsychology, saveQuestion } =
+    usePsychologyStore()
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log('focus')
       setQuestionsPsychology()
-    }, []),
+    }, [submitted]),
   )
+
+  const handleSubmit = () => {
+    console.log('submit')
+    //check if first and second options are not empty and show modal
+    if (selectItem === 'options' || selectItem === 'checkbox') {
+      if (values.firstOption !== '' && values.secondOption !== '') {
+        saveQuestion({
+          question: value,
+          type: selectItem,
+          options: [
+            values.firstOption,
+            values.secondOption,
+            values.thirdOption,
+            values.fourthOption,
+          ],
+        })
+        setSubmitted(!submitted)
+        setSelectItem('')
+        setValue('')
+        //clean values
+        setValues({
+          firstOption: '',
+          secondOption: '',
+          thirdOption: '',
+          fourthOption: '',
+        })
+        setVisible(!visible)
+      } else {
+        console.log('error')
+        setErrorVisible(!errorVisible)
+      }
+    } else {
+      saveQuestion({ question: value, type: selectItem })
+      setSubmitted(!submitted)
+      setSelectItem('')
+      setValue('')
+      setVisible(!visible)
+    }
+  }
 
   return (
     <>
@@ -48,14 +96,7 @@ const QuestionsList: React.FC<
         visible={visible}>
         <ModalContainer>
           <ModalView>
-            <ScrollView
-              contentContainerStyle={{
-                height: '100vh',
-                marginBottom: 5,
-                backgroundColor: 'green',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}>
+            <ScrollView style={{ flex: 1, width: '100%' }}>
               <Text type={'h1'}>Crear pregunta</Text>
 
               <CardContainer>
@@ -67,6 +108,13 @@ const QuestionsList: React.FC<
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index)
                     setSelectItem(selectedItem)
+                    //clean values
+                    setValues({
+                      firstOption: '',
+                      secondOption: '',
+                      thirdOption: '',
+                      fourthOption: '',
+                    })
                   }}
                   buttonStyle={{
                     borderRadius: 5,
@@ -77,19 +125,65 @@ const QuestionsList: React.FC<
               {selectItem === 'options' && (
                 <>
                   <Text type={'pLarge'}>Primera opcion</Text>
-                  <TextInput onChangeText={setValue} value={value} />
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, firstOption: text })
+                    }
+                    value={values.firstOption}
+                  />
                   <Text type={'pLarge'}>Segunda opcion (opcional)</Text>
-                  <TextInput onChangeText={setValue} value={value} />
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, secondOption: text })
+                    }
+                    value={values.secondOption}
+                  />
                   <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
-                  <TextInput onChangeText={setValue} value={value} />
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, thirdOption: text })
+                    }
+                    value={values.thirdOption}
+                  />
                   <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
-                  <TextInput onChangeText={setValue} value={value} />
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, fourthOption: text })
+                    }
+                    value={values.fourthOption}
+                  />
                 </>
               )}
               {selectItem === 'checkbox' && (
                 <>
-                  <Text type={'pLarge'}>Escribe las opciones</Text>
-                  <TextInput onChangeText={setValue} value={value} />
+                  <Text type={'pLarge'}>Primera opcion</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, firstOption: text })
+                    }
+                    value={values.firstOption}
+                  />
+                  <Text type={'pLarge'}>Segunda opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, secondOption: text })
+                    }
+                    value={values.secondOption}
+                  />
+                  <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, thirdOption: text })
+                    }
+                    value={values.thirdOption}
+                  />
+                  <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, fourthOption: text })
+                    }
+                    value={values.fourthOption}
+                  />
                 </>
               )}
 
@@ -100,19 +194,32 @@ const QuestionsList: React.FC<
                   text="Cancelar"
                   onPress={() => {
                     setVisible(!visible)
+                    setSelectItem('')
+                    setValues({
+                      firstOption: '',
+                      secondOption: '',
+                      thirdOption: '',
+                      fourthOption: '',
+                    })
+                    setValue('')
                   }}
                 />
                 <Button
                   textType="buttonMedium"
                   size="medium"
                   text="Guardar"
-                  onPress={() => {}}
+                  onPress={handleSubmit}
                 />
               </ButtonContainer>
             </ScrollView>
           </ModalView>
         </ModalContainer>
       </Modal>
+      <ModalComponent
+        text="Debes llenar los campos de primera y segunda opcion"
+        isVisible={errorVisible}
+        onClose={() => setErrorVisible(!errorVisible)}
+      />
       <TitleContainer>
         <Text type="pLarge" color="quaternary">
           Lista de preguntas

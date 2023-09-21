@@ -29,6 +29,8 @@ export const FlatList = styled.FlatList(({ theme }) => ({
 
 export const CardContainer = styled.View(() => ({
   flex: 1,
+  height: '70%',
+  width: '80%',
   justifyContent: 'center',
   alignItems: 'center',
 }))
@@ -99,14 +101,15 @@ export const Touchable = styled.TouchableOpacity(() => ({
 
 export const ButtonContainer = styled.View(() => ({
   flex: 1,
-  width: '100%',
-  height: '30%',
+  marginTop: 10,
+  height: '40%',
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'flex-end',
 }))
 
 export const TextInput = styled.TextInput(({ theme }) => ({
+  flex: 1,
   width: '90%',
   borderRadius: 10,
   backgroundColor: 'white',
