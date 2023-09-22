@@ -28,9 +28,13 @@ export const FlatList = styled.FlatList(({ theme }) => ({
 }))
 
 export const CardContainer = styled.View(() => ({
-  flex: 1,
+  flex: 0,
+  width: '100%',
   justifyContent: 'center',
   alignItems: 'center',
+  borderRadius: 10,
+  marginBottom: 10,
+  marginTop: 10,
 }))
 
 export const TitleContainer = styled.View(({ theme }) => ({
@@ -56,4 +60,47 @@ export const CardTouchable = styled.TouchableOpacity(({ theme }) => ({
   borderRadius: 10,
   borderBottomColor: theme.colors.quaternary,
   borderBottomWidth: 3,
+}))
+
+export const IconTouchable = styled.TouchableOpacity(() => ({
+  flex: 0,
+  padding: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const ModalView = styled.View(({ theme }) => ({
+  flex: 0,
+  height: '80%',
+  width: '90%',
+  backgroundColor: theme.colors.background1,
+  borderRadius: 20,
+  padding: 35,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  alignItems: 'center',
+}))
+
+export const ModalContainer = styled.View(({}) => ({
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+export const TextInput = styled.TextInput(({ theme }) => ({
+  flex: 0,
+  height: '10%',
+  width: '90%',
+  borderRadius: 10,
+  backgroundColor: 'white',
+  borderColor: theme.colors.background4,
+  borderWidth: 2,
+  color: 'black',
 }))
