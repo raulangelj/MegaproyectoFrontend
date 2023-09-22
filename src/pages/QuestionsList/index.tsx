@@ -9,6 +9,7 @@ import {
   ModalView,
   ButtonContainer,
   TextInput,
+  CardContainer,
 } from '@pages/QuestionsList/styles'
 import Text from '@components/atoms/Text'
 import React from 'react'
@@ -19,7 +20,6 @@ import Button from '@components/atoms/Button'
 import ModalComponent from '@components/molecules/Modal'
 import SelectDropdown from 'react-native-select-dropdown'
 import { lightColors } from '@themes/colors'
-import { CardContainer } from '@pages/Report/styles'
 import { usePsychologyStore } from 'hooks'
 
 const QuestionsList: React.FC<

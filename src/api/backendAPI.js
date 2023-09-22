@@ -9,7 +9,7 @@ const backendAPI = axios.create({
     'Content-Type': 'application/json',
     'Allow-Cross-Origin': '*',
     'x-token':
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5NTMxNTc2MiwiZXhwIjoxNjk1MzIyOTYyfQ.HHQMvRmALBEI9kgIlHn0tFoE3F3duPeBLb3wNq6Fwoo',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NGRmYzExOTllNWJlYmI3YjJlZWRjOGEiLCJuYW1lIjoiQnJ5YW5uIFBzaWNvbG9nbyIsImlhdCI6MTY5NTQwODE2MywiZXhwIjoxNjk1NDE1MzYzfQ.3ykNUtJdpvKZShsnWFLcgpLlTr6-HxECEiMVXFtt3Ys',
   },
 })
 
