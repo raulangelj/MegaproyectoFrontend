@@ -58,6 +58,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
 
   //call to api to get questions
   useEffect(() => {
+    console.log('calling to questions')
     setQuestions()
   }, [])
   //console.log('IM HERE2')

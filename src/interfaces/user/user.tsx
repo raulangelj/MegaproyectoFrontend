@@ -1,4 +1,4 @@
-export type UserCategory = 'phychology' | 'patient'
+export type UserCategory = 'psychology' | 'patient'
 
 export interface UserInterface {
   uid: string

@@ -9,6 +9,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import IconAnt from 'react-native-vector-icons/AntDesign'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import { RootStackParamList } from '@navigations/types/RootParamList'
+import TabNavigator from '@navigations/AppNavigator/TabNavigator'
+import PsychologyNavigator from '@navigations/AppNavigator/PsychologyNavigator'
 
 const ChatIcon = () => (
   <Icon name="chatbubbles-outline" size={25} color="black" />
@@ -59,6 +61,11 @@ export default () => {
   return (
     <RootStack.Group key="Landing">
       <RootStack.Screen name="Landing" component={MainBottomTabNavigator} />
+      <RootStack.Screen name="TabNavigator" component={TabNavigator} />
+      <RootStack.Screen
+        name="PsychologyNavigator"
+        component={PsychologyNavigator}
+      />
     </RootStack.Group>
   )
 }
