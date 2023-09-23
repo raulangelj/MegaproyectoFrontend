@@ -6,6 +6,7 @@ export const psychologySlice = createSlice({
     patients: [],
     psychologyQuestions: [],
     loading: false,
+    searchedPatientQuestions: [],
   },
   reducers: {
     onLoadingPatient: (state, action) => {
@@ -17,8 +18,16 @@ export const psychologySlice = createSlice({
     onSetPsychologyQuestions: (state, action) => {
       state.psychologyQuestions = action.payload.questions
     },
+    onSetSearchedPatientQuestions: (state, action) => {
+      console.log('SearchedPatientQuestions', action.payload)
+      state.searchedPatientQuestions = action.payload.questions
+    },
   },
 })
 
-export const { onLoadingPatient, onSetPatients, onSetPsychologyQuestions } =
-  psychologySlice.actions
+export const {
+  onLoadingPatient,
+  onSetPatients,
+  onSetPsychologyQuestions,
+  onSetSearchedPatientQuestions,
+} = psychologySlice.actions

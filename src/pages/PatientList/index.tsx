@@ -16,9 +16,11 @@ import Feather from 'react-native-vector-icons/Feather'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { usePsychologyStore } from 'hooks'
 import { lightColors } from '@themes/colors'
 import ModalComponent from '@components/molecules/Modal'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import {
   Button,
   KeyboardAvoidingView,
@@ -36,6 +38,8 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
     patients,
     setPatients,
     createPatient,
+    getQuestionsPatient,
+    searchedPatientQuestions,
   } = usePsychologyStore()
   const [visible, setVisible] = React.useState(false)
   const [values, setValues] = React.useState({
@@ -47,6 +51,8 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
   const [submitted, setSubmitted] = React.useState(false)
   const [errorVisible, setErrorVisible] = React.useState(false)
   const [textError, setTextError] = React.useState('')
+  const [patientVisible, setPatientVisible] = React.useState(false)
+  const [selectedItem, setSelectedItem] = React.useState({})
 
   useFocusEffect(
     React.useCallback(() => {
@@ -112,12 +118,73 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
       console.error('Error:', error)
     }
   }
-
   const isSelected = (index: any) => selectedQuestions.includes(index)
+
+  const handleCardPress = async (item: any) => {
+    setSelectedItem(item)
+    await getQuestionsPatient(item._id)
+    setPatientVisible(!patientVisible)
+  }
 
   return (
     <>
-      <Modal visible={visible} animationType="slide" transparent={true}>
+      <Modal
+        visible={patientVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setPatientVisible(!patientVisible)
+        }}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <View style={{ flex: 0, flexDirection: 'row', padding: 10 }}>
+              <Text type={'h1'}>Informacion de paciente</Text>
+              {/*icon to delete, edit and add */}
+              <IconTouchable
+                onPress={() => {
+                  setPatientVisible(!patientVisible)
+                }}>
+                <MaterialCommunityIcons name="delete" size={20} color="black" />
+              </IconTouchable>
+              <IconTouchable
+                onPress={() => {
+                  setPatientVisible(!patientVisible)
+                }}>
+                <Ionicons name="add-circle" size={20} color="black" />
+              </IconTouchable>
+            </View>
+
+            <ScrollView contentContainerStyle={{ padding: 20 }}>
+              <FontAwesome name="user-circle" size={80} color="black" />
+              <Text type={'h1'}>Nombre: {selectedItem?.name}</Text>
+              <Text type={'h2'}>Correo: {selectedItem?.email}</Text>
+              {/* Additional input fields or content within the ScrollView */}
+              {/*render assigned questions */}
+              {console.log('ingresando a modal')}
+              <Text type={'h1'}>Preguntas asignadas</Text>
+              {searchedPatientQuestions.map((question, index) => (
+                <CardContainer
+                  key={index}
+                  style={{
+                    backgroundColor: lightColors.primary,
+                  }}>
+                  <Text type={'h1'}>{question.question}</Text>
+                  <Text type={'h1'}>Tipo: {question.type}</Text>
+                </CardContainer>
+              ))}
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      <Modal
+        visible={visible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setVisible(!visible)
+        }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -209,7 +276,10 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
       <FlatList
         data={patients}
         renderItem={({ item }: { item: any }) => (
-          <CardTouchable>
+          <CardTouchable
+            onPress={() => {
+              handleCardPress(item)
+            }}>
             <FontAwesome name="user-circle" size={20} color="black" />
             <Text type="pLarge">{item.name}</Text>
             <Text type="pLarge">{item.category}</Text>
