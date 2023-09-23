@@ -100,9 +100,9 @@ export const Touchable = styled.TouchableOpacity(() => ({
 }))
 
 export const ButtonContainer = styled.View(() => ({
-  flex: 1,
+  flex: 0,
+  width: '100%',
   marginTop: 10,
-  height: '40%',
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'flex-end',
