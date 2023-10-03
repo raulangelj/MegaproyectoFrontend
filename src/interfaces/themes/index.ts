@@ -1,4 +1,12 @@
 export interface Colors {
+  activityPrimary: string
+  activitySecondary: string
+  activityTertiary: string
+  activityQuaternary: string
+  activityQuinary: string
+  activityBackground0: string
+  activityForeground0: string
+
   primary: string
   secondary: string
   tertiary: string

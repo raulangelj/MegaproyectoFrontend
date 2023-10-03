@@ -1,11 +1,11 @@
 import { FontFamilies, FontSizes, Fonts } from '@interfaces/themes'
 
 export const fontsFamilies: FontFamilies = {
-  light: 'Quicksand_300Light',
-  regular: 'Quicksand_400Regular',
-  medium: 'Quicksand_500Medium',
-  semibold: 'Quicksand_600SemiBold',
-  bold: 'Quicksand_700Bold',
+  light: 'Nunito-Light',
+  regular: 'Nunito-Regular',
+  medium: 'Nunito-Medium',
+  semibold: 'Nunito-SemiBold',
+  bold: 'Nunito-Bold',
 }
 
 const heroFont: Fonts = {
