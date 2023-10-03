@@ -1,14 +1,15 @@
 import React from 'react'
-import { Container, TopNavigation } from './styles'
+import { TopNavigation } from './styles'
 import LandingIcon from '@assets/images/back_button.svg'
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
 import { TouchableOpacity } from 'react-native'
+import Background from '@modules/Activities/components/atoms/Background'
 
 const ActivitiesList: React.FC<RootStackScreenProps<'ActivitiesList'>> = ({
   navigation,
 }) => {
   return (
-    <Container>
+    <Background>
       <TopNavigation>
         <TouchableOpacity
           onPress={() => {
@@ -17,7 +18,7 @@ const ActivitiesList: React.FC<RootStackScreenProps<'ActivitiesList'>> = ({
           <LandingIcon height={24} width={17} />
         </TouchableOpacity>
       </TopNavigation>
-    </Container>
+    </Background>
   )
 }
 

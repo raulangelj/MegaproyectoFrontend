@@ -11,4 +11,12 @@ const lightTheme: AppTheme = {
   fontFamilies: Font.fontsFamilies,
 }
 
-export { lightTheme }
+const darkTheme: AppTheme = {
+  name: 'dark',
+  colors: Colors.darkColors,
+  sizes: sizes.sizes,
+  fontSizes: Font.fontSizes,
+  fontFamilies: Font.fontsFamilies,
+}
+
+export { lightTheme, darkTheme }
