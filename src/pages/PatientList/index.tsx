@@ -340,6 +340,43 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
     )
   }
 
+  const handleDeleteQuestion = async () => {
+    try {
+      //for every selected quesstion
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        //delete question
+        console.log(
+          selectedItem._id,
+          selectedQuestions[i],
+          searchedPatientQuestions[selectedQuestions[i]]._id,
+        )
+        await deleteQuestion({
+          idPatient: selectedItem._id,
+          idQuestion: searchedPatientQuestions[selectedQuestions[i]]._id,
+        })
+      }
+      //refresh questions
+      setSelectedQuestions([])
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const handleAddQuestion = async () => {
+    console.log('update / add question to patient')
+    console.log('selected questions', selectedQuestions)
+    //send array
+    await updateQuestion({
+      idPatient: selectedItem._id,
+      idQuestion: getSelectedQuestions(),
+    })
+    console.log('after update petition')
+    setSubmitted(!submitted)
+    //clean
+    setSelectedQuestions([])
+    setAddQuestion(!addQuestion)
+  }
+
   return (
     <>
       {patientVisible && (
