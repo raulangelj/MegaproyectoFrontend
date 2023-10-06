@@ -33,7 +33,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
             textColor="background0"
           />
           <Button
-            text="Ver mis preguntas"
+            text="Ver preguntas reflexivas"
             onPress={() => {
               console.log('Reporte generado')
               navigation.navigate('PsychologyNavigator', {
@@ -62,7 +62,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
         </Container>
         <ButtonsContainer>
           <Button
-            text="Llenar mi reporte"
+            text="Diario reflexivo"
             onPress={() => {
               console.log('Reporte generado')
               navigation.navigate('TabNavigator', { screen: 'Main' })
