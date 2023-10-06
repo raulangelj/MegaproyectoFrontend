@@ -586,6 +586,171 @@ const QuestionsList: React.FC<
           </View>
         </KeyboardAvoidingView>
       </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setQuestionVisible(!questionVisible)
+        }}
+        visible={questionVisible}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={{ flex: 0, height: '100%', backgroundColor: 'white' }}>
+            <Text type={'h1'}>Editar pregunta</Text>
+            <ScrollView
+              contentContainerStyle={{ alignItems: 'center', padding: 20 }}>
+              <Text type={'pLarge'}>Pregunta</Text>
+              <Text type={'pLarge'}>{selectedQuestion.question}</Text>
+              <Text type={'pLarge'}>Tipo de pregunta</Text>
+              <Text type={'pLarge'}>{selectedQuestion.type}</Text>
+              <Button
+                textType="buttonMedium"
+                size="large"
+                text="Editar titulo"
+                onPress={() => {
+                  setEditTitle(!editTitle)
+                }}
+              />
+              {editTitle && (
+                <>
+                  <Text type={'pLarge'}>Escribe la pregunta</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                </>
+              )}
+              <Button
+                textType="buttonMedium"
+                size="large"
+                text="Editar tipo"
+                onPress={() => {
+                  setEditType(!editType)
+                }}
+              />
+              {editType && (
+                <SelectDropdown
+                  data={['Escritura', 'Checkbox', 'Opciones', 'Slider']}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index)
+                    //transform selectedItem to valid options
+                    if (selectedItem === 'Escritura') {
+                      setSelectItem('input')
+                    }
+                    if (selectedItem === 'Checkbox') {
+                      setSelectItem('checkbox')
+                    }
+                    if (selectedItem === 'Opciones') {
+                      setSelectItem('options')
+                    }
+                    if (selectedItem === 'Slider') {
+                      setSelectItem('slider')
+                    }
+                    //clean values
+                    setValues({
+                      firstOption: '',
+                      secondOption: '',
+                      thirdOption: '',
+                      fourthOption: '',
+                    })
+                  }}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    backgroundColor: lightColors.secondary,
+                  }}
+                  defaultButtonText="Opciones"
+                />
+              )}
+              {selectItem === 'options' && (
+                <>
+                  <Text type={'pLarge'}>Primera opcion</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, firstOption: text })
+                    }
+                    value={values.firstOption}
+                  />
+                  <Text type={'pLarge'}>Segunda opcion</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, secondOption: text })
+                    }
+                    value={values.secondOption}
+                  />
+                  <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, thirdOption: text })
+                    }
+                    value={values.thirdOption}
+                  />
+                  <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, fourthOption: text })
+                    }
+                    value={values.fourthOption}
+                  />
+                </>
+              )}
+              {selectItem === 'checkbox' && (
+                <>
+                  <Text type={'pLarge'}>Primera opcion</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, firstOption: text })
+                    }
+                    value={values.firstOption}
+                  />
+                  <Text type={'pLarge'}>Segunda opcion</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, secondOption: text })
+                    }
+                    value={values.secondOption}
+                  />
+                  <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, thirdOption: text })
+                    }
+                    value={values.thirdOption}
+                  />
+                  <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                  <TextInput
+                    onChangeText={text =>
+                      setValues({ ...values, fourthOption: text })
+                    }
+                    value={values.fourthOption}
+                  />
+                </>
+              )}
+            </ScrollView>
+            <ButtonContainer>
+              <Button
+                textType="buttonMedium"
+                size="large"
+                text="Cancelar"
+                onPress={() => {
+                  setQuestionVisible(!questionVisible)
+                  setSelectItem('')
+                  setValues({
+                    firstOption: '',
+                    secondOption: '',
+                    thirdOption: '',
+                    fourthOption: '',
+                  })
+                  setValue('')
+                }}
+              />
+              <Button
+                textType="buttonMedium"
+                size="large"
+                text="Guardar"
+                onPress={handleUpdate}
+              />
+            </ButtonContainer>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
       <ModalComponent
         text="Debes llenar los campos de primera y segunda opcion"
         isVisible={errorVisible}
