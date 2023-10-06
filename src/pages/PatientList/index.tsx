@@ -11,7 +11,7 @@ import {
   CardContainer,
 } from '@pages/PatientList/styles'
 import Text from '@components/atoms/Text'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
@@ -40,6 +40,8 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
     createPatient,
     getQuestionsPatient,
     searchedPatientQuestions,
+    deleteQuestion,
+    updateQuestion,
   } = usePsychologyStore()
   const [visible, setVisible] = React.useState(false)
   const [values, setValues] = React.useState({
@@ -53,13 +55,15 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
   const [textError, setTextError] = React.useState('')
   const [patientVisible, setPatientVisible] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState({})
+  const [deleteIcon, setDeleteIcon] = React.useState(false)
+  const [addQuestion, setAddQuestion] = React.useState(false)
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('focus patient')
+      console.log('Entrando use focus')
       setPatients()
       setQuestionsPsychology()
-      console.log('patients', patients)
+      getQuestionsPatient(selectedItem._id)
     }, [submitted]),
   )
 
@@ -73,6 +77,17 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
     }
   }
 
+  useEffect(() => {
+    console.log('selected questions useEffect', selectedQuestions)
+    if (patientVisible === true) {
+      if (selectedQuestions.length > 0) {
+        setDeleteIcon(true)
+      } else {
+        setDeleteIcon(false)
+      }
+    }
+  }, [selectedQuestions])
+
   //get id of selected questions
   const getSelectedQuestions = () => {
     const selectedQuestionsIds = selectedQuestions.map(
@@ -83,7 +98,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log('submit')
+      console.log('submit creating patient')
       //validate email format
       const emailRegex = /\S+@\S+\.\S+/
       if (!emailRegex.test(values.email)) {
@@ -120,61 +135,170 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
   }
   const isSelected = (index: any) => selectedQuestions.includes(index)
 
+  //When patient is selected
   const handleCardPress = async (item: any) => {
     setSelectedItem(item)
     await getQuestionsPatient(item._id)
     setPatientVisible(!patientVisible)
   }
 
+  const handleDeleteQuestion = async () => {
+    try {
+      //for every selected quesstion
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        //delete question
+        console.log(
+          selectedItem._id,
+          selectedQuestions[i],
+          searchedPatientQuestions[selectedQuestions[i]]._id,
+        )
+        await deleteQuestion({
+          idPatient: selectedItem._id,
+          idQuestion: searchedPatientQuestions[selectedQuestions[i]]._id,
+        })
+      }
+      //refresh questions
+      setSelectedQuestions([])
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const handleAddQuestion = async () => {
+    console.log('update / add question to patient')
+    console.log('selected questions', selectedQuestions)
+    //send array
+    await updateQuestion({
+      idPatient: selectedItem._id,
+      idQuestion: getSelectedQuestions(),
+    })
+    console.log('after update petition')
+    setSubmitted(!submitted)
+    //clean
+    setSelectedQuestions([])
+    setAddQuestion(!addQuestion)
+  }
+
   return (
     <>
+      {patientVisible && (
+        <Modal
+          visible={patientVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => {
+            setPatientVisible(!patientVisible)
+            setSelectedQuestions([])
+          }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+              <View style={{ flex: 0, flexDirection: 'row', padding: 10 }}>
+                <Text type={'h1'}>Informacion de paciente</Text>
+                {/*icon to delete, edit and add */}
+                {deleteIcon && (
+                  <IconTouchable
+                    onPress={() => {
+                      handleDeleteQuestion()
+                    }}>
+                    <MaterialCommunityIcons
+                      name="delete"
+                      size={20}
+                      color="black"
+                    />
+                  </IconTouchable>
+                )}
+                <IconTouchable
+                  onPress={() => {
+                    setAddQuestion(!addQuestion)
+                  }}>
+                  <Ionicons name="add-circle" size={20} color="black" />
+                </IconTouchable>
+              </View>
+
+              <ScrollView contentContainerStyle={{ padding: 20 }}>
+                <FontAwesome name="user-circle" size={80} color="black" />
+                <Text type={'h1'}>Nombre: {selectedItem?.name}</Text>
+                <Text type={'h2'}>Correo: {selectedItem?.email}</Text>
+                {/* Additional input fields or content within the ScrollView */}
+                {/*render assigned questions */}
+                {console.log('ingresando a modal')}
+                <Text type={'h1'}>Preguntas asignadas</Text>
+                {searchedPatientQuestions.map((question, index) => (
+                  <TouchableWithoutFeedback
+                    key={index}
+                    onLongPress={() => toggleQuestionSelection(index)}>
+                    <CardContainer
+                      key={index}
+                      style={{
+                        backgroundColor: isSelected(index)
+                          ? lightColors.quinary
+                          : lightColors.primary,
+                      }}>
+                      <Text type={'h1'}>{question.question}</Text>
+                      <Text type={'h1'}>Tipo: {question.type}</Text>
+                    </CardContainer>
+                  </TouchableWithoutFeedback>
+                ))}
+              </ScrollView>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+      )}
+
       <Modal
-        visible={patientVisible}
+        visible={addQuestion}
         animationType="slide"
         transparent={true}
         onRequestClose={() => {
-          setPatientVisible(!patientVisible)
+          setAddQuestion(!addQuestion)
+          setSelectedQuestions([])
         }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={{ flex: 1, backgroundColor: 'white' }}>
             <View style={{ flex: 0, flexDirection: 'row', padding: 10 }}>
-              <Text type={'h1'}>Informacion de paciente</Text>
-              {/*icon to delete, edit and add */}
-              <IconTouchable
-                onPress={() => {
-                  setPatientVisible(!patientVisible)
-                }}>
-                <MaterialCommunityIcons name="delete" size={20} color="black" />
-              </IconTouchable>
-              <IconTouchable
-                onPress={() => {
-                  setPatientVisible(!patientVisible)
-                }}>
-                <Ionicons name="add-circle" size={20} color="black" />
-              </IconTouchable>
+              <Text type={'h1'}>Agregar pregunta a paciente</Text>
             </View>
 
             <ScrollView contentContainerStyle={{ padding: 20 }}>
-              <FontAwesome name="user-circle" size={80} color="black" />
-              <Text type={'h1'}>Nombre: {selectedItem?.name}</Text>
-              <Text type={'h2'}>Correo: {selectedItem?.email}</Text>
-              {/* Additional input fields or content within the ScrollView */}
-              {/*render assigned questions */}
-              {console.log('ingresando a modal')}
-              <Text type={'h1'}>Preguntas asignadas</Text>
-              {searchedPatientQuestions.map((question, index) => (
-                <CardContainer
+              <Text type={'h2'}>Selecciona las preguntas para el paciente</Text>
+              {/*Obtener pregutnas del psicologo*/}
+              {/*render questions map*/}
+              {psychologyQuestions.map((question, index) => (
+                <TouchableWithoutFeedback
                   key={index}
-                  style={{
-                    backgroundColor: lightColors.primary,
-                  }}>
-                  <Text type={'h1'}>{question.question}</Text>
-                  <Text type={'h1'}>Tipo: {question.type}</Text>
-                </CardContainer>
+                  onLongPress={() => toggleQuestionSelection(index)}>
+                  <CardContainer
+                    key={index}
+                    style={{
+                      backgroundColor: isSelected(index)
+                        ? lightColors.quinary
+                        : lightColors.primary,
+                    }}>
+                    <Text type={'h1'}>{question.question}</Text>
+                    <Text type={'h1'}>Tipo: {question.type}</Text>
+                  </CardContainer>
+                </TouchableWithoutFeedback>
               ))}
             </ScrollView>
+            <Button
+              title="Agregar"
+              onPress={() => {
+                handleAddQuestion()
+              }}
+              color={lightColors.quaternary}
+            />
+            <Button
+              title="Cancelar"
+              onPress={() => {
+                //clean values
+                setAddQuestion(!addQuestion)
+              }}
+              color={lightColors.quaternary}
+            />
           </View>
         </KeyboardAvoidingView>
       </Modal>
