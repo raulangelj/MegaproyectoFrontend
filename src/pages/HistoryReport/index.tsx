@@ -138,7 +138,14 @@ const HistoryReport: React.FC<
   if (isLoading) {
     return <Text>Generating PDF...</Text>
   }
-
+  //if answers are empty
+  if (answers.length === 0) {
+    return (
+      <Container>
+        <Text>Aun no hay reportes disponibles</Text>
+      </Container>
+    )
+  }
   return (
     <Container>
       <Modal

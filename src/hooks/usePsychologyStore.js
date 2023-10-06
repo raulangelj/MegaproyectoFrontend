@@ -69,7 +69,54 @@ export const usePsychologyStore = () => {
       const { data } = await backendAPI.get('/report/getQuestionsPatient', {
         params: { id },
       })
+      console.log('data get questions', data)
       dispatch(onSetSearchedPatientQuestions(data))
+      console.log('after delete patient questions', searchedPatientQuestions)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //delete question from patient
+  const deleteQuestion = async body => {
+    try {
+      dispatch(onLoadingPatient(true))
+      console.log('body deleting', body)
+      const { data } = await backendAPI.delete('/report/deleteQuestions', {
+        data: body,
+      })
+      console.log('data deleting', data)
+      getQuestionsPatient(body.idPatient)
+      console.log('data deleting', data)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //update questions to patient
+  const updateQuestion = async body => {
+    try {
+      dispatch(onLoadingPatient(true))
+      console.log('body updating', body)
+      const { data } = await backendAPI.put('/report/updateQuestions', body)
+      console.log('data updating', data)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //edit question info
+  const updateQuestionInfo = async body => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.put('/report/updateQuestion', body)
+      console.log('data updating', data)
     } catch (error) {
       console.log('error ', error)
     } finally {
@@ -88,5 +135,8 @@ export const usePsychologyStore = () => {
     setQuestionsPsychology,
     saveQuestion,
     getQuestionsPatient,
+    deleteQuestion,
+    updateQuestion,
+    updateQuestionInfo,
   }
 }
