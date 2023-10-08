@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootStackScreenProps } from '@navigations/types/ScreenProps'
-import React, { useEffect, useState, useLayoutEffect } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {
   ChatScreen,
@@ -16,12 +22,27 @@ import { MockHost } from '@static/mocks/User'
 import { ChatData, Message } from '@interfaces/chat'
 import socket from 'utils/socket'
 import { useUserStore } from 'hooks'
+import { UserInterface } from '@interfaces/user/user'
+
+const filterChatMessages = (data: ChatData, user: UserInterface) => {
+  const filterData = data.messages.filter(chatMessage => {
+    // If the user is not a psychologist, then do not return messages from "bot"
+    if (user.category === 'patient') {
+      return chatMessage.author_name !== 'bot'
+    } else {
+      return chatMessage
+    }
+  })
+
+  return { ...data, messages: filterData }
+}
 
 const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   const { user, status } = useUserStore()
   const [actualUser, setActualUser] = useState(user)
   const [chatInfo, setChatInfo] = useState({} as ChatData)
   const [message, setMessage] = useState('')
+  const messagesContainer = useRef<FlatList>(null)
   // const [chatMessages, setChatMessages] = React.useState(MockChatRoom)
 
   useEffect(() => {
@@ -45,12 +66,16 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   // * This useEffect is for the chat messages
   useEffect(() => {
     socket.on('roomFound', (roomChats: ChatData) => {
-      setChatInfo(roomChats)
+      setChatInfo(filterChatMessages(roomChats, user))
     })
     socket.on('receiveMessage', (data: ChatData) => {
-      setChatInfo(data)
+      setChatInfo(filterChatMessages(data, user))
     })
   }, [socket])
+
+  useEffect(() => {
+    messagesContainer?.current?.scrollToEnd({ animated: true })
+  }, [chatInfo])
 
   const renderItems = ({ item }: { item: Message }) => {
     return (
@@ -75,7 +100,6 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
       room: chatInfo.host_id,
       message: newMessage,
     })
-    console.log(newMessage)
     setMessage('')
   }
 
@@ -84,6 +108,7 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
       <MessageView>
         {chatInfo?.messages?.length > 0 ? (
           <FlatList
+            ref={messagesContainer}
             data={chatInfo.messages}
             renderItem={renderItems}
             keyExtractor={(item: Message) => item._id}
