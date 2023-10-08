@@ -27,6 +27,7 @@ export const MessageInput = styled.TextInput(({ theme }) => ({
   flex: 1,
   marginRight: theme.sizes.xs,
   borderRadius: 20,
+  color: 'black',
 }))
 
 export const MessageSendPressable = styled.Pressable(({ theme }) => ({
