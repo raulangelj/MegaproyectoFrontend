@@ -81,7 +81,9 @@ const HistoryReport: React.FC<
               </tr>
               <tr>
                 <th>Fecha de creacion</th>
-                <td>${date.getDay()} / ${date.getMonth()} / ${date.getFullYear()}</td>
+                <td>${date.getDay() + 1} / ${
+        date.getMonth() + 1
+      } / ${date.getFullYear()}</td>
               </tr>
               <tr>
                 <th>Total reportes</th>
