@@ -273,16 +273,18 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   useEffect(() => {
     //console.log('USE EFFECT ANSWER', counterQuestion)
     const saveAndNavigate = async () => {
+      console.log(counterQuestion, questions.length)
       if (counterQuestion === questions.length - 1) {
         // Save the answers
         console.log('ANSWER TO BE SAVED', answers)
-        await saveAnswer({ answersData: answers })
-        setCounterQuestion(0)
+        if (counterQuestion >= 0 && answers.length !== 0) {
+          await saveAnswer({ answersData: answers })
+          setCounterQuestion(0)
 
-        // Navigate to the next screen
-        navigation.navigate('MainReport')
-      }
-      if (questions.length > 0 && answers.length > 0) {
+          // Navigate to the next screen
+          navigation.navigate('MainReport')
+        }
+      } else if (questions.length > 0 && answers.length > 0) {
         console.log('estoy aqui')
         setCounterQuestion((counterQuestion + 1) % questions.length)
       }

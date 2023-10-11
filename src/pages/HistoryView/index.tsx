@@ -80,7 +80,8 @@ const HistoryView: React.FC<RootStackScreenProps<'HistoryView'>> = ({
                     item.answer.map((answer: any) => {
                       return (
                         <Text type="h2" key={answer}>
-                          {answer}
+                          {/*if answer is empty or '' return No respondida*/}
+                          {answer === '' ? 'No respondida' : answer}
                         </Text>
                       )
                     })
