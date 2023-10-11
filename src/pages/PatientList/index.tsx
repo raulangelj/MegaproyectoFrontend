@@ -362,6 +362,23 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
     }
   }
 
+  const handleDeletePatient = async () => {
+    console.log('ye;,', selectedItem._id, selectedItem, selectedQuestions)
+    try {
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        //delete question
+
+        await deletePatient({
+          id: selectedQuestions[i]._id,
+        })
+      }
+      setSubmitted(!submitted)
+      setSelectedQuestions([])
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   const handleAddQuestion = async () => {
     console.log('update / add question to patient')
     console.log('selected questions', selectedQuestions)
@@ -375,6 +392,113 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
     //clean
     setSelectedQuestions([])
     setAddQuestion(!addQuestion)
+  }
+
+  const handleBack = () => {
+    setPatientVisible(!patientVisible)
+    setSelectedQuestions([])
+  }
+
+  if (patients.length === 0) {
+    return (
+      <>
+        <Modal
+          visible={visible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => {
+            setVisible(!visible)
+          }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+              <Text type={'h1'}>Creacion de paciente</Text>
+              <ScrollView1 contentContainerStyle={{ padding: 20 }}>
+                <Text type={'h1'}>Nombre:</Text>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                  value={values.name}
+                  onChangeText={text => setValues({ ...values, name: text })}
+                  autoFocus={true}
+                />
+                <Text type={'h1'}>Correo:</Text>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                  value={values.email}
+                  onChangeText={text => setValues({ ...values, email: text })}
+                  autoFocus={true}
+                />
+                <Text type={'h1'}>Contraseña:</Text>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                  value={values.password}
+                  onChangeText={text =>
+                    setValues({ ...values, password: text })
+                  }
+                  autoFocus={true}
+                  secureTextEntry={true}
+                />
+                <Text type={'h1'}>Preguntas disponibles</Text>
+                {/*render questions map*/}
+                {psychologyQuestions.map((question, index) => (
+                  <TouchableWithoutFeedback
+                    key={index}
+                    onLongPress={() => toggleQuestionSelection(index)}>
+                    <CardContainer
+                      style={{
+                        backgroundColor: isSelected(index)
+                          ? lightColors.quinary
+                          : lightColors.primary,
+                      }}>
+                      <Text type={'h1'}>{question.question}</Text>
+                      <Text type={'h1'}>Tipo: {question.type}</Text>
+                    </CardContainer>
+                  </TouchableWithoutFeedback>
+                ))}
+
+                {/* Additional input fields or content within the ScrollView */}
+              </ScrollView1>
+              <Button
+                title="Guardar"
+                onPress={() => {
+                  handleSubmit()
+                }}
+                color={lightColors.quaternary}
+              />
+              <Button
+                title="Cancelar"
+                onPress={() => {
+                  //clean values
+                  setValues({
+                    name: '',
+                    email: '',
+                    password: '',
+                  })
+                  setSelectedQuestions([])
+                  setVisible(!visible)
+                }}
+                color={lightColors.quaternary}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+        <TitleContainer>
+          <Text type="pLarge" color="quaternary">
+            Lista de pacientes
+          </Text>
+          <IconTouchable
+            onPress={() => {
+              setVisible(!visible)
+            }}>
+            <Feather name="user-plus" size={20} color="black" />
+          </IconTouchable>
+        </TitleContainer>
+        <EmptyContainer>
+          <Text type={'h1'}>Aun no hay pacientes disponibles</Text>
+        </EmptyContainer>
+      </>
+    )
   }
 
   return (
