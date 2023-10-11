@@ -10,7 +10,7 @@ import {
   CardContainer,
 } from '@pages/QuestionsList/styles'
 import Text from '@components/atoms/Text'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import {
@@ -25,6 +25,7 @@ import ModalComponent from '@components/molecules/Modal'
 import SelectDropdown from 'react-native-select-dropdown'
 import { lightColors } from '@themes/colors'
 import { usePsychologyStore } from 'hooks'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const QuestionsList: React.FC<
   PsychologyTabsScreenProps<'QuestionsList'>
@@ -49,7 +50,10 @@ const QuestionsList: React.FC<
     setQuestionsPsychology,
     saveQuestion,
     updateQuestionInfo,
+    deleteGeneralQuestion,
   } = usePsychologyStore()
+  const [selectedQuestions, setSelectedQuestions] = React.useState([])
+  const [deleteIcon, setDeleteIcon] = React.useState(false)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -58,12 +62,32 @@ const QuestionsList: React.FC<
     }, [submitted]),
   )
 
-  const handleSubmit = () => {
+  const toggleQuestionSelection = (index: any) => {
+    if (isSelected(index)) {
+      // If the question is already selected, deselect it
+      setSelectedQuestions(selectedQuestions.filter(i => i !== index))
+    } else {
+      // If the question is not selected, select it
+      setSelectedQuestions([...selectedQuestions, index])
+    }
+  }
+
+  useEffect(() => {
+    console.log('selected questions useEffect', selectedQuestions)
+
+    if (selectedQuestions.length > 0) {
+      setDeleteIcon(true)
+    } else {
+      setDeleteIcon(false)
+    }
+  }, [selectedQuestions])
+
+  const handleSubmit = async () => {
     console.log('submit')
     //check if first and second options are not empty and show modal
     if (selectItem === 'options' || selectItem === 'checkbox') {
       if (values.firstOption !== '' && values.secondOption !== '') {
-        saveQuestion({
+        await saveQuestion({
           question: value,
           type: selectItem,
           options: [
@@ -89,7 +113,7 @@ const QuestionsList: React.FC<
         setErrorVisible(!errorVisible)
       }
     } else {
-      saveQuestion({ question: value, type: selectItem })
+      await saveQuestion({ question: value, type: selectItem })
       setSubmitted(!submitted)
       setSelectItem('')
       setValue('')
@@ -147,6 +171,185 @@ const QuestionsList: React.FC<
     console.log(question)
     setSelectedQuestion(question)
     setQuestionVisible(!questionVisible)
+  }
+  if (psychologyQuestions.length === 0) {
+    return (
+      <>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => {
+            setVisible(!visible)
+          }}
+          visible={visible}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={{ flex: 0, height: '100%', backgroundColor: 'white' }}>
+              <Text type={'h1'}>Crear pregunta</Text>
+              <ScrollView
+                contentContainerStyle={{ alignItems: 'center', padding: 20 }}>
+                <CardContainer>
+                  <Text type={'pLarge'}>Escribe la pregunta</Text>
+                  <TextInput onChangeText={setValue} value={value} />
+                  <Text type={'pLarge'}>Tipo de pregunta</Text>
+                  <SelectDropdown
+                    data={['Escritura', 'Checkbox', 'Opciones', 'Slider']}
+                    onSelect={(selectedItem, index) => {
+                      console.log(selectedItem, index)
+                      //transform selectedItem to valid options
+                      if (selectedItem === 'Escritura') {
+                        setSelectItem('input')
+                      }
+                      if (selectedItem === 'Checkbox') {
+                        setSelectItem('checkbox')
+                      }
+                      if (selectedItem === 'Opciones') {
+                        setSelectItem('options')
+                      }
+                      if (selectedItem === 'Slider') {
+                        setSelectItem('slider')
+                      }
+                      //clean values
+                      setValues({
+                        firstOption: '',
+                        secondOption: '',
+                        thirdOption: '',
+                        fourthOption: '',
+                      })
+                    }}
+                    buttonStyle={{
+                      borderRadius: 5,
+                      backgroundColor: lightColors.secondary,
+                    }}
+                    defaultButtonText="Opciones"
+                  />
+                </CardContainer>
+                {selectItem === 'options' && (
+                  <>
+                    <Text type={'pLarge'}>Primera opcion</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, firstOption: text })
+                      }
+                      value={values.firstOption}
+                    />
+                    <Text type={'pLarge'}>Segunda opcion</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, secondOption: text })
+                      }
+                      value={values.secondOption}
+                    />
+                    <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, thirdOption: text })
+                      }
+                      value={values.thirdOption}
+                    />
+                    <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, fourthOption: text })
+                      }
+                      value={values.fourthOption}
+                    />
+                  </>
+                )}
+                {selectItem === 'checkbox' && (
+                  <>
+                    <Text type={'pLarge'}>Primera opcion</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, firstOption: text })
+                      }
+                      value={values.firstOption}
+                    />
+                    <Text type={'pLarge'}>Segunda opcion</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, secondOption: text })
+                      }
+                      value={values.secondOption}
+                    />
+                    <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, thirdOption: text })
+                      }
+                      value={values.thirdOption}
+                    />
+                    <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                    <TextInput
+                      onChangeText={text =>
+                        setValues({ ...values, fourthOption: text })
+                      }
+                      value={values.fourthOption}
+                    />
+                  </>
+                )}
+              </ScrollView>
+              <ButtonContainer>
+                <Button
+                  textType="buttonMedium"
+                  size="large"
+                  text="Cancelar"
+                  onPress={() => {
+                    setVisible(!visible)
+                    setSelectItem('')
+                    setValues({
+                      firstOption: '',
+                      secondOption: '',
+                      thirdOption: '',
+                      fourthOption: '',
+                    })
+                    setValue('')
+                  }}
+                />
+                <Button
+                  textType="buttonMedium"
+                  size="large"
+                  text="Guardar"
+                  onPress={handleSubmit}
+                />
+              </ButtonContainer>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+        <TitleContainer>
+          <Text type="pLarge" color="quaternary">
+            Lista de preguntas
+          </Text>
+          <IconTouchable
+            onPress={() => {
+              setVisible(!visible)
+            }}>
+            <AntDesign name="addfile" size={25} color="black" />
+          </IconTouchable>
+        </TitleContainer>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: lightColors.primary,
+          }}>
+          <Text type={'h1'}>Aun no hay preguntas reflexivas</Text>
+        </View>
+      </>
+    )
+  }
+
+  const isSelected = (index: any) => selectedQuestions.includes(index)
+
+  const handleDeleteGeneralQuestion = async () => {
+    console.log('here', selectedQuestions, selectItem)
+    for (const item of selectedQuestions) {
+      await deleteGeneralQuestion({ id: item._id })
+    }
+    setSubmitted(!submitted)
+    setSelectedQuestions([])
   }
 
   return (
@@ -473,13 +676,30 @@ const QuestionsList: React.FC<
           }}>
           <AntDesign name="addfile" size={25} color="black" />
         </IconTouchable>
+        {deleteIcon && (
+          <IconTouchable
+            onPress={() => {
+              console.log('delete patient')
+              handleDeleteGeneralQuestion()
+            }}>
+            <MaterialCommunityIcons name="delete" size={20} color="black" />
+          </IconTouchable>
+        )}
       </TitleContainer>
       <FlatList
         data={psychologyQuestions}
         renderItem={({ item }: { item: any }) => (
           <CardTouchable
             onPress={() => {
-              handleQuestionCard(item)
+              if (!deleteIcon) {
+                handleQuestionCard(item)
+              }
+            }}
+            onLongPress={() => toggleQuestionSelection(item)}
+            style={{
+              backgroundColor: isSelected(item)
+                ? lightColors.quinary
+                : lightColors.background0,
             }}>
             <Text type="pLarge">{item.question}</Text>
             <Text type="pLarge">Tipo: {item.type}</Text>
