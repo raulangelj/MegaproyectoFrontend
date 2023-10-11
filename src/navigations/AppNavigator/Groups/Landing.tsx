@@ -35,6 +35,7 @@ const MainBottomTabNavigator: React.FC<
         options={{
           title: 'Profile',
           tabBarIcon: ProfileIcon,
+          headerShown: false,
         }}
       />
       <MainBottomTab.Screen
@@ -43,6 +44,7 @@ const MainBottomTabNavigator: React.FC<
         options={{
           title: 'Actividades',
           tabBarIcon: ActivitiesIcon,
+          headerShown: false,
         }}
       />
       <MainBottomTab.Screen
@@ -51,6 +53,7 @@ const MainBottomTabNavigator: React.FC<
         options={{
           title: 'Chat',
           tabBarIcon: ChatIcon,
+          headerShown: false,
         }}
       />
     </MainBottomTab.Navigator>

@@ -29,7 +29,7 @@ export const FlatList = styled.FlatList(({ theme }) => ({
 
 export const CardContainer = styled.View(() => ({
   flex: 0,
-  width: '100%',
+  width: '90%',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 10,
@@ -54,12 +54,11 @@ export const CardTouchable = styled.TouchableOpacity(({ theme }) => ({
   padding: 10,
   width: '95%',
   height: '100%',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: theme.colors.background0,
-  borderRadius: 10,
-  borderBottomColor: theme.colors.quaternary,
-  borderBottomWidth: 3,
+  backgroundColor: theme.colors.secondary,
+  borderRadius: 30,
 }))
 
 export const IconTouchable = styled.TouchableOpacity(() => ({
@@ -103,4 +102,27 @@ export const TextInput = styled.TextInput(({ theme }) => ({
   borderColor: theme.colors.background4,
   borderWidth: 2,
   color: 'black',
+}))
+
+export const Text = styled.Text(() => ({
+  flex: 1,
+  color: 'black',
+  fontSize: 15,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  alignItems: 'center',
+  textAlignVertical: 'center',
+}))
+
+export const EmptyContainer = styled.View(({ theme }) => ({
+  flex: 1,
+  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  backgroundColor: theme.colors.primary,
+}))
+
+export const ScrollView1 = styled.ScrollView(() => ({
+  flexGrow: 1,
 }))

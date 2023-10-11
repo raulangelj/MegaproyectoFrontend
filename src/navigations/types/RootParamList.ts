@@ -36,6 +36,8 @@ export type PsychologyTabsParamList = {
   PatientList1: undefined
   QuestionsList1: undefined
   QuestionsList: undefined
+  Statistics: undefined
+  Statistics1: undefined
 }
 
 declare global {

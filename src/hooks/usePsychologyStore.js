@@ -124,6 +124,45 @@ export const usePsychologyStore = () => {
     }
   }
 
+  //deletePatient
+  const deletePatient = async id => {
+    console.log('id deleting', id)
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.delete('/report/deletePatient', {
+        data: id,
+      })
+      console.log('data deleting', data)
+      await setPatients()
+      console.log('after delete patient', patients)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //delete general question
+  const deleteGeneralQuestion = async id => {
+    console.log('id deleting', id)
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.delete(
+        '/report/deleteGeneralQuestion',
+        {
+          data: id,
+        },
+      )
+      console.log('data deleting', data)
+      await setQuestionsPsychology()
+      console.log('after delete patient', patients)
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
   return {
     // properties
     patients,
@@ -138,5 +177,7 @@ export const usePsychologyStore = () => {
     deleteQuestion,
     updateQuestion,
     updateQuestionInfo,
+    deletePatient,
+    deleteGeneralQuestion,
   }
 }
