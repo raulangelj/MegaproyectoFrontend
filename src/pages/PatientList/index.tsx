@@ -5,17 +5,16 @@ import {
   TitleContainer,
   CardTouchable,
   IconTouchable,
-  ModalContainer,
-  ModalView,
   TextInput,
   CardContainer,
   EmptyContainer,
   ScrollView1,
+  EmailPaswordContainer,
+  InputField,
 } from '@pages/PatientList/styles'
 import Text from '@components/atoms/Text'
 import React, { useEffect } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
-import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -47,19 +46,24 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
     deletePatient,
   } = usePsychologyStore()
   const [visible, setVisible] = React.useState(false)
+  const [selectedQuestions, setSelectedQuestions] = React.useState<any>([])
+  const [submitted, setSubmitted] = React.useState(false)
+  const [errorVisible, setErrorVisible] = React.useState(false)
+  const [textError, setTextError] = React.useState('')
+  const [patientVisible, setPatientVisible] = React.useState(false)
+
+  const [deleteIcon, setDeleteIcon] = React.useState(false)
+  const [addQuestion, setAddQuestion] = React.useState(false)
   const [values, setValues] = React.useState({
     name: '',
     email: '',
     password: '',
   })
-  const [selectedQuestions, setSelectedQuestions] = React.useState([])
-  const [submitted, setSubmitted] = React.useState(false)
-  const [errorVisible, setErrorVisible] = React.useState(false)
-  const [textError, setTextError] = React.useState('')
-  const [patientVisible, setPatientVisible] = React.useState(false)
-  const [selectedItem, setSelectedItem] = React.useState({})
-  const [deleteIcon, setDeleteIcon] = React.useState(false)
-  const [addQuestion, setAddQuestion] = React.useState(false)
+  const [selectedItem, setSelectedItem] = React.useState({
+    _id: '',
+    name: '',
+    email: '',
+  })
 
   useFocusEffect(
     React.useCallback(() => {
@@ -69,6 +73,21 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
       getQuestionsPatient(selectedItem._id)
     }, [submitted]),
   )
+
+  const getTypeOfQuestion = (type: string) => {
+    switch (type) {
+      case 'input':
+        return 'Escritura'
+      case 'checkbox':
+        return 'Checkbox'
+      case 'options':
+        return 'Opciones'
+      case 'slider':
+        return 'Slider'
+      default:
+        return 'Escritura'
+    }
+  }
 
   const toggleQuestionSelection = (index: any) => {
     if (isSelected(index)) {
@@ -203,6 +222,86 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
     setSelectedQuestions([])
   }
 
+  const createPatientComponent = () => {
+    return (
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <Text type={'h1'}>Creacion de paciente</Text>
+
+          <ScrollView1 contentContainerStyle={{ padding: 20 }}>
+            <EmailPaswordContainer>
+              <InputField
+                label="Nombre de usuario"
+                icon="emoticon-outline"
+                value={values.name}
+                placeholder="username"
+                onChangeText={text => setValues({ ...values, name: text })}
+              />
+              <InputField
+                label="Correo Electronico"
+                icon="email-variant"
+                value={values.email}
+                placeholder="email@gmail.com"
+                keyboardType="email-address"
+                onChangeText={text => setValues({ ...values, email: text })}
+              />
+              <InputField
+                label="Contraseña"
+                icon="lock-open"
+                value={values.password}
+                placeholder="* * * * * *"
+                isPassword
+                onChangeText={text => setValues({ ...values, password: text })}
+              />
+            </EmailPaswordContainer>
+            <Text type={'h2'}>Preguntas disponibles</Text>
+            {psychologyQuestions.map((question, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onLongPress={() => toggleQuestionSelection(index)}>
+                <CardContainer
+                  style={{
+                    backgroundColor: isSelected(index)
+                      ? lightColors.secondary
+                      : lightColors.quinary,
+                  }}>
+                  <Text type="pLargeBold" color="white">
+                    {question.question}
+                  </Text>
+                  <Text type="pMedium" color="white">
+                    Tipo: {getTypeOfQuestion(question.type)}
+                  </Text>
+                </CardContainer>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView1>
+          <Button
+            title="Guardar"
+            onPress={() => {
+              handleSubmit()
+            }}
+            color={lightColors.quaternary}
+          />
+          <Button
+            title="Cancelar"
+            onPress={() => {
+              setValues({
+                name: '',
+                email: '',
+                password: '',
+              })
+              setSelectedQuestions([])
+              setVisible(!visible)
+            }}
+            color={lightColors.quaternary}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    )
+  }
+
   if (patients.length === 0) {
     return (
       <>
@@ -213,79 +312,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
           onRequestClose={() => {
             setVisible(!visible)
           }}>
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={{ flex: 1, backgroundColor: 'white' }}>
-              <Text type={'h1'}>Creacion de paciente</Text>
-              <ScrollView1 contentContainerStyle={{ padding: 20 }}>
-                <Text type={'h1'}>Nombre:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.name}
-                  onChangeText={text => setValues({ ...values, name: text })}
-                  autoFocus={true}
-                />
-                <Text type={'h1'}>Correo:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.email}
-                  onChangeText={text => setValues({ ...values, email: text })}
-                  autoFocus={true}
-                />
-                <Text type={'h1'}>Contraseña:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.password}
-                  onChangeText={text =>
-                    setValues({ ...values, password: text })
-                  }
-                  autoFocus={true}
-                  secureTextEntry={true}
-                />
-                <Text type={'h1'}>Preguntas disponibles</Text>
-                {/*render questions map*/}
-                {psychologyQuestions.map((question, index) => (
-                  <TouchableWithoutFeedback
-                    key={index}
-                    onLongPress={() => toggleQuestionSelection(index)}>
-                    <CardContainer
-                      style={{
-                        backgroundColor: isSelected(index)
-                          ? lightColors.quinary
-                          : lightColors.primary,
-                      }}>
-                      <Text type={'h1'}>{question.question}</Text>
-                      <Text type={'h1'}>Tipo: {question.type}</Text>
-                    </CardContainer>
-                  </TouchableWithoutFeedback>
-                ))}
-
-                {/* Additional input fields or content within the ScrollView */}
-              </ScrollView1>
-              <Button
-                title="Guardar"
-                onPress={() => {
-                  handleSubmit()
-                }}
-                color={lightColors.quaternary}
-              />
-              <Button
-                title="Cancelar"
-                onPress={() => {
-                  //clean values
-                  setValues({
-                    name: '',
-                    email: '',
-                    password: '',
-                  })
-                  setSelectedQuestions([])
-                  setVisible(!visible)
-                }}
-                color={lightColors.quaternary}
-              />
-            </View>
-          </KeyboardAvoidingView>
+          {createPatientComponent()}
         </Modal>
         <TitleContainer>
           <Text type="pLarge" color="quaternary">
@@ -384,7 +411,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
                           {question.question}
                         </Text>
                         <Text type="pMediumBold" color="white">
-                          Tipo: {question.type}
+                          Tipo: {getTypeOfQuestion(question.type)}
                         </Text>
                       </CardContainer>
                     </TouchableWithoutFeedback>
@@ -414,15 +441,13 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <View style={{ flex: 1, backgroundColor: lightColors.primary }}>
             <View style={{ flex: 0, flexDirection: 'row', padding: 10 }}>
               <Text type={'h1'}>Agregar pregunta a paciente</Text>
             </View>
 
             <ScrollView1 contentContainerStyle={{ padding: 20 }}>
-              <Text type={'h2'}>Selecciona las preguntas para el paciente</Text>
-              {/*Obtener pregutnas del psicologo*/}
-              {/*render questions map*/}
+              <Text type={'h2'}>Selecciona las preguntas</Text>
               {psychologyQuestions.map((question, index) => (
                 <TouchableWithoutFeedback
                   key={index}
@@ -432,10 +457,14 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
                     style={{
                       backgroundColor: isSelected(index)
                         ? lightColors.quinary
-                        : lightColors.primary,
+                        : lightColors.secondary,
                     }}>
-                    <Text type={'h1'}>{question.question}</Text>
-                    <Text type={'h1'}>Tipo: {question.type}</Text>
+                    <Text type="pLargeBold" color="background0">
+                      {question.question}
+                    </Text>
+                    <Text type="pMediumBold" color="background0">
+                      Tipo: {question.type}
+                    </Text>
                   </CardContainer>
                 </TouchableWithoutFeedback>
               ))}
@@ -465,77 +494,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
         onRequestClose={() => {
           setVisible(!visible)
         }}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <Text type={'h1'}>Creacion de paciente</Text>
-            <ScrollView1 contentContainerStyle={{ padding: 20 }}>
-              <Text type={'h1'}>Nombre:</Text>
-              <TextInput
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                value={values.name}
-                onChangeText={text => setValues({ ...values, name: text })}
-                autoFocus={true}
-              />
-              <Text type={'h1'}>Correo:</Text>
-              <TextInput
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                value={values.email}
-                onChangeText={text => setValues({ ...values, email: text })}
-                autoFocus={true}
-              />
-              <Text type={'h1'}>Contraseña:</Text>
-              <TextInput
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                value={values.password}
-                onChangeText={text => setValues({ ...values, password: text })}
-                autoFocus={true}
-                secureTextEntry={true}
-              />
-              <Text type={'h1'}>Preguntas disponibles</Text>
-              {/*render questions map*/}
-              {psychologyQuestions.map((question, index) => (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onLongPress={() => toggleQuestionSelection(index)}>
-                  <CardContainer
-                    style={{
-                      backgroundColor: isSelected(index)
-                        ? lightColors.quinary
-                        : lightColors.primary,
-                    }}>
-                    <Text type={'h1'}>{question.question}</Text>
-                    <Text type={'h1'}>Tipo: {question.type}</Text>
-                  </CardContainer>
-                </TouchableWithoutFeedback>
-              ))}
-
-              {/* Additional input fields or content within the ScrollView */}
-            </ScrollView1>
-            <Button
-              title="Guardar"
-              onPress={() => {
-                handleSubmit()
-              }}
-              color={lightColors.quaternary}
-            />
-            <Button
-              title="Cancelar"
-              onPress={() => {
-                //clean values
-                setValues({
-                  name: '',
-                  email: '',
-                  password: '',
-                })
-                setSelectedQuestions([])
-                setVisible(!visible)
-              }}
-              color={lightColors.quaternary}
-            />
-          </View>
-        </KeyboardAvoidingView>
+        {createPatientComponent()}
       </Modal>
       <ModalComponent
         text={textError}
