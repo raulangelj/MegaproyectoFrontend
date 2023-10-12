@@ -66,6 +66,21 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
             borderRadius={10}
             textColor="background0"
           />
+          <Button
+            text="Ver estadisticas"
+            onPress={() => {
+              console.log('Reporte generado')
+              navigation.navigate('PsychologyNavigator', {
+                screen: 'Statistics1',
+              })
+            }}
+            style={{ borderColor: 'white', borderWidth: 0 }}
+            size="large"
+            textType="buttonLarge"
+            color="quinary"
+            borderRadius={10}
+            textColor="background0"
+          />
         </ButtonsContainer>
       </MainContainer>
     )

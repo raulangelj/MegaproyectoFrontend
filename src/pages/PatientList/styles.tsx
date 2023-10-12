@@ -1,4 +1,5 @@
 import styled from '@emotion/native'
+import Input from '@components/molecules/Input'
 //TODO
 //Ask props , and FC or view? in Text
 
@@ -32,7 +33,7 @@ export const CardContainer = styled.View(() => ({
   width: '90%',
   justifyContent: 'center',
   alignItems: 'center',
-  borderRadius: 10,
+  borderRadius: 30,
   marginBottom: 10,
   marginTop: 10,
 }))
@@ -125,4 +126,13 @@ export const EmptyContainer = styled.View(({ theme }) => ({
 
 export const ScrollView1 = styled.ScrollView(() => ({
   flexGrow: 1,
+}))
+
+export const EmailPaswordContainer = styled.View(({ theme }) => ({
+  paddingTop: theme.sizes.md,
+  width: '100%',
+}))
+
+export const InputField = styled(Input)(() => ({
+  marginBottom: 20,
 }))
