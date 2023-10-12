@@ -54,10 +54,7 @@ export const CardTouchable = styled.TouchableOpacity(({ theme }) => ({
   height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: theme.colors.background0,
-  borderRadius: 10,
-  borderBottomColor: theme.colors.quaternary,
-  borderBottomWidth: 3,
+  borderRadius: 30,
 }))
 
 export const IconTouchable = styled.TouchableOpacity(() => ({
@@ -114,6 +111,7 @@ export const TextInput = styled.TextInput(({ theme }) => ({
   borderRadius: 10,
   backgroundColor: 'white',
   borderColor: theme.colors.background4,
-  borderWidth: 2,
+  borderWidth: 1,
   color: 'black',
+  margin: 10,
 }))
