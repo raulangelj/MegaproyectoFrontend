@@ -192,6 +192,167 @@ const QuestionsList: React.FC<
     setSelectedQuestion(question)
     setQuestionVisible(!questionVisible)
   }
+
+  const isSelected = (index: any) => selectedQuestions.includes(index)
+
+  const handleDeleteGeneralQuestion = async () => {
+    console.log('here', selectedQuestions, selectItem)
+    for (const item of selectedQuestions) {
+      await deleteGeneralQuestion({ id: item._id })
+    }
+    setSubmitted(!submitted)
+    setSelectedQuestions([])
+  }
+
+  const createQuestionComponent = () => {
+    return (
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View
+          style={{
+            flex: 0,
+            height: '100%',
+            backgroundColor: lightColors.primary,
+          }}>
+          <Text type={'h1'}>Crear pregunta</Text>
+          <ScrollView
+            contentContainerStyle={{ alignItems: 'center', padding: 20 }}>
+            <CardContainer>
+              <Text type={'pLargeBold'}>Escribe la pregunta</Text>
+              <TextInput onChangeText={setValue} value={value} />
+              <Text type={'pLargeBold'}>Tipo de pregunta</Text>
+              <SelectDropdown
+                data={['Escritura', 'Checkbox', 'Opciones', 'Slider']}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index)
+                  //transform selectedItem to valid options
+                  if (selectedItem === 'Escritura') {
+                    setSelectItem('input')
+                  }
+                  if (selectedItem === 'Checkbox') {
+                    setSelectItem('checkbox')
+                  }
+                  if (selectedItem === 'Opciones') {
+                    setSelectItem('options')
+                  }
+                  if (selectedItem === 'Slider') {
+                    setSelectItem('slider')
+                  }
+                  //clean values
+                  setValues({
+                    firstOption: '',
+                    secondOption: '',
+                    thirdOption: '',
+                    fourthOption: '',
+                  })
+                }}
+                buttonStyle={{
+                  borderRadius: 5,
+                  backgroundColor: lightColors.quinary,
+                  marginTop: 20,
+                }}
+                defaultButtonText="Opciones"
+                buttonTextStyle={{ color: 'white' }}
+              />
+            </CardContainer>
+            {selectItem === 'options' && (
+              <>
+                <Text type={'pLarge'}>Primera opcion</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, firstOption: text })
+                  }
+                  value={values.firstOption}
+                />
+                <Text type={'pLarge'}>Segunda opcion</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, secondOption: text })
+                  }
+                  value={values.secondOption}
+                />
+                <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, thirdOption: text })
+                  }
+                  value={values.thirdOption}
+                />
+                <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, fourthOption: text })
+                  }
+                  value={values.fourthOption}
+                />
+              </>
+            )}
+            {selectItem === 'checkbox' && (
+              <>
+                <Text type={'pLarge'}>Primera opcion</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, firstOption: text })
+                  }
+                  value={values.firstOption}
+                />
+                <Text type={'pLarge'}>Segunda opcion</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, secondOption: text })
+                  }
+                  value={values.secondOption}
+                />
+                <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, thirdOption: text })
+                  }
+                  value={values.thirdOption}
+                />
+                <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
+                <TextInput
+                  onChangeText={text =>
+                    setValues({ ...values, fourthOption: text })
+                  }
+                  value={values.fourthOption}
+                />
+              </>
+            )}
+          </ScrollView>
+          <ButtonContainer>
+            <Button
+              textType="buttonMedium"
+              size="large"
+              text="Cancelar"
+              onPress={() => {
+                setVisible(!visible)
+                setSelectItem('')
+                setValues({
+                  firstOption: '',
+                  secondOption: '',
+                  thirdOption: '',
+                  fourthOption: '',
+                })
+                setValue('')
+              }}
+              color="quaternary"
+              textColor="white"
+            />
+            <Button
+              textType="buttonMedium"
+              size="large"
+              text="Guardar"
+              onPress={handleSubmit}
+              color="quaternary"
+              textColor="white"
+            />
+          </ButtonContainer>
+        </View>
+      </KeyboardAvoidingView>
+    )
+  }
   if (psychologyQuestions.length === 0) {
     return (
       <>
@@ -202,140 +363,7 @@ const QuestionsList: React.FC<
             setVisible(!visible)
           }}
           visible={visible}>
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={{ flex: 0, height: '100%', backgroundColor: 'white' }}>
-              <Text type={'h1'}>Crear pregunta</Text>
-              <ScrollView
-                contentContainerStyle={{ alignItems: 'center', padding: 20 }}>
-                <CardContainer>
-                  <Text type={'pLarge'}>Escribe la pregunta</Text>
-                  <TextInput onChangeText={setValue} value={value} />
-                  <Text type={'pLarge'}>Tipo de pregunta</Text>
-                  <SelectDropdown
-                    data={['Escritura', 'Checkbox', 'Opciones', 'Slider']}
-                    onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index)
-                      //transform selectedItem to valid options
-                      if (selectedItem === 'Escritura') {
-                        setSelectItem('input')
-                      }
-                      if (selectedItem === 'Checkbox') {
-                        setSelectItem('checkbox')
-                      }
-                      if (selectedItem === 'Opciones') {
-                        setSelectItem('options')
-                      }
-                      if (selectedItem === 'Slider') {
-                        setSelectItem('slider')
-                      }
-                      //clean values
-                      setValues({
-                        firstOption: '',
-                        secondOption: '',
-                        thirdOption: '',
-                        fourthOption: '',
-                      })
-                    }}
-                    buttonStyle={{
-                      borderRadius: 5,
-                      backgroundColor: lightColors.secondary,
-                    }}
-                    defaultButtonText="Opciones"
-                  />
-                </CardContainer>
-                {selectItem === 'options' && (
-                  <>
-                    <Text type={'pLarge'}>Primera opcion</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, firstOption: text })
-                      }
-                      value={values.firstOption}
-                    />
-                    <Text type={'pLarge'}>Segunda opcion</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, secondOption: text })
-                      }
-                      value={values.secondOption}
-                    />
-                    <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, thirdOption: text })
-                      }
-                      value={values.thirdOption}
-                    />
-                    <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, fourthOption: text })
-                      }
-                      value={values.fourthOption}
-                    />
-                  </>
-                )}
-                {selectItem === 'checkbox' && (
-                  <>
-                    <Text type={'pLarge'}>Primera opcion</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, firstOption: text })
-                      }
-                      value={values.firstOption}
-                    />
-                    <Text type={'pLarge'}>Segunda opcion</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, secondOption: text })
-                      }
-                      value={values.secondOption}
-                    />
-                    <Text type={'pLarge'}>Tercera opcion (opcional)</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, thirdOption: text })
-                      }
-                      value={values.thirdOption}
-                    />
-                    <Text type={'pLarge'}>Cuarta opcion (opcional)</Text>
-                    <TextInput
-                      onChangeText={text =>
-                        setValues({ ...values, fourthOption: text })
-                      }
-                      value={values.fourthOption}
-                    />
-                  </>
-                )}
-              </ScrollView>
-              <ButtonContainer>
-                <Button
-                  textType="buttonMedium"
-                  size="large"
-                  text="Cancelar"
-                  onPress={() => {
-                    setVisible(!visible)
-                    setSelectItem('')
-                    setValues({
-                      firstOption: '',
-                      secondOption: '',
-                      thirdOption: '',
-                      fourthOption: '',
-                    })
-                    setValue('')
-                  }}
-                />
-                <Button
-                  textType="buttonMedium"
-                  size="large"
-                  text="Guardar"
-                  onPress={handleSubmit}
-                />
-              </ButtonContainer>
-            </View>
-          </KeyboardAvoidingView>
+          {createQuestionComponent()}
         </Modal>
         <TitleContainer>
           <Text type="pLarge" color="quaternary">
@@ -775,14 +803,21 @@ const QuestionsList: React.FC<
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={{ flex: 0, height: '100%', backgroundColor: 'white' }}>
+          <View
+            style={{
+              flex: 0,
+              height: '100%',
+              backgroundColor: lightColors.primary,
+            }}>
             <Text type={'h1'}>Editar pregunta</Text>
             <ScrollView
               contentContainerStyle={{ alignItems: 'center', padding: 20 }}>
-              <Text type={'pLarge'}>Pregunta</Text>
+              <Text type={'pLargeBold'}>Pregunta</Text>
               <Text type={'pLarge'}>{selectedQuestion.question}</Text>
-              <Text type={'pLarge'}>Tipo de pregunta</Text>
-              <Text type={'pLarge'}>{selectedQuestion.type}</Text>
+              <Text type={'pLargeBold'}>Tipo de pregunta</Text>
+              <Text type={'pLarge'}>
+                {getTypeOfQuestion(selectedQuestion.type)}
+              </Text>
               <Button
                 textType="buttonMedium"
                 size="large"
@@ -790,6 +825,10 @@ const QuestionsList: React.FC<
                 onPress={() => {
                   setEditTitle(!editTitle)
                 }}
+                style={{ marginTop: 20, marginBottom: 20 }}
+                color="quinary"
+                textColor="white"
+                borderRadius={20}
               />
               {editTitle && (
                 <>
@@ -800,10 +839,14 @@ const QuestionsList: React.FC<
               <Button
                 textType="buttonMedium"
                 size="large"
-                text="Editar tipo"
+                text="Editar tipo  "
                 onPress={() => {
                   setEditType(!editType)
                 }}
+                style={{ marginTop: 20, marginBottom: 20 }}
+                color="quinary"
+                textColor="white"
+                borderRadius={20}
               />
               {editType && (
                 <SelectDropdown
@@ -832,10 +875,12 @@ const QuestionsList: React.FC<
                     })
                   }}
                   buttonStyle={{
-                    borderRadius: 5,
-                    backgroundColor: lightColors.secondary,
+                    borderRadius: 20,
+                    backgroundColor: lightColors.quinary,
+                    marginTop: 20,
                   }}
                   defaultButtonText="Opciones"
+                  buttonTextStyle={{ color: 'white' }}
                 />
               )}
               {selectItem === 'options' && (
@@ -919,12 +964,16 @@ const QuestionsList: React.FC<
                   })
                   setValue('')
                 }}
+                color="quaternary"
+                textColor="white"
               />
               <Button
                 textType="buttonMedium"
                 size="large"
                 text="Guardar"
                 onPress={handleUpdate}
+                color="quaternary"
+                textColor="white"
               />
             </ButtonContainer>
           </View>

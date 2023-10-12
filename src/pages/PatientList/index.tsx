@@ -399,6 +399,86 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
     setSelectedQuestions([])
   }
 
+  const createPatientComponent = () => {
+    return (
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <Text type={'h1'}>Creacion de paciente</Text>
+
+          <ScrollView1 contentContainerStyle={{ padding: 20 }}>
+            <EmailPaswordContainer>
+              <InputField
+                label="Nombre de usuario"
+                icon="emoticon-outline"
+                value={values.name}
+                placeholder="username"
+                onChangeText={text => setValues({ ...values, name: text })}
+              />
+              <InputField
+                label="Correo Electronico"
+                icon="email-variant"
+                value={values.email}
+                placeholder="email@gmail.com"
+                keyboardType="email-address"
+                onChangeText={text => setValues({ ...values, email: text })}
+              />
+              <InputField
+                label="Contraseña"
+                icon="lock-open"
+                value={values.password}
+                placeholder="* * * * * *"
+                isPassword
+                onChangeText={text => setValues({ ...values, password: text })}
+              />
+            </EmailPaswordContainer>
+            <Text type={'h2'}>Preguntas disponibles</Text>
+            {psychologyQuestions.map((question, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onLongPress={() => toggleQuestionSelection(index)}>
+                <CardContainer
+                  style={{
+                    backgroundColor: isSelected(index)
+                      ? lightColors.secondary
+                      : lightColors.quinary,
+                  }}>
+                  <Text type="pLargeBold" color="white">
+                    {question.question}
+                  </Text>
+                  <Text type="pMedium" color="white">
+                    Tipo: {getTypeOfQuestion(question.type)}
+                  </Text>
+                </CardContainer>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView1>
+          <Button
+            title="Guardar"
+            onPress={() => {
+              handleSubmit()
+            }}
+            color={lightColors.quaternary}
+          />
+          <Button
+            title="Cancelar"
+            onPress={() => {
+              setValues({
+                name: '',
+                email: '',
+                password: '',
+              })
+              setSelectedQuestions([])
+              setVisible(!visible)
+            }}
+            color={lightColors.quaternary}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    )
+  }
+
   if (patients.length === 0) {
     return (
       <>
@@ -409,79 +489,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
           onRequestClose={() => {
             setVisible(!visible)
           }}>
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={{ flex: 1, backgroundColor: 'white' }}>
-              <Text type={'h1'}>Creacion de paciente</Text>
-              <ScrollView1 contentContainerStyle={{ padding: 20 }}>
-                <Text type={'h1'}>Nombre:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.name}
-                  onChangeText={text => setValues({ ...values, name: text })}
-                  autoFocus={true}
-                />
-                <Text type={'h1'}>Correo:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.email}
-                  onChangeText={text => setValues({ ...values, email: text })}
-                  autoFocus={true}
-                />
-                <Text type={'h1'}>Contraseña:</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                  value={values.password}
-                  onChangeText={text =>
-                    setValues({ ...values, password: text })
-                  }
-                  autoFocus={true}
-                  secureTextEntry={true}
-                />
-                <Text type={'h1'}>Preguntas disponibles</Text>
-                {/*render questions map*/}
-                {psychologyQuestions.map((question, index) => (
-                  <TouchableWithoutFeedback
-                    key={index}
-                    onLongPress={() => toggleQuestionSelection(index)}>
-                    <CardContainer
-                      style={{
-                        backgroundColor: isSelected(index)
-                          ? lightColors.quinary
-                          : lightColors.primary,
-                      }}>
-                      <Text type={'h1'}>{question.question}</Text>
-                      <Text type={'h1'}>Tipo: {question.type}</Text>
-                    </CardContainer>
-                  </TouchableWithoutFeedback>
-                ))}
-
-                {/* Additional input fields or content within the ScrollView */}
-              </ScrollView1>
-              <Button
-                title="Guardar"
-                onPress={() => {
-                  handleSubmit()
-                }}
-                color={lightColors.quaternary}
-              />
-              <Button
-                title="Cancelar"
-                onPress={() => {
-                  //clean values
-                  setValues({
-                    name: '',
-                    email: '',
-                    password: '',
-                  })
-                  setSelectedQuestions([])
-                  setVisible(!visible)
-                }}
-                color={lightColors.quaternary}
-              />
-            </View>
-          </KeyboardAvoidingView>
+          {createPatientComponent()}
         </Modal>
         <TitleContainer>
           <Text type="pLarge" color="quaternary">
