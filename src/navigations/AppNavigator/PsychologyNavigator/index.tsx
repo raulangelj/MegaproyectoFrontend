@@ -10,6 +10,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import HistoryReport from '@pages/HistoryReport'
+import HistoryView from '@pages/HistoryView'
 
 const Tab = createBottomTabNavigator<PsychologyTabsParamList>()
 
@@ -20,6 +22,20 @@ const PatientStack = () => (
     <Stack.Screen
       name="PatientList"
       component={PatientList}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="HistoryReport"
+      component={HistoryReport}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="HistoryView"
+      component={HistoryView}
       options={{
         headerShown: false,
       }}

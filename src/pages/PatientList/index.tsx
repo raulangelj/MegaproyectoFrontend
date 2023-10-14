@@ -28,11 +28,14 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
 
-const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
+const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
+  navigation,
+}) => {
   const {
     psychologyQuestions,
     setQuestionsPsychology,
@@ -68,6 +71,9 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
   useFocusEffect(
     React.useCallback(() => {
       console.log('Entrando use focus')
+      //variables iniciales oriinales
+      setSelectedQuestions([])
+      setDeleteIcon(false)
       setPatients()
       setQuestionsPsychology()
       getQuestionsPatient(selectedItem._id)
@@ -158,9 +164,11 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
 
   //When patient is selected
   const handleCardPress = async (item: any) => {
+    console.log('CARD PRESSIONADA')
     setSelectedItem(item)
     await getQuestionsPatient(item._id)
     setPatientVisible(!patientVisible)
+    console.log('CARD PRESIONADA- selected item', selectedItem)
   }
 
   const handleDeleteQuestion = async () => {
@@ -347,7 +355,8 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={{ flex: 1, backgroundColor: lightColors.primary }}>
-              <ScrollView1 contentContainerStyle={{ padding: 0 }}>
+              <ScrollView1
+                contentContainerStyle={{ padding: 0, alignItems: 'center' }}>
                 <ImageBackground
                   source={require('../../assets/images/wickedbackground(1).png')}
                   style={{ flex: 1, width: '100%', alignItems: 'center' }}
@@ -395,7 +404,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
                   </View>
                 </ImageBackground>
                 <Text type="h2">Preguntas asignadas</Text>
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', width: '100%' }}>
                   {searchedPatientQuestions.map((question, index) => (
                     <TouchableWithoutFeedback
                       key={index}
@@ -416,6 +425,34 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = () => {
                       </CardContainer>
                     </TouchableWithoutFeedback>
                   ))}
+                </View>
+                <View
+                  style={{
+                    width: '90%',
+                    alignItems: 'center',
+                    marginTop: 20,
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      backgroundColor: lightColors.quaternary, // Example background color
+                      padding: 10,
+                      alignItems: 'center',
+                      borderRadius: 20, // Example border radius
+                    }}
+                    onPress={() => {
+                      console.log('navigation')
+                      setPatientVisible(!patientVisible)
+                      setSelectedQuestions([])
+                      navigation.navigate('HistoryReport', {
+                        id: selectedItem._id,
+                      })
+                      // Your navigation code here
+                    }}>
+                    <Text style={{ color: 'white' }} type="pLargeBold">
+                      Ver historial
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </ScrollView1>
               <Button
