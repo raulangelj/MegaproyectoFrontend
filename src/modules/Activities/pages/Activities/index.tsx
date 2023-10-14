@@ -17,6 +17,7 @@ const Activities: React.FC<RootStackScreenProps<'Activities'>> = ({
 }) => {
   const dispatch = useAppDispatch()
   const themeName = useAppSelector(state => state.theme.theme.name)
+  const tags = useAppSelector(state => state.activities.tags)
 
   return (
     <Container>
@@ -51,15 +52,20 @@ const Activities: React.FC<RootStackScreenProps<'Activities'>> = ({
       {themeName === 'dark' ? <LandingIcon /> : <LandingIconDay />}
       <ButtonWrapper>
         <Button
-          onPress={function (): void {
-            navigation.navigate('ActivitiesShuffle')
+          onPress={() => {
+            console.log(tags.length)
+            if (tags.length > 0) {
+              navigation.navigate('ActivitiesShuffle')
+            } else {
+              navigation.navigate('SelectPreffered')
+            }
           }}
           text="Iniciemos"
           size="block"
           color="activitySecondary"
           textColor="activityForeground0"
           textType="buttonMedium"
-          borderRadius={50}
+          borderRadius={10}
         />
       </ButtonWrapper>
     </Container>

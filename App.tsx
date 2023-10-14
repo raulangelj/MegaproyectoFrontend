@@ -5,17 +5,23 @@ import { useAppSelector } from 'hooks/useAppSelector'
 import useIsNight from 'hooks/useIsNight'
 import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
-import { store } from 'store'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistor, store } from 'store'
 import { toggleTheme } from 'store/theme'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+// AsyncStorage.clear()
 
 const App = (): JSX.Element => {
   const isNight = useIsNight()
 
   return (
     <Provider store={store}>
-      <Theme isNight={isNight.isNight}>
-        <AppNavigator />
-      </Theme>
+      <PersistGate loading={null} persistor={persistor}>
+        <Theme isNight={isNight.isNight}>
+          <AppNavigator />
+        </Theme>
+      </PersistGate>
     </Provider>
   )
 }
