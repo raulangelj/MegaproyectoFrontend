@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Container, HeaderContainer, CardContainer } from './styles'
 import React from 'react'
-import { RootStackScreenProps } from '@navigations/types/ScreenProps'
+import { PsychologyTabsScreenProps, RootStackScreenProps } from '@navigations/types/ScreenProps'
 import ImageHistory from '../../assets/images/reminder.svg'
 import Text from '@components/atoms/Text'
 import { PieChart } from 'react-native-chart-kit'
@@ -9,7 +9,7 @@ import { Dimensions } from 'react-native'
 import { ScrollView } from '@pages/Report/styles'
 import { lightColors } from '@themes/colors'
 
-const HistoryView: React.FC<RootStackScreenProps<'HistoryView'>> = ({
+const HistoryView: React.FC<PsychologyTabsScreenProps<'HistoryView'>> = ({
   route,
 }) => {
   let emptyAnswers = 0
