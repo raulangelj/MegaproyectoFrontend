@@ -39,7 +39,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
           <Button
             text="Ver mis pacientes"
             onPress={() => {
-              console.log('Reporte generado')
+              //console.log('Reporte generado')
               navigation.navigate('PsychologyNavigator', {
                 screen: 'PatientList1',
               })
@@ -54,7 +54,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
           <Button
             text="Ver preguntas reflexivas"
             onPress={() => {
-              console.log('Reporte generado')
+              //console.log('Reporte generado')
               navigation.navigate('PsychologyNavigator', {
                 screen: 'QuestionsList1',
               })
@@ -69,7 +69,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
           <Button
             text="Ver estadisticas"
             onPress={() => {
-              console.log('Reporte generado')
+              //console.log('Reporte generado')
               navigation.navigate('PsychologyNavigator', {
                 screen: 'Statistics1',
               })
@@ -115,7 +115,7 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
             text="Diario reflexivo"
             onPress={() => {
               console.log('Reporte generado')
-              navigation.navigate('TabNavigator', { screen: 'Main' })
+              navigation.navigate('MainReport')
             }}
             size="large"
             textType="buttonLarge"

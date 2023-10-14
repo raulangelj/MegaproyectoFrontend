@@ -27,9 +27,12 @@ export type RootStackParamList = {
   PsychologyNavigator: { screen: string } | undefined
   Report: undefined
   HistoryView: { id: number; report: any } | undefined
+  HistoryReport: undefined
   Landing: undefined
   Profile: undefined
   Activities: undefined
+  MainReport: undefined
+  PsychologyGroup: { screen: string; params: {} } | undefined
 }
 
 export type ReportTabsParamList = {
@@ -47,6 +50,8 @@ export type PsychologyTabsParamList = {
   QuestionsList: undefined
   Statistics: undefined
   Statistics1: undefined
+  HistoryReport: { id: string } | undefined
+  HistoryView: { id: string; report: any } | undefined
 }
 
 declare global {

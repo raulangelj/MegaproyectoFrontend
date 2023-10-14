@@ -28,6 +28,4 @@ export const ButtonsContainer = styled.View(({ theme }) => ({
   height: '30%',
   padding: 10,
   margin: 10,
-  borderRadius: 15,
-  backgroundColor: 'transparent',
 }))
