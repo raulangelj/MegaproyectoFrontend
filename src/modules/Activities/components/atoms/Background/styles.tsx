@@ -6,6 +6,7 @@ export const Container = styled.View(({ theme }) => ({
 }))
 
 export const ContentWrapper = styled.View(({ theme }) => ({
+  flex: 1,
   paddingHorizontal: theme.sizes.xs,
 }))
 

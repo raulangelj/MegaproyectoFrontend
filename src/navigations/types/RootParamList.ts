@@ -15,7 +15,9 @@ export type RootStackParamList = {
   ActivitiesMenu: undefined
   ActivitiesShuffle: undefined
   ActivitiesList: undefined
-  SimpleActivity: Activity
+  SimpleActivity: { activity: Activity }
+  Diario: { activity: Activity }
+  SelectPreffered: undefined
   // ----------
 
   Chat: undefined
