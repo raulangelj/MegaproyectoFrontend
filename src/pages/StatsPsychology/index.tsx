@@ -1,19 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PsychologyTabsScreenProps } from '@navigations/types/ScreenProps'
 import React, { useState } from 'react'
-import {
-  DownloadButton,
-  ButtonsContainer,
-  Container,
-  Text,
-  Touchable,
-  ScrollView1,
-} from './styles'
+import { DownloadButton, Container, Text, ScrollView1 } from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { lightColors } from '@themes/colors'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
-import { Alert, ImageBackground, Modal, View } from 'react-native'
+import { Alert, Dimensions, ImageBackground, View } from 'react-native'
 import Image from '../../assets/images/perminute.svg'
+import { LineChart } from 'react-native-chart-kit'
 
 const StatsPsychology: React.FC<
   PsychologyTabsScreenProps<'Statistics'>
@@ -182,20 +176,90 @@ const StatsPsychology: React.FC<
               marginTop: 10,
               marginBottom: 10,
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-around',
+              flexDirection: 'row',
             }}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: lightColors.primary,
-              }}>
-              5
-            </Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-              Reportes generados
-            </Text>
+            {/* hacer una division para cantidad de reportes y cantidad  de pacientes */}
+            <View>
+              <Text
+                style={{
+                  color: lightColors.quaternary,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                Pacientes
+              </Text>
+              <Text
+                style={{
+                  color: lightColors.quaternary,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                5
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: lightColors.quaternary,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                Reportes
+              </Text>
+              <Text
+                style={{
+                  color: lightColors.quaternary,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                5
+              </Text>
+            </View>
           </View>
+          <LineChart
+            data={{
+              labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+              datasets: [
+                {
+                  data: [
+                    Math.random() * 100,
+                    Math.random() * 100,
+                    Math.random() * 100,
+                    Math.random() * 100,
+                    Math.random() * 100,
+                    Math.random() * 100,
+                  ],
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width - 30} // from react-native
+            height={220}
+            yAxisLabel="$"
+            yAxisSuffix="k"
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: '#e26a00',
+              backgroundGradientFrom: '#fb8c00',
+              backgroundGradientTo: '#ffa726',
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: '#ffa726',
+              },
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
         </ScrollView1>
       </View>
     </Container>
