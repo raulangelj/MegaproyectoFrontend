@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import Chat from '@pages/Chat'
 // import Chat from './Chat'
-import Activities from './Activities'
+import Activities from '@modules/Activities/pages/Activities'
 import Profile from '@pages/Profile'
 import MainReport from '@pages/MainReportPage'
 import { RootStack } from '@navigations/AppNavigator'
@@ -43,6 +43,7 @@ const MainBottomTabNavigator: React.FC<
         name="Activities"
         component={Activities}
         options={{
+          headerShown: false,
           title: 'Actividades',
           tabBarIcon: ActivitiesIcon,
           headerShown: false,

@@ -6,12 +6,21 @@ import { Activities } from '@navigations/AppNavigator/Groups/Activities';
  * we should be adding more items progressively
  */
 
+import { Activity } from '@modules/Activities/interfaces/activities'
+
 // Not defining the screen names here because they come dynamically from API and all screens have the same params
 
 export type RootStackParamList = {
-  Chat: undefined
+  // Activities
   ActivitiesMenu: undefined
+  ActivitiesShuffle: undefined
   ActivitiesList: undefined
+  SimpleActivity: { activity: Activity }
+  Diario: { activity: Activity }
+  SelectPreffered: undefined
+  // ----------
+
+  Chat: undefined
   SignIn: undefined
   SignUp: undefined
   TabNavigator: { screen: string } | undefined
