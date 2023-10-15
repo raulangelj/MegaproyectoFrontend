@@ -31,7 +31,7 @@ export const Container = styled.View(({ theme }) => ({
 
 export const Text = styled.Text(() => ({
   flex: 1,
-  color: 'black',
+  color: 'white',
   fontSize: 15,
   fontWeight: 'bold',
   textAlign: 'center',
