@@ -60,6 +60,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   useEffect(() => {
     console.log('calling to questions')
     setQuestions()
+    setCounterQuestion(0)
   }, [])
   //console.log('IM HERE2')
   //console.log('QUESTIONS ', Questions2)
@@ -190,7 +191,7 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    //console.log('ENTERING EFFECT COUNTER', counterQuestion)
+    console.log('ENTERING EFFECT COUNTER', counterQuestion)
     setQuestion(questions[counterQuestion])
     //change the bar progress between 0 and 1
     setProgress(counterQuestion / questions.length)
@@ -266,22 +267,30 @@ const Report: React.FC<ReportTabsScreenProps<'Report'>> = ({ navigation }) => {
           answer: [speed],
         },
       ])
+      setSpeed(0)
     }
   }
   useEffect(() => {
     //console.log('USE EFFECT ANSWER', counterQuestion)
-    if (counterQuestion === questions.length - 1) {
-      // Save the answers
-      console.log('ANSWER TO BE SAVED', answers)
-      saveAnswer({ answersData: answers })
-      setCounterQuestion(0)
+    const saveAndNavigate = async () => {
+      console.log(counterQuestion, questions.length)
+      if (counterQuestion === questions.length - 1) {
+        // Save the answers
+        console.log('ANSWER TO BE SAVED', answers)
+        if (counterQuestion >= 0 && answers.length !== 0) {
+          await saveAnswer({ answersData: answers })
+          setCounterQuestion(0)
 
-      // Navigate to the next screen
-      navigation.navigate('MainReport')
+          // Navigate to the next screen
+          navigation.navigate('MainReport')
+        }
+      } else if (questions.length > 0 && answers.length > 0) {
+        console.log('estoy aqui')
+        setCounterQuestion((counterQuestion + 1) % questions.length)
+      }
     }
-    if (questions.length > 0) {
-      setCounterQuestion((counterQuestion + 1) % questions.length)
-    }
+
+    saveAndNavigate()
   }, [answers, navigation])
 
   //handle state of checkboxes dynamically

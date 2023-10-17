@@ -1,8 +1,8 @@
 import styled from '@emotion/native'
 
-export const Container = styled.View(({}) => ({
+export const Container = styled.View(({ theme }) => ({
   flex: 1,
-  backgroundColor: '#95b8f6',
+  backgroundColor: theme.colors.primary,
   justifyContent: 'flex-start',
   alignItems: 'center',
 }))
@@ -28,6 +28,7 @@ export const Text = styled.Text(() => ({
   fontWeight: 'bold',
   textAlign: 'center',
   alignItems: 'center',
+  textAlignVertical: 'center',
 }))
 
 export const ButtonsContainer = styled.View(() => ({

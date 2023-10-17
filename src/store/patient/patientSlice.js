@@ -29,7 +29,7 @@ export const patientSlice = createSlice({
       state.questions = action.payload.questions
     },
     onSetAnswers: (state, action) => {
-      console.log('action.payload answers ', action.payload)
+      //console.log('action.payload answers ', action.payload)
       state.answers = action.payload.answers
     },
     onUpdateAnswer: (state, action) => {

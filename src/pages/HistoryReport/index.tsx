@@ -1,5 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
-import { ReportTabsScreenProps } from '@navigations/types/ScreenProps'
+import {
+  PsychologyTabsScreenProps,
+  ReportTabsScreenProps,
+} from '@navigations/types/ScreenProps'
 import React, { useState } from 'react'
 import {
   Container,
@@ -20,19 +22,24 @@ import { ScrollView } from '@pages/Report/styles'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { lightColors } from '@themes/colors'
 import { usePatientStore } from 'hooks'
-const HistoryReport: React.FC<
-  ReportTabsScreenProps<'HistoryReportMain'>
-> = () => {
-  const navigation = useNavigation()
+const HistoryReport: React.FC<PsychologyTabsScreenProps<'HistoryReport'>> = ({
+  navigation,
+  route,
+}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [count, setCount] = useState(1)
   const [visible, setVisible] = useState(false)
-  const { getAnswers, answers, sortAnswers } = usePatientStore()
+  const { getAnswersPatient, answers, sortAnswers } = usePatientStore()
+  const [sortTracking, setSortTracking] = useState({
+    day: false,
+    month: false,
+    year: false,
+  })
 
   //use effect run when focus
   useFocusEffect(
     React.useCallback(() => {
-      getAnswers()
+      getAnswersPatient(route.params?.id)
     }, []),
   )
 
@@ -81,7 +88,9 @@ const HistoryReport: React.FC<
               </tr>
               <tr>
                 <th>Fecha de creacion</th>
-                <td>${date.getDay()} / ${date.getMonth()} / ${date.getFullYear()}</td>
+                <td>${date.getDay() + 1} / ${
+        date.getMonth() + 1
+      } / ${date.getFullYear()}</td>
               </tr>
               <tr>
                 <th>Total reportes</th>
@@ -138,7 +147,14 @@ const HistoryReport: React.FC<
   if (isLoading) {
     return <Text>Generating PDF...</Text>
   }
-
+  //if answers are empty
+  if (answers.length === 0) {
+    return (
+      <Container>
+        <Text>Aun no hay reportes disponibles</Text>
+      </Container>
+    )
+  }
   return (
     <Container>
       <Modal
@@ -152,22 +168,36 @@ const HistoryReport: React.FC<
           <ModalView>
             <Touchable
               onPress={() => {
-                sortAnswers({ type: 'day' })
-
+                sortAnswers({ type: 'day', sorting: sortTracking.day })
+                setSortTracking({
+                  day: !sortTracking.day,
+                  month: false,
+                  year: false,
+                })
                 setVisible(!visible)
               }}>
               <Text>Ordenar por dia</Text>
             </Touchable>
             <Touchable
               onPress={() => {
-                sortAnswers({ type: 'month' })
+                sortAnswers({ type: 'month', sorting: sortTracking.month })
+                setSortTracking({
+                  day: false,
+                  month: !sortTracking.month,
+                  year: false,
+                })
                 setVisible(!visible)
               }}>
               <Text>Ordenar por mes</Text>
             </Touchable>
             <Touchable
               onPress={() => {
-                sortAnswers({ type: 'year' })
+                sortAnswers({ type: 'year', sorting: sortTracking.year })
+                setSortTracking({
+                  day: false,
+                  month: false,
+                  year: !sortTracking.year,
+                })
                 setVisible(!visible)
               }}>
               <Text>Ordenar por año</Text>
@@ -176,13 +206,13 @@ const HistoryReport: React.FC<
         </ModalContainer>
       </Modal>
       <ButtonsContainer>
-        <DownloadButton
+        {/* <DownloadButton
           onPress={() => {
             generatePDF()
           }}>
           <Icon name="file-download" size={30} color={lightColors.quaternary} />
           <Text>Descargar informe</Text>
-        </DownloadButton>
+        </DownloadButton> */}
         <Touchable
           onPress={() => {
             setVisible(!visible)

@@ -41,7 +41,6 @@ const ActivityCatalog: React.FC<any> = ({
   }, [])
 
   const renderItem = ({ item }: { item: Activity }) => {
-    console.log(item)
     return (
       <View style={{ paddingHorizontal: 5 }}>
         <ActivityLongCard
@@ -56,7 +55,6 @@ const ActivityCatalog: React.FC<any> = ({
       </View>
     )
   }
-
   return (
     <View
       style={{ flex: 1, backgroundColor: theme.colors.activityBackground0 }}>

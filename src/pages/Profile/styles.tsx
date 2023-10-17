@@ -3,15 +3,17 @@ import styled from '@emotion/native'
 //Ask props , and FC or view? in Text
 
 export const Container = styled.View(({ theme }) => ({
-  flex: 0,
-  backgroundColor: theme.colors.background0,
+  flex: 1,
   alignItems: 'center',
-  width: '100%',
+  justifyContent: 'center',
+  justifyItems: 'center',
+  width: '50%',
+  height: '50%',
 }))
 
 export const MainContainer = styled.View(({ theme }) => ({
   flex: 1,
-  backgroundColor: theme.colors.background0,
+  backgroundColor: theme.colors.primary,
   alignItems: 'center',
   width: '100%',
   height: '100%',
@@ -22,7 +24,8 @@ export const ButtonsContainer = styled.View(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
-  width: '100%',
+  width: '90%',
   height: '30%',
   padding: 10,
+  margin: 10,
 }))

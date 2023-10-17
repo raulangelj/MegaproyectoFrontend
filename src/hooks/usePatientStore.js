@@ -45,20 +45,38 @@ export const usePatientStore = () => {
     }
   }
 
+  //getAnswers psychology side
+  const getAnswersPatient = async id => {
+    try {
+      dispatch(onLoading(true))
+      console.log('id ', id)
+      const { data } = await backendAPI.get('/report/getAnswersPatient', {
+        params: {
+          id,
+        },
+      })
+      dispatch(onSetAnswers(data))
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoading(false))
+    }
+  }
+
   //sort the answers by dateDay
-  const sortAnswers = ({ type }) => {
+  const sortAnswers = ({ type, sorting }) => {
     let sortedAnswers = []
     if (type === 'day') {
       sortedAnswers = [...answers].sort((a, b) => {
-        return b.dateDay - a.dateDay
+        return sorting ? b.dateDay - a.dateDay : a.dateDay - b.dateDay
       })
-    } else if (type === 'montn') {
+    } else if (type === 'month') {
       sortedAnswers = [...answers].sort((a, b) => {
-        return b.dateMonth - a.dateMonth
+        return sorting ? b.dateMonth - a.dateMonth : a.dateMonth - b.dateMonth
       })
     } else if (type === 'year') {
       sortedAnswers = [...answers].sort((a, b) => {
-        return b.dateYear - a.dateYear
+        return sorting ? b.dateYear - a.dateYear : a.dateYear - b.dateYear
       })
     }
 
@@ -76,5 +94,6 @@ export const usePatientStore = () => {
     getAnswers,
     saveAnswer,
     sortAnswers,
+    getAnswersPatient,
   }
 }
