@@ -8,9 +8,6 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from 'store'
 import { toggleTheme } from 'store/theme'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-// AsyncStorage.clear()
 
 const App = (): JSX.Element => {
   const isNight = useIsNight()

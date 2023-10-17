@@ -14,7 +14,6 @@ export const filterArray = (
   const validActivities = newActivities.filter(activity =>
     activity.type.some(tag => validationSet.has(tag)),
   )
-  console.log(validActivities, 'HMM')
   return validActivities
 }
 
@@ -44,4 +43,8 @@ export const getFilteredItems = (
 ): Activity[] => {
   console.log(time, tags)
   return filterArray(activities, time, tags)
+}
+
+export const getLevel2 = (activities: Activity[]): Activity[] => {
+  return activities.filter(activity => activity.complexity === 2)
 }
