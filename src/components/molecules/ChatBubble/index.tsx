@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Text from '@components/atoms/Text'
 import {
+  BotIconContainer,
   ChatBubbleContainer,
   ChatMessageContainer,
   ChatMessageWrapper,
@@ -9,6 +10,7 @@ import {
   MessageTime,
 } from './styles'
 import { Message } from '@interfaces/chat'
+import BotIcon from '@assets/images/bot.svg'
 
 export interface ChatMessageProps {
   item: Message
@@ -32,7 +34,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ item, isActualUser }) => {
     <MessageItems>
       <ChatMessageWrapper isActualUser={isActualUser}>
         <ChatMessageContainer isActualUser={isActualUser}>
-          <Ionicons name="person-circle-sharp" size={30} color="black" />
+          {author === 'bot' ? (
+            <BotIconContainer>
+              <BotIcon width={25} height={25} />
+            </BotIconContainer>
+          ) : (
+            <Ionicons name="person-circle-sharp" size={30} color="black" />
+          )}
           <ChatBubbleContainer isActualUser={isActualUser}>
             <Text type="pMediumBold">{author}</Text>
             <Text type="pMedium">{text}</Text>
