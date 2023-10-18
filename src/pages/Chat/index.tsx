@@ -14,15 +14,19 @@ import {
   MessageInputContainer,
   MessageSendPressable,
   MessageView,
+  ModalBody,
 } from './styles'
 import { MockChatRoom } from '@static/mocks/ChatRoom'
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, View, ViewStyle } from 'react-native'
 import ChatMessage from '@components/molecules/ChatBubble'
 import { MockHost } from '@static/mocks/User'
 import { ChatData, Message } from '@interfaces/chat'
 import socket from 'utils/socket'
-import { useUserStore } from 'hooks'
+import { useChat, useUserStore } from 'hooks'
 import { UserInterface } from '@interfaces/user/user'
+import ChatHeader from '@components/molecules/ChatHeader'
+import Modal from '@components/molecules/Modal'
+import Text from '@components/atoms/Text'
 
 const filterChatMessages = (data: ChatData, user: UserInterface) => {
   const filterData = data.messages.filter(chatMessage => {
@@ -39,14 +43,20 @@ const filterChatMessages = (data: ChatData, user: UserInterface) => {
 
 const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   const { user, status } = useUserStore()
+  const { getBotMessages } = useChat()
   const [actualUser, setActualUser] = useState(user)
   const [chatInfo, setChatInfo] = useState({} as ChatData)
   const [message, setMessage] = useState('')
   const messagesContainer = useRef<FlatList>(null)
+  const [botMessages, setBotMessages] = useState([] as Message[])
+  const [showBotMessages, setShowBotMessages] = useState(false)
   // const [chatMessages, setChatMessages] = React.useState(MockChatRoom)
 
+  const roomId = useMemo(() => {
+    return user.category === 'patient' ? user.idPsychology : user.uid
+  }, [user])
+
   useEffect(() => {
-    const roomId = user.category === 'patient' ? user.idPsychology : user.uid
     socket.emit('joinRoom', {
       room: roomId,
       user: actualUser,
@@ -58,7 +68,6 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
   }, [])
 
   useLayoutEffect(() => {
-    const roomId = user.category === 'patient' ? user.idPsychology : user.uid
     // Get all the messages at the beginning
     socket.emit('findRoom', roomId)
   }, [])
@@ -103,8 +112,15 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
     setMessage('')
   }
 
+  const onPressBotMessage = async () => {
+    const response = await getBotMessages(roomId)
+    setBotMessages(response)
+    setShowBotMessages(oldValue => !oldValue)
+  }
+
   return (
     <ChatScreen>
+      <ChatHeader roomTitle={chatInfo.name} onPress={onPressBotMessage} />
       <MessageView>
         {chatInfo?.messages?.length > 0 ? (
           <FlatList
@@ -123,8 +139,38 @@ const Chat: React.FC<RootStackScreenProps<'Chat'>> = () => {
           <FontAwesome name="send" size={20} color="#f2f0f1" />
         </MessageSendPressable>
       </MessageInputContainer>
+      <Modal
+        isVisible={showBotMessages}
+        text={`Bot Message in ${chatInfo.name}`}
+        textColor="background5"
+        onClose={onPressBotMessage}
+        buttonTextColor="foreground4"
+        buttonColor="quinary"
+        style={$modalContainer}>
+        <ModalBody contentContainerStyle={$containerScroll}>
+          {botMessages.length > 0 ? (
+            botMessages.map((botMessage, index) => (
+              <ChatMessage item={botMessage} key={index} isActualUser={false} />
+            ))
+          ) : (
+            <Text type="pLarge">No messages</Text>
+          )}
+        </ModalBody>
+      </Modal>
     </ChatScreen>
   )
 }
 
 export default Chat
+
+const $modalContainer: ViewStyle = {
+  width: '80%',
+  height: '90%',
+  backgroundColor: 'white',
+  borderRadius: 20,
+  overflow: 'hidden',
+}
+
+const $containerScroll: ViewStyle = {
+  alignItems: 'flex-start',
+}

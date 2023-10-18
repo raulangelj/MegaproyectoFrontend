@@ -40,3 +40,8 @@ export const MessageSendPressable = styled.Pressable(({ theme }) => ({
   justifyContent: 'center',
   borderRadius: 100,
 }))
+
+export const ModalBody = styled.ScrollView(({ theme }) => ({
+  width: '100%',
+  paddingVertical: theme.sizes.xs,
+}))
