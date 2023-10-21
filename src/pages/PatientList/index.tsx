@@ -5,7 +5,6 @@ import {
   TitleContainer,
   CardTouchable,
   IconTouchable,
-  TextInput,
   CardContainer,
   EmptyContainer,
   ScrollView1,
@@ -139,7 +138,7 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
       } else {
         await createPatient({
           assignedQuestions: getSelectedQuestions(),
-          category: 'paciente',
+          category: 'patient',
           password: values.password,
           email: values.email,
           name: values.name,
