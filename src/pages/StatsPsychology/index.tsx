@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PsychologyTabsScreenProps } from '@navigations/types/ScreenProps'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useMemo } from 'react'
 import { DownloadButton, Container, ScrollView1, TextDownload } from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { lightColors } from '@themes/colors'
@@ -8,7 +8,12 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf'
 import { Alert, Dimensions, ImageBackground, View } from 'react-native'
 import Image from '../../assets/images/perminute.svg'
 import { BarChart, LineChart } from 'react-native-chart-kit'
-import { usePsychologyStore, usePatientStore } from 'hooks'
+import {
+  usePsychologyStore,
+  usePatientStore,
+  useUserStore,
+  useChat,
+} from 'hooks'
 import Text from '@components/atoms/Text'
 import SelectDropdown from 'react-native-select-dropdown'
 import ViewShot from 'react-native-view-shot'
@@ -36,9 +41,16 @@ const StatsPsychology: React.FC<
     fullReport,
   } = usePsychologyStore()
   const { answers } = usePatientStore()
+  const { user } = useUserStore()
+  const { getBotMessages } = useChat()
   const [dataArray, setData] = useState({})
   const [resultados, setResultados] = useState({})
   const [resultadosPaciente, setResultadosPaciente] = useState({})
+  const [response, setResponse] = useState({})
+
+  const roomId = useMemo(() => {
+    return user.category === 'patient' ? user.idPsychology : user.uid
+  }, [user])
 
   //get the number of reports in general
   //use effect run when focus
@@ -49,6 +61,7 @@ const StatsPsychology: React.FC<
     setPatients()
     getLastUpdateReport()
     getFullReport()
+    setResponse(getBotMessages(roomId))
   }, [])
 
   //when answersByDate is set , run function
@@ -671,6 +684,7 @@ const StatsPsychology: React.FC<
                   color: lightColors.quaternary,
                   fontWeight: 'bold',
                 }}>
+                {console.log('RESPONSE', response)}
                 {patients.length}
               </Text>
             </View>
