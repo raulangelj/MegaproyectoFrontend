@@ -1,7 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PsychologyTabsScreenProps } from '@navigations/types/ScreenProps'
 import React, { useState, useRef, useMemo } from 'react'
-import { DownloadButton, Container, ScrollView1, TextDownload } from './styles'
+import {
+  DownloadButton,
+  Container,
+  ScrollView1,
+  TextDownload,
+  EmptyContainer,
+} from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { lightColors } from '@themes/colors'
 import RNHTMLtoPDF from 'react-native-html-to-pdf'
@@ -18,6 +24,8 @@ import Text from '@components/atoms/Text'
 import SelectDropdown from 'react-native-select-dropdown'
 import ViewShot from 'react-native-view-shot'
 import RNFetchBlob from 'rn-fetch-blob'
+import { Message } from '@interfaces/chat'
+import { useFocusEffect } from '@react-navigation/native'
 const StatsPsychology: React.FC<
   PsychologyTabsScreenProps<'Statistics'>
 > = () => {
@@ -39,6 +47,7 @@ const StatsPsychology: React.FC<
     getLastUpdateReport,
     getFullReport,
     fullReport,
+    updateLastUpdatedReport,
   } = usePsychologyStore()
   const { answers } = usePatientStore()
   const { user } = useUserStore()
@@ -47,6 +56,8 @@ const StatsPsychology: React.FC<
   const [resultados, setResultados] = useState({})
   const [resultadosPaciente, setResultadosPaciente] = useState({})
   const [response, setResponse] = useState({})
+  const [botMessages, setBotMessages] = useState([] as Message[])
+  const [downloaded, setDownloaded] = useState(false)
 
   const roomId = useMemo(() => {
     return user.category === 'patient' ? user.idPsychology : user.uid
@@ -54,15 +65,37 @@ const StatsPsychology: React.FC<
 
   //get the number of reports in general
   //use effect run when focus
-  React.useEffect(() => {
-    console.log('effect stats')
-    getAnswersByDate()
-    getAllAnswers()
-    setPatients()
-    getLastUpdateReport()
-    getFullReport()
-    setResponse(getBotMessages(roomId))
-  }, [])
+  // React.useEffect(() => {
+  //   console.log('effect stats')
+
+  //   const fetchData = async () => {
+  //     await getAnswersByDate()
+  //     await getAllAnswers()
+  //     await setPatients()
+  //     await getLastUpdateReport()
+  //     await getFullReport()
+  //     setBotMessages(await getBotMessages(roomId))
+  //   }
+
+  //   fetchData()
+  // }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('effect stats')
+
+      const fetchData = async () => {
+        getAnswersByDate()
+        getAllAnswers()
+        setPatients()
+        getLastUpdateReport()
+        getFullReport()
+        setBotMessages(await getBotMessages(roomId))
+      }
+
+      fetchData()
+    }, [downloaded]),
+  )
 
   //when answersByDate is set , run function
   React.useEffect(() => {
@@ -234,10 +267,16 @@ const StatsPsychology: React.FC<
               <td>${totalReports}</td>
             </tr>
           </table>
-          <h1>Porcentaje de pacientes que respondieron por dia</h1>
-          <img src="${uris[0]}" />
-          <h1>Porcentaje promedio de completitud de reporte por dia</h1>
-          <img src="${uris[1]}" />
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+  <h1>Porcentaje de pacientes que respondieron por día</h1>
+  <div style="display: flex; justify-content: center;">
+    <img src="${uris[0]}" style="width: 60%; height: auto;"/>
+  </div>
+  <h1>Porcentaje promedio de completitud de reporte por día</h1>
+  <div style="display: flex; justify-content: center;">
+    <img src="${uris[1]}" style="width: 60%; height: auto;"/>
+  </div>
+</div>
           <h1>Informacion critica de los pacientes</h1>
           <h2>Respuestas diario reflexivo</h2>
           <table>
@@ -260,12 +299,39 @@ const StatsPsychology: React.FC<
               })}
           </table>
           <h2>Pacientes con alerta de depresion</h2>
+          ${
+            Object.keys(response).length > 0
+              ? `<table>
+              <tr>
+                <th>Paciente</th>
+                <th>Cantidad de mensajes</th>
+              </tr>
+              ${Object.keys(response)
+                .sort((a, b) => response[b] - response[a])
+                .map(key => {
+                  const count = response[key]
+                  return `
+                    <tr key=${key}>
+                      <td>${key}</td>
+                      <td>${count}</td>
+                    </tr>
+                  `
+                })
+                .join('')}
+            </table>`
+              : '<h2>No hay pacientes</h2>'
+          }
           <h1>Informe de pacientes individual</h1>
           
             ${Object.keys(fullReport)
               .map(key => {
                 const line = fullReport[key]
                 console.log('line', line)
+                if (line.length === 0) {
+                  return `
+                  <h1>Informe de paciente ${key}</h1>
+                  <h2> No hay informe para este paciente </h2>`
+                }
                 return `
                 <h1>Informe de paciente ${key}</h1>
                 
@@ -309,19 +375,26 @@ const StatsPsychology: React.FC<
     `
         const options = {
           html,
-          fileName: `report_${new Date(lastUpdatedReport)
-            .toISOString()
-            .slice(0, 10)}.pdf`,
+          fileName: 'test',
           directory: 'Download',
           base64: true,
         }
-        const file = await RNHTMLtoPDF.convert(options).catch(error => {
+        let file = await RNHTMLtoPDF.convert(options).catch(error => {
           console.log(error)
         })
-        let filePath = RNFetchBlob.fs.dirs.DownloadDir + '/' + options.fileName
-        RNFetchBlob.fs.writeFile(filePath, file.base64, 'base64')
+        let filePath = RNFetchBlob.fs.dirs.DownloadDir + '/Informe.pdf'
+        RNFetchBlob.fs
+          .writeFile(filePath, file.base64, 'base64')
+          .then(async () => {
+            await updateLastUpdatedReport()
+            setDownloaded(!downloaded)
+            console.log('File written')
+            setIsLoading(false)
+          })
+          .catch(error => {
+            console.log(error)
+          })
         setCount(count + 1)
-        setIsLoading(false)
       } catch (error: any) {
         Alert.alert('Error', error.message)
       }
@@ -343,6 +416,36 @@ const StatsPsychology: React.FC<
     }, {})
   }
 
+  //useEffect botMessages
+  React.useEffect(() => {
+    console.log('botMessages', botMessages, new Date(Date.now()))
+    if (botMessages.length > 0) {
+      //map and console every item
+      //Count how many times appears every id where createdAt between lastUpdatedReport and Date.now()
+      const counter = {}
+      botMessages.forEach(item => {
+        if (
+          new Date(item.createdAt) >= new Date(lastUpdatedReport) &&
+          new Date(item.createdAt) <= new Date(Date.now())
+        ) {
+          if (!counter[item.author_id]) {
+            counter[item.author_id] = 0
+          }
+          counter[item.author_id] += 1
+        }
+      })
+      //now add the name to the counter
+      const counterWithName = {}
+
+      for (const key in counter) {
+        const patient = patients.find(patient => patient._id === key)
+        counterWithName[patient.name] = counter[key]
+      }
+      console.log('counter', counterWithName)
+      setResponse(counterWithName)
+    }
+  }, [botMessages])
+
   const data = {
     //the keys of amountAnswersByDate
     labels: Object.keys(resultados),
@@ -353,8 +456,30 @@ const StatsPsychology: React.FC<
     ],
   }
 
+  const processBot = (item: Message) => {
+    //search the id in patients to get the name
+    const patient = patients.find(patient => patient._id === item.author_id)
+    //count how many times appears in botMessages
+    const countTimes = botMessages.filter(
+      message => message.author_id === item.author_id,
+    ).length
+
+    return patient.name, countTimes
+  }
+
   if (isLoading) {
-    return <Text type="buttonLarge">Generating PDF...</Text>
+    return (
+      <EmptyContainer>
+        <Text type={'h1'}>Generando pdf</Text>
+      </EmptyContainer>
+    )
+  }
+  if (patients.length === 0) {
+    return (
+      <EmptyContainer>
+        <Text type={'h1'}>Aun no cuentas con pacientes</Text>
+      </EmptyContainer>
+    )
   }
   return (
     <Container>
@@ -516,31 +641,34 @@ const StatsPsychology: React.FC<
           <Text type="pLargeBold" style={{ fontSize: 20, textAlign: 'center' }}>
             Porcentaje de completitud de reporte por dia
           </Text>
-          <ViewShot ref={chartRef2} options={{ format: 'jpg', quality: 0.9 }}>
-            <BarChart
-              //style={graphStyle}
-              data={data}
-              width={Dimensions.get('window').width - 30}
-              height={220}
-              yAxisLabel=""
-              yAxisSuffix="%"
-              chartConfig={{
-                backgroundColor: '#e26a00',
-                backgroundGradientFrom: '#fb8c00',
-                backgroundGradientTo: '#ffa726',
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                strokeWidth: 2, // optional, default 3
-                barPercentage: 0.5,
-                useShadowColorFromDataset: false, // optional
-              }}
-              style={{
-                borderRadius: 16,
-              }}
-              fromZero={true}
-              yMax={100}
-            />
-          </ViewShot>
+          {Object.keys(resultados).length > 0 && (
+            <ViewShot ref={chartRef2} options={{ format: 'jpg', quality: 0.9 }}>
+              <BarChart
+                //style={graphStyle}
+                data={data}
+                width={Dimensions.get('window').width - 30}
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix="%"
+                chartConfig={{
+                  backgroundColor: '#e26a00',
+                  backgroundGradientFrom: '#fb8c00',
+                  backgroundGradientTo: '#ffa726',
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) =>
+                    `rgba(255, 255, 255, ${opacity})`,
+                  strokeWidth: 2, // optional, default 3
+                  barPercentage: 0.5,
+                  useShadowColorFromDataset: false, // optional
+                }}
+                style={{
+                  borderRadius: 16,
+                }}
+                fromZero={true}
+                yMax={100}
+              />
+            </ViewShot>
+          )}
           <Text type="pLargeBold" style={{ fontSize: 20 }}>
             Porcentaje de completitud por paciente
           </Text>
@@ -635,32 +763,32 @@ const StatsPsychology: React.FC<
               </Text>
               {/* Render a card with patient name and days withouth answer */}
 
-              {Object.keys(ignoredDaysAnswer)
-                .filter(key => key !== 'total')
-                .sort((a, b) => ignoredDaysAnswer[a] - ignoredDaysAnswer[b])
-                .map(key => {
-                  const diasFaltantes =
-                    ignoredDaysAnswer.total - ignoredDaysAnswer[key]
-                  return (
-                    <View key={key} style={{ marginBottom: 10 }}>
-                      <Text
-                        style={{ fontSize: 18, fontWeight: 'bold' }}
-                        type="pLarge">
-                        {key}
-                      </Text>
-                      <Text style={{ fontSize: 16 }} type="pLarge">
-                        Días sin responder: {diasFaltantes}
-                      </Text>
-                    </View>
-                  )
-                })}
+              {Object.keys(ignoredDaysAnswer).length > 0 &&
+                Object.keys(ignoredDaysAnswer)
+                  .filter(key => key !== 'total')
+                  .sort((a, b) => ignoredDaysAnswer[a] - ignoredDaysAnswer[b])
+                  .map(key => {
+                    const diasFaltantes =
+                      ignoredDaysAnswer.total - ignoredDaysAnswer[key]
+                    return (
+                      <View key={key} style={{ marginBottom: 10 }}>
+                        <Text
+                          style={{ fontSize: 18, fontWeight: 'bold' }}
+                          type="pLarge">
+                          {key}
+                        </Text>
+                        <Text style={{ fontSize: 16 }} type="pLarge">
+                          Días sin responder: {diasFaltantes}
+                        </Text>
+                      </View>
+                    )
+                  })}
             </View>
           </View>
           <View
             style={{
               backgroundColor: lightColors.white,
               width: '90%',
-              height: 100,
               borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
@@ -671,22 +799,57 @@ const StatsPsychology: React.FC<
             {/* hacer una division para cantidad de reportes y cantidad  de pacientes */}
             <View style={{ alignItems: 'center' }}>
               <Text
-                type="buttonLarge"
+                type="pLarge"
                 style={{
                   color: lightColors.quaternary,
                   fontWeight: 'bold',
+                  marginBottom: 10,
                 }}>
                 Pacientes con alerta de depresion
               </Text>
-              <Text
-                type="buttonLarge"
-                style={{
-                  color: lightColors.quaternary,
-                  fontWeight: 'bold',
-                }}>
-                {console.log('RESPONSE', response)}
-                {patients.length}
-              </Text>
+              {/* Render a card with patient name and days withouth answer */}
+
+              {botMessages.length > 0 && Object.keys(response).length > 0 ? (
+                Object.keys(response)
+                  .sort((a, b) => response[b] - response[a])
+                  .map(key => {
+                    const count = response[key]
+                    return (
+                      <View key={key} style={{ marginBottom: 10 }}>
+                        <Text
+                          style={{ fontSize: 18, fontWeight: 'bold' }}
+                          type="pLarge">
+                          {key}
+                        </Text>
+                        <Text style={{ fontSize: 16 }} type="pLarge">
+                          Cantidad de mensajes: {count}
+                        </Text>
+                      </View>
+                    )
+                  })
+              ) : (
+                <Text type="pLarge">No hay pacientes</Text>
+              )}
+              {/* {Object.keys(ignoredDaysAnswer).length > 0 &&
+                Object.keys(ignoredDaysAnswer)
+                  .filter(key => key !== 'total')
+                  .sort((a, b) => ignoredDaysAnswer[a] - ignoredDaysAnswer[b])
+                  .map(key => {
+                    const diasFaltantes =
+                      ignoredDaysAnswer.total - ignoredDaysAnswer[key]
+                    return (
+                      <View key={key} style={{ marginBottom: 10 }}>
+                        <Text
+                          style={{ fontSize: 18, fontWeight: 'bold' }}
+                          type="pLarge">
+                          {key}
+                        </Text>
+                        <Text style={{ fontSize: 16 }} type="pLarge">
+                          Días sin responder: {diasFaltantes}
+                        </Text>
+                      </View>
+                    )
+                  })} */}
             </View>
           </View>
           {/* Top 3 pacientes que han presentado mas sintomas de depresion y que no responden */}

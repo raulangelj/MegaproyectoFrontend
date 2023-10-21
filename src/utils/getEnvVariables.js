@@ -15,6 +15,6 @@ export const getEnvVariables = () => {
   // }
   // return {}
   return {
-    API_URL: 'http://192.168.1.6:400',
+    API_URL: 'http://192.168.1.23:400',
   }
 }
