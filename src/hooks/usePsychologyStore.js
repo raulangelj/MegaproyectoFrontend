@@ -5,12 +5,25 @@ import {
   onSetPatients,
   onSetPsychologyQuestions,
   onSetSearchedPatientQuestions,
+  onSetTotalReports,
+  onSetAnswersByDay,
+  onSetLastUpdatedReport,
+  onSetFullReport,
 } from 'store'
 
 export const usePsychologyStore = () => {
   const dispatch = useDispatch()
-  const { patients, psychologyQuestions, searchedPatientQuestions } =
-    useSelector(state => state.psychology)
+  const {
+    patients,
+    psychologyQuestions,
+    searchedPatientQuestions,
+    totalReports,
+    answersByDay,
+    amountAnswersByDate,
+    ignoredDaysAnswer,
+    lastUpdatedReport,
+    fullReport,
+  } = useSelector(state => state.psychology)
 
   const setPatients = async () => {
     try {
@@ -163,11 +176,73 @@ export const usePsychologyStore = () => {
     }
   }
 
+  //get all answers
+  const getAllAnswers = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.get('/report/getNumberOfAnswers')
+      console.log('data answers report', data)
+      dispatch(onSetTotalReports(data))
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //get answers by date
+  const getAnswersByDate = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.get('/report/getAnswersByDate')
+      console.log('data answers report', data)
+      dispatch(onSetAnswersByDay(data))
+    } catch (error) {
+      console.log('error ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //getLastUpdateReport
+  const getLastUpdateReport = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.get('/report/getLastUpdatedReport')
+      console.log('last updated report', data)
+      dispatch(onSetLastUpdatedReport(data))
+    } catch (error) {
+      console.log('error jeje ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
+  //get full report
+  const getFullReport = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.get('/report/getReports')
+      console.log('full report', data)
+      dispatch(onSetFullReport(data))
+    } catch (error) {
+      console.log('error jeje ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
   return {
     // properties
     patients,
     psychologyQuestions,
     searchedPatientQuestions,
+    totalReports,
+    answersByDay,
+    amountAnswersByDate,
+    ignoredDaysAnswer,
+    lastUpdatedReport,
+    fullReport,
     // methods
     createPatient,
     setPatients,
@@ -179,5 +254,9 @@ export const usePsychologyStore = () => {
     updateQuestionInfo,
     deletePatient,
     deleteGeneralQuestion,
+    getAllAnswers,
+    getAnswersByDate,
+    getLastUpdateReport,
+    getFullReport,
   }
 }
