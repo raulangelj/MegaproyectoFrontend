@@ -39,6 +39,16 @@ export const Text = styled.Text(() => ({
   textAlignVertical: 'center',
 }))
 
+export const TextDownload = styled.Text(() => ({
+  flex: 1,
+  color: 'white',
+  fontSize: 15,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  alignItems: 'center',
+  textAlignVertical: 'center',
+}))
+
 export const Touchable = styled.TouchableOpacity(() => ({
   flex: 1,
   width: '100%',

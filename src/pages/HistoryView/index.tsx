@@ -1,7 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Container, HeaderContainer, CardContainer } from './styles'
 import React from 'react'
-import { PsychologyTabsScreenProps, RootStackScreenProps } from '@navigations/types/ScreenProps'
+import {
+  PsychologyTabsScreenProps,
+  RootStackScreenProps,
+} from '@navigations/types/ScreenProps'
 import ImageHistory from '../../assets/images/reminder.svg'
 import Text from '@components/atoms/Text'
 import { PieChart } from 'react-native-chart-kit'
@@ -18,6 +21,9 @@ const HistoryView: React.FC<PsychologyTabsScreenProps<'HistoryView'>> = ({
   route.params?.report.answers.map((item: any) => {
     console.log(item.answer)
     if (item.answer.length === 1 && item.answer[0] === '') {
+      console.log('empty')
+      emptyAnswers++
+    } else if (item.answer.length === 1 && item.answer[0] === 0) {
       console.log('empty')
       emptyAnswers++
     }
