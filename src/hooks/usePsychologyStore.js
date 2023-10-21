@@ -232,6 +232,19 @@ export const usePsychologyStore = () => {
     }
   }
 
+  //update lastUpdatedReport
+  const updateLastUpdatedReport = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.put('/report/updateLastUpdatedReport')
+      console.log('last updated report', data)
+    } catch (error) {
+      console.log('error jeje ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
   return {
     // properties
     patients,
@@ -258,5 +271,6 @@ export const usePsychologyStore = () => {
     getAnswersByDate,
     getLastUpdateReport,
     getFullReport,
+    updateLastUpdatedReport,
   }
 }
