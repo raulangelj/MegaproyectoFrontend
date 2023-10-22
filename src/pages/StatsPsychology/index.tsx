@@ -620,19 +620,18 @@ const StatsPsychology: React.FC<
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
                   backgroundColor: '#e26a00',
-                  backgroundGradientFrom: '#fb8c00',
-                  backgroundGradientTo: '#ffa726',
+                  backgroundGradientFrom: lightColors.quaternary,
+                  backgroundGradientTo: lightColors.quaternary,
                   decimalPlaces: 2, // optional, defaults to 2dp
                   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                  labelColor: (opacity = 1) =>
-                    `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                   style: {
                     borderRadius: 16,
                   },
                   propsForDots: {
                     r: '6',
                     strokeWidth: '2',
-                    stroke: '#ffa726',
+                    stroke: lightColors.quaternary,
                   },
                 }}
                 bezier
@@ -658,8 +657,8 @@ const StatsPsychology: React.FC<
                 yAxisSuffix="%"
                 chartConfig={{
                   backgroundColor: '#e26a00',
-                  backgroundGradientFrom: '#fb8c00',
-                  backgroundGradientTo: '#ffa726',
+                  backgroundGradientFrom: lightColors.quaternary,
+                  backgroundGradientTo: lightColors.quaternary,
                   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                   labelColor: (opacity = 1) =>
                     `rgba(255, 255, 255, ${opacity})`,
@@ -719,11 +718,11 @@ const StatsPsychology: React.FC<
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundColor: '#e26a00',
-                backgroundGradientFrom: '#fb8c00',
-                backgroundGradientTo: '#ffa726',
+                backgroundGradientFrom: lightColors.quaternary,
+                backgroundGradientTo: lightColors.quaternary,
                 decimalPlaces: 1, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 style: {
                   borderRadius: 16,
                 },
