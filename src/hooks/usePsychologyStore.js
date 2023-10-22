@@ -245,6 +245,19 @@ export const usePsychologyStore = () => {
     }
   }
 
+  //delete answers of patients
+  const deleteAnswers = async () => {
+    try {
+      dispatch(onLoadingPatient(true))
+      const { data } = await backendAPI.delete('/report/deleteAnswers')
+      console.log('last updated report', data)
+    } catch (error) {
+      console.log('error jeje ', error)
+    } finally {
+      dispatch(onLoadingPatient(false))
+    }
+  }
+
   return {
     // properties
     patients,
@@ -272,5 +285,6 @@ export const usePsychologyStore = () => {
     getLastUpdateReport,
     getFullReport,
     updateLastUpdatedReport,
+    deleteAnswers,
   }
 }

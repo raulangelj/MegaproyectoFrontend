@@ -48,6 +48,7 @@ const StatsPsychology: React.FC<
     getFullReport,
     fullReport,
     updateLastUpdatedReport,
+    deleteAnswers,
   } = usePsychologyStore()
   const { answers } = usePatientStore()
   const { user } = useUserStore()
@@ -382,11 +383,16 @@ const StatsPsychology: React.FC<
         let file = await RNHTMLtoPDF.convert(options).catch(error => {
           console.log(error)
         })
-        let filePath = RNFetchBlob.fs.dirs.DownloadDir + '/Informe.pdf'
+        let filePath =
+          RNFetchBlob.fs.dirs.DownloadDir +
+          `/report_${new Date(lastUpdatedReport)
+            .toISOString()
+            .slice(0, 10)}.pdf`
         RNFetchBlob.fs
           .writeFile(filePath, file.base64, 'base64')
           .then(async () => {
             await updateLastUpdatedReport()
+            await deleteAnswers()
             setDownloaded(!downloaded)
             console.log('File written')
             setIsLoading(false)
