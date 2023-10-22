@@ -353,7 +353,7 @@ const QuestionsList: React.FC<
       </KeyboardAvoidingView>
     )
   }
-  if (psychologyQuestions.length === 0) {
+  if (psychologyQuestions.length === 1) {
     return (
       <>
         <Modal
@@ -613,27 +613,29 @@ const QuestionsList: React.FC<
       </TitleContainer>
       <FlatList
         data={psychologyQuestions}
-        renderItem={({ item }: { item: any }) => (
-          <CardTouchable
-            onPress={() => {
-              if (!deleteIcon) {
-                handleQuestionCard(item)
-              }
-            }}
-            onLongPress={() => toggleQuestionSelection(item)}
-            style={{
-              backgroundColor: isSelected(item)
-                ? lightColors.secondary
-                : lightColors.quinary,
-            }}>
-            <Text type="pLargeBold" color="background0">
-              {item.question}
-            </Text>
-            <Text type="pMedium" color="background0">
-              Tipo: {getTypeOfQuestion(item.type)}
-            </Text>
-          </CardTouchable>
-        )}
+        renderItem={({ item, index }: { item: any; index: number }) =>
+          index != 0 && (
+            <CardTouchable
+              onPress={() => {
+                if (!deleteIcon) {
+                  handleQuestionCard(item)
+                }
+              }}
+              onLongPress={() => toggleQuestionSelection(item)}
+              style={{
+                backgroundColor: isSelected(item)
+                  ? lightColors.secondary
+                  : lightColors.quinary,
+              }}>
+              <Text type="pLargeBold" color="background0">
+                {item.question}
+              </Text>
+              <Text type="pMedium" color="background0">
+                Tipo: {getTypeOfQuestion(item.type)}
+              </Text>
+            </CardTouchable>
+          )
+        }
       />
     </>
   )

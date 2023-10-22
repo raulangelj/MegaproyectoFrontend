@@ -119,6 +119,9 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
     const selectedQuestionsIds = selectedQuestions.map(
       (question: any) => psychologyQuestions[question]._id,
     )
+    //add the first one of psychologyQuestions by default
+    selectedQuestionsIds.push(psychologyQuestions[0]._id)
+
     return selectedQuestionsIds
   }
 
@@ -264,25 +267,28 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
               />
             </EmailPaswordContainer>
             <Text type={'h2'}>Preguntas disponibles</Text>
-            {psychologyQuestions.map((question, index) => (
-              <TouchableWithoutFeedback
-                key={index}
-                onLongPress={() => toggleQuestionSelection(index)}>
-                <CardContainer
-                  style={{
-                    backgroundColor: isSelected(index)
-                      ? lightColors.secondary
-                      : lightColors.quinary,
-                  }}>
-                  <Text type="pLargeBold" color="white">
-                    {question.question}
-                  </Text>
-                  <Text type="pMedium" color="white">
-                    Tipo: {getTypeOfQuestion(question.type)}
-                  </Text>
-                </CardContainer>
-              </TouchableWithoutFeedback>
-            ))}
+            {psychologyQuestions.map(
+              (question, index) =>
+                index != 0 && (
+                  <TouchableWithoutFeedback
+                    key={index}
+                    onLongPress={() => toggleQuestionSelection(index)}>
+                    <CardContainer
+                      style={{
+                        backgroundColor: isSelected(index)
+                          ? lightColors.secondary
+                          : lightColors.quinary,
+                      }}>
+                      <Text type="pLargeBold" color="white">
+                        {question.question}
+                      </Text>
+                      <Text type="pMedium" color="white">
+                        Tipo: {getTypeOfQuestion(question.type)}
+                      </Text>
+                    </CardContainer>
+                  </TouchableWithoutFeedback>
+                ),
+            )}
           </ScrollView1>
           <Button
             title="Guardar"
@@ -404,26 +410,29 @@ const PatientList: React.FC<PsychologyTabsScreenProps<'PatientList'>> = ({
                 </ImageBackground>
                 <Text type="h2">Preguntas asignadas</Text>
                 <View style={{ alignItems: 'center', width: '100%' }}>
-                  {searchedPatientQuestions.map((question, index) => (
-                    <TouchableWithoutFeedback
-                      key={index}
-                      onLongPress={() => toggleQuestionSelection(index)}>
-                      <CardContainer
-                        key={index}
-                        style={{
-                          backgroundColor: isSelected(index)
-                            ? lightColors.quinary
-                            : lightColors.secondary,
-                        }}>
-                        <Text type="pLargeBold" color="white">
-                          {question.question}
-                        </Text>
-                        <Text type="pMediumBold" color="white">
-                          Tipo: {getTypeOfQuestion(question.type)}
-                        </Text>
-                      </CardContainer>
-                    </TouchableWithoutFeedback>
-                  ))}
+                  {searchedPatientQuestions.map(
+                    (question, index) =>
+                      index != 0 && (
+                        <TouchableWithoutFeedback
+                          key={index}
+                          onLongPress={() => toggleQuestionSelection(index)}>
+                          <CardContainer
+                            key={index}
+                            style={{
+                              backgroundColor: isSelected(index)
+                                ? lightColors.quinary
+                                : lightColors.secondary,
+                            }}>
+                            <Text type="pLargeBold" color="white">
+                              {question.question}
+                            </Text>
+                            <Text type="pMediumBold" color="white">
+                              Tipo: {getTypeOfQuestion(question.type)}
+                            </Text>
+                          </CardContainer>
+                        </TouchableWithoutFeedback>
+                      ),
+                  )}
                 </View>
                 <View
                   style={{
