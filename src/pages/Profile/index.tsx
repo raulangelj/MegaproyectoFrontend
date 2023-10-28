@@ -40,13 +40,6 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
     endDateParam.setHours(hour)
     endDateParam.setMinutes(minutes)
     endDateParam.setSeconds(0)
-    console.log(
-      'DATES',
-      initDateParam,
-      endDateParam,
-      initDateParam.toISOString(),
-      endDateParam.toISOString(),
-    )
     //create event
     const eventId = await RNCalendarEvents.saveEvent('Diario reflexivo 2', {
       startDate: initDateParam.toISOString(),
@@ -60,7 +53,6 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
       allDay: false,
       notes: 'Recuerda llenar tu diario reflexivo',
     }).catch(error => console.log(error))
-    console.log(eventId)
   }
 
   if (user && user?.category === 'psychology') {
@@ -239,7 +231,6 @@ const Profile: React.FC<RootStackScreenProps<'Profile'>> = ({ navigation }) => {
             <Button
               text="Diario reflexivo"
               onPress={() => {
-                console.log('Reporte generado')
                 navigation.navigate('MainReport')
               }}
               size="large"
