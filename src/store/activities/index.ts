@@ -8,6 +8,7 @@ export const activitiesSlice = createSlice({
     messageToShow: '' as string,
     tempTags: [] as string[],
     tags: [] as string[],
+    prevDate: new Date() as Date,
   },
   reducers: {
     addProgress(state, action: PayloadAction<number>) {
@@ -38,8 +39,23 @@ export const activitiesSlice = createSlice({
     addTags(state) {
       state.tags = state.tempTags
     },
+    setDay(state, action: PayloadAction<Date>) {
+      if (!state.prevDate) {
+        state.prevDate = new Date()
+      }
+      if (
+        state.prevDate.getDate() !== action.payload.getDate() ||
+        state.prevDate.getMonth() !== action.payload.getMonth() ||
+        state.prevDate.getFullYear() !== action.payload.getFullYear()
+      ) {
+        state.userProgress = 0
+        state.messageToShow =
+          'Llevas 1/4 actividades para llegar a la meta diaria'
+        state.prevDate = action.payload
+      }
+    },
   },
 })
 
-export const { addProgress, addTag, deleteTag, addTags } =
+export const { addProgress, addTag, deleteTag, addTags, setDay } =
   activitiesSlice.actions

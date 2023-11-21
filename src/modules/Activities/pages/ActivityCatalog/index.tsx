@@ -6,7 +6,10 @@ import { View } from 'react-native'
 import ActivityLongCard from '@modules/Activities/components/molecules/ActivityLongCard'
 import { useTheme } from '@emotion/react'
 import { useNavigation } from '@react-navigation/native'
-import { getFilteredItems } from '@modules/Activities/utils/shuffleAlgorithm'
+import {
+  getFilteredItems,
+  getLevel2,
+} from '@modules/Activities/utils/shuffleAlgorithm'
 import { useAppSelector } from 'hooks/useAppSelector'
 
 const ActivityCatalog: React.FC<any> = ({
@@ -23,8 +26,15 @@ const ActivityCatalog: React.FC<any> = ({
   useEffect(() => {
     console.log(tab)
     if (tab.id === 'tab1') {
-      console.log('aquhsbusbus')
-      setActivities(getFilteredItems(allActivities, themeName, tags))
+      let daytime: string
+      if (themeName === 'dark') {
+        daytime = 'night'
+      } else {
+        daytime = 'day'
+      }
+      setActivities(getFilteredItems(allActivities, daytime, tags))
+    } else if (tab.id === 'tab3') {
+      setActivities(getLevel2(allActivities))
     } else {
       setActivities(allActivities)
     }
@@ -45,7 +55,6 @@ const ActivityCatalog: React.FC<any> = ({
       </View>
     )
   }
-  console.log(activities)
   return (
     <View
       style={{ flex: 1, backgroundColor: theme.colors.activityBackground0 }}>

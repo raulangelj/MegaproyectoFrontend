@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ButtonWrapper, Container } from './styles'
 import Text from '@components/atoms/Text'
 import LandingIcon from '@assets/images/activities_landing.svg'
@@ -11,6 +11,7 @@ import { useAppDispatch } from 'hooks/useAppDispatch'
 import { TouchableOpacity } from 'react-native'
 import { useAppSelector } from 'hooks/useAppSelector'
 import { toggleTheme } from 'store/theme'
+import { setDay } from 'store/activities'
 
 const Activities: React.FC<RootStackScreenProps<'Activities'>> = ({
   navigation,
@@ -18,6 +19,10 @@ const Activities: React.FC<RootStackScreenProps<'Activities'>> = ({
   const dispatch = useAppDispatch()
   const themeName = useAppSelector(state => state.theme.theme.name)
   const tags = useAppSelector(state => state.activities.tags)
+
+  useEffect(() => {
+    dispatch(setDay(new Date()))
+  }, [])
 
   return (
     <Container>

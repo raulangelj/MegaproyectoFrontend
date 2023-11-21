@@ -18,6 +18,8 @@ export type RootStackParamList = {
   SimpleActivity: { activity: Activity }
   Diario: { activity: Activity }
   SelectPreffered: undefined
+  Yoga: { activity: Activity }
+  Meditar: { activity: Activity }
   // ----------
 
   Chat: undefined

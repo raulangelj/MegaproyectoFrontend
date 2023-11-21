@@ -13,8 +13,12 @@ const tabs: Omit<TabInterface, 'selectedId'>[] = [
     name: 'Personalizado',
   },
   {
-    id: 'tab4',
+    id: 'tab2',
     name: 'Todas',
+  },
+  {
+    id: 'tab3',
+    name: 'Interactivas',
   },
 ]
 
@@ -23,6 +27,9 @@ const Tab = createMaterialTopTabNavigator()
 const ActivityTabs = () => {
   return (
     <Tab.Navigator
+      screenOptions={{
+        lazy: true,
+      }}
       tabBar={(props: MaterialTopTabBarProps) => (
         <TopTabs {...props} tabs={tabs} />
       )}>

@@ -91,14 +91,15 @@ export const activities: Activity[] = [
     shortDescription: 'Es hora de estirarte',
     image: fisica,
     cardColor: '#6CB28E',
-    type: ['Actividades Físicas', 'day'],
+    type: ['Actividades Físicas', 'day', 'night'],
     complexity: 2,
   },
   {
     key: 'f2',
     route: 'Meditar',
     name: 'Meditación',
-    shortDescription: 'Es hora de meditar',
+    shortDescription:
+      'Es hora de meditar, cierra tus ojos y no pienses en nada durante 10 minutos. Respira profundamente sin quedarte dormido. Por favor hazlo en un lugar seguro y calmado para mejores resultados.',
     image: fisica,
     cardColor: '#6CB28E',
     type: ['Actividades Físicas', 'day', 'night'],
