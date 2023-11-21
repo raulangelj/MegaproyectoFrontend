@@ -7,5 +7,5 @@ export interface UserInterface {
   category: UserCategory | undefined
   token: string
   tokenInitDate: Date | undefined
-  idPsychology?: string
+  idPsychology: string
 }

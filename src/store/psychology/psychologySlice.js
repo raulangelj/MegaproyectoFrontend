@@ -7,6 +7,12 @@ export const psychologySlice = createSlice({
     psychologyQuestions: [],
     loading: false,
     searchedPatientQuestions: [],
+    totalReports: 0,
+    answersByDay: [],
+    amountAnswersByDate: {},
+    ignoredDaysAnswer: {},
+    lastUpdatedReport: Date.now(),
+    fullReport: {},
   },
   reducers: {
     onLoadingPatient: (state, action) => {
@@ -22,6 +28,24 @@ export const psychologySlice = createSlice({
       console.log('SearchedPatientQuestions', action.payload)
       state.searchedPatientQuestions = action.payload.questions
     },
+    onSetTotalReports: (state, action) => {
+      console.log('total reports', action.payload)
+      state.totalReports = action.payload.counter
+    },
+    onSetAnswersByDay: (state, action) => {
+      console.log('answers by day', action.payload)
+      state.answersByDay = action.payload.generalAnswers
+      state.amountAnswersByDate = action.payload.amountAnswersByDate
+      state.ignoredDaysAnswer = action.payload.ignoredDaysAnswer
+    },
+    onSetLastUpdatedReport: (state, action) => {
+      console.log('last updated report 2', action.payload)
+      state.lastUpdatedReport = action.payload.lastUpdated
+    },
+    onSetFullReport: (state, action) => {
+      console.log('full report', action.payload)
+      state.fullReport = action.payload.answersObject
+    },
   },
 })
 
@@ -30,4 +54,8 @@ export const {
   onSetPatients,
   onSetPsychologyQuestions,
   onSetSearchedPatientQuestions,
+  onSetTotalReports,
+  onSetAnswersByDay,
+  onSetLastUpdatedReport,
+  onSetFullReport,
 } = psychologySlice.actions

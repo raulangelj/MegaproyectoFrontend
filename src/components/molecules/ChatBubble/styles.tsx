@@ -34,4 +34,13 @@ export const MessageTime = styled(Text)(({ theme }) => ({
   marginRight: theme.sizes.xl,
 }))
 
+export const BotIconContainer = styled.View(() => ({
+  width: 25,
+  height: 25,
+  borderRadius: 100,
+  borderColor: 'black',
+  borderWidth: 1,
+  marginHorizontal: 5,
+}))
+
 export const MessageItems = styled.View(() => ({}))
